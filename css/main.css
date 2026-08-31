@@ -1,57 +1,131 @@
-/* css/main.css - Core CSS variables, typography, reset, and base layout */
+/* css/main.css - BharatVerse Design Tokens, Typography Scale, Global Surfaces & Layout */
 
 :root {
-  /* Cultural Palette Tokens */
-  --color-kesariya: #FF7A00;
-  --color-kesariya-glow: rgba(255, 122, 0, 0.45);
-  --color-marigold: #FFAA00;
+  /* ==========================================================================
+     1. REFINED CULTURAL PALETTE (HERITAGE ADVENTURE UI)
+     ========================================================================== */
   
-  --color-peacock: #008E8A;
-  --color-peacock-light: #00D2C4;
-  --color-peacock-glow: rgba(0, 210, 196, 0.35);
+  /* Royal Gold & Warm Brass Accents (Ancient Inlays & Relics) */
+  --gold-300: #F6D799;
+  --gold-400: #E5B869;
+  --gold-500: #C89B3C;
+  --gold-600: #A27621;
+  --gold-glow: rgba(229, 184, 105, 0.3);
+  --gold-border: rgba(229, 184, 105, 0.28);
+  --gold-border-bright: rgba(246, 215, 153, 0.55);
 
-  --color-royal-gold: #FFD700;
-  --color-gold-metallic: linear-gradient(135deg, #FFE259 0%, #FFA751 100%);
-  --color-gold-border: rgba(255, 215, 0, 0.35);
+  /* Kesariya Ochre & Saffron (Energy, Heritage, Action) */
+  --saffron-400: #F38C42;
+  --saffron-500: #D96B27;
+  --saffron-600: #B34E14;
+  --saffron-glow: rgba(217, 107, 39, 0.35);
 
-  --color-rann-white: #F8FAFC;
-  --color-rann-sand: #F1E5D1;
-  --color-terracotta: #D9534F;
+  /* Royal Peacock & Mineral Teal (Wisdom, Coastal Gujarat, Serenity) */
+  --peacock-300: #46C7C2;
+  --peacock-400: #1B828F;
+  --peacock-500: #0E606B;
+  --peacock-600: #083B44;
+  --peacock-glow: rgba(27, 130, 143, 0.32);
 
-  /* Surfaces & Dark Foundations */
-  --bg-cosmic-dark: #070B14;
-  --bg-surface-elevated: #0F172A;
-  --bg-surface-glass: rgba(15, 23, 42, 0.78);
-  --bg-surface-glass-hover: rgba(30, 41, 59, 0.88);
-  --bg-surface-glass-border: rgba(255, 255, 255, 0.12);
+  /* Deep Emerald & Sanctuary Green (Gir Wildlife, Success) */
+  --emerald-400: #34D399;
+  --emerald-500: #10B981;
+  --emerald-600: #059669;
+  --emerald-surface: rgba(6, 78, 59, 0.55);
 
-  /* Status Colors */
-  --color-success: #10B981;
-  --color-error: #EF4444;
-  --color-streak: #FF4500;
-  --color-xp: #38BDF8;
+  /* Terracotta & Vermilion (Errors, Warnings, Earth) */
+  --terracotta-400: #F87171;
+  --terracotta-500: #EF4444;
+  --terracotta-surface: rgba(127, 29, 29, 0.6);
 
-  /* Typography */
-  --font-display: 'Cinzel Decorative', 'Poppins', Georgia, serif;
+  /* Noble Sandstone & Ivory (Readable Text & Highlights) */
+  --sand-50: #FAF7F2;
+  --sand-100: #F3EDE2;
+  --sand-200: #E5DBC9;
+  --sand-300: #C8BEAB;
+  --sand-400: #9E937F;
+
+  /* Atmospheric Shadows & Dark Canvas (Temple Vaults & Celestial Sky) */
+  --space-950: #070A11;
+  --space-900: #0B101C;
+  --space-850: #101728;
+  --space-800: #162035;
+  --space-700: #1F2C46;
+  --space-600: #2B3B5C;
+
+  /* Surfaces & Glassmorphic Elevation */
+  --surface-glass-subtle: rgba(16, 23, 40, 0.72);
+  --surface-glass-base: rgba(16, 23, 40, 0.86);
+  --surface-glass-elevated: rgba(22, 32, 53, 0.94);
+  --surface-glass-card: rgba(27, 39, 64, 0.65);
+  --surface-glass-border: rgba(255, 255, 255, 0.08);
+
+  /* Backward Compatibility Aliases */
+  --color-kesariya: var(--saffron-500);
+  --color-kesariya-glow: var(--saffron-glow);
+  --color-peacock: var(--peacock-500);
+  --color-peacock-light: var(--peacock-300);
+  --color-royal-gold: var(--gold-400);
+  --color-success: var(--emerald-500);
+  --color-error: var(--terracotta-500);
+  --bg-cosmic-dark: var(--space-950);
+  --bg-surface-elevated: var(--space-900);
+  --bg-surface-glass: var(--surface-glass-base);
+  --bg-surface-glass-border: var(--surface-glass-border);
+
+  /* ==========================================================================
+     2. STRUCTURED TYPOGRAPHY SCALE
+     ========================================================================== */
+  --font-display: 'Cinzel Decorative', 'Times New Roman', Georgia, serif;
   --font-title: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Rajdhani', 'Courier New', monospace;
+  --font-mono: 'Rajdhani', 'JetBrains Mono', 'Courier New', monospace;
 
-  /* Dimensions */
-  --hud-height: 72px;
-  --border-radius-sm: 8px;
-  --border-radius-md: 14px;
-  --border-radius-lg: 20px;
-  --border-radius-pill: 9999px;
+  /* ==========================================================================
+     3. SPACING & GEOMETRY SCALE (TACTILE GAME UI)
+     ========================================================================== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 14px;
+  --space-lg: 20px;
+  --space-xl: 28px;
+  --space-2xl: 40px;
 
-  /* Elevation */
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
-  --shadow-glow-saffron: 0 0 25px rgba(255, 122, 0, 0.45);
-  --shadow-glow-gold: 0 0 30px rgba(255, 215, 0, 0.4);
-  --shadow-glow-teal: 0 0 25px rgba(0, 210, 196, 0.4);
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-pill: 9999px;
+
+  /* Layout Constants */
+  --hud-height: 68px;
+  --container-max-width: 1240px;
+
+  /* ==========================================================================
+     4. TIMED MOTION & TRANSITION TOKENS
+     ========================================================================== */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --motion-micro: 120ms;
+  --motion-fast: 200ms;
+  --motion-base: 300ms;
+  --motion-enter: 450ms;
+  --motion-cinematic: 600ms;
+
+  /* Shadow & Depth */
+  --shadow-subtle: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-elevation: 0 12px 36px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-glass: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-gold-inset: inset 0 0 18px rgba(229, 184, 105, 0.15);
 }
 
-/* Reset & Box Sizing */
+/* ==========================================================================
+   5. BASE RESET & VIEWPORT
+   ========================================================================== */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -63,38 +137,39 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: var(--bg-cosmic-dark);
-  color: #F8FAFC;
+  background-color: var(--space-950);
+  color: var(--sand-100);
   font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.55;
   user-select: none;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Cosmic Background */
+/* Atmospheric Background Canvas */
 .bg-bharat-universe {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-color: var(--bg-cosmic-dark);
+  background-color: var(--space-950);
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(255, 122, 0, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 85% 80%, rgba(0, 210, 196, 0.1) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.85) 0%, #070B14 100%);
+    radial-gradient(circle at 18% 18%, rgba(217, 107, 39, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 82% 82%, rgba(27, 130, 143, 0.09) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, var(--space-900) 0%, var(--space-950) 100%);
   overflow: hidden;
   pointer-events: none;
 }
 
-/* Sacred Geometric Mandala Grid */
+/* Subtle Ancient Cartography Mandala Watermark */
 .bg-mandala-overlay {
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025' fill-rule='evenodd'%3E%3Cpath d='M30 30L15 0h30L30 30zM0 15l30 15L0 45V15zm60 0v30L30 30l30-15zM30 30l15 30H15l15-30z'/%3E%3C/g%3E%3C/svg%3E");
-  opacity: 0.8;
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C89B3C' fill-opacity='0.018' fill-rule='evenodd'%3E%3Ccircle cx='40' cy='40' r='38' stroke='%23C89B3C' stroke-width='0.6' fill='none'/%3E%3Cpath d='M40 0L40 80M0 40L80 40M11.7 11.7L68.3 68.3M11.7 68.3L68.3 11.7' stroke='%23C89B3C' stroke-width='0.4'/%3E%3Cpolygon points='40,20 60,40 40,60 20,40' stroke='%23C89B3C' stroke-width='0.5' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.85;
 }
 
-/* Main App Shell */
+/* App Shell Structure */
 #app {
   position: relative;
   width: 100%;
@@ -105,7 +180,6 @@ html, body {
   overflow: hidden;
 }
 
-/* Screen Layer Container */
 .screens-viewport {
   position: relative;
   flex: 1;
@@ -114,7 +188,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Individual Screen Container */
+/* Screen Transition Layer */
 .screen {
   position: absolute;
   inset: 0;
@@ -125,23 +199,67 @@ html, body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: scale(0.98);
+  transition: opacity var(--motion-base) var(--ease-in-out-smooth), transform var(--motion-enter) var(--ease-out-expo);
+  transform: scale(0.985) translateY(4px);
+  will-change: transform, opacity;
 }
 
 .screen.active {
   opacity: 1;
   visibility: visible;
   pointer-events: all;
-  transform: scale(1);
+  transform: scale(1) translateY(0);
 }
 
-/* Glassmorphism Panel Base */
+/* Universal Reusable Glass Panel */
 .glass-panel {
-  background: var(--bg-surface-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--bg-surface-glass-border);
-  box-shadow: var(--shadow-glass), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-lg);
+  background: var(--surface-glass-base);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--gold-border);
+  box-shadow: var(--shadow-glass);
+  border-radius: var(--radius-lg);
+  position: relative;
+}
+
+/* Cultural Gold Filigree Corner Accents */
+.glass-panel.corner-accents::before,
+.glass-panel.corner-accents::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--gold-400);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.glass-panel.corner-accents::before {
+  top: 4px;
+  left: 4px;
+  border-top: 1.5px solid var(--gold-400);
+  border-left: 1.5px solid var(--gold-400);
+}
+
+.glass-panel.corner-accents::after {
+  bottom: 4px;
+  right: 4px;
+  border-bottom: 1.5px solid var(--gold-400);
+  border-right: 1.5px solid var(--gold-400);
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 16, 28, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(229, 184, 105, 0.25);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(229, 184, 105, 0.5);
 }

@@ -1,20 +1,22 @@
-/* css/map.css - Styles for the interactive India SVG Map and State POI Markers */
+/* css/map.css - Interactive India Map & Cartographic Exploration Interface */
 
 .map-screen-layout {
   display: flex;
   width: 100%;
   height: 100%;
-  padding-top: calc(var(--hud-height) + 1.5rem);
-  padding-bottom: 1.5rem;
+  padding-top: calc(var(--hud-height) + 1.25rem);
+  padding-bottom: 1.25rem;
   padding-left: 2rem;
   padding-right: 2rem;
   gap: 2rem;
   align-items: center;
   justify-content: center;
   position: relative;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
 }
 
-/* Map Canvas Container */
+/* Map Canvas Viewport */
 .map-viewport {
   flex: 1;
   height: 100%;
@@ -27,8 +29,8 @@
 
 .map-svg-container {
   width: 100%;
-  max-width: 650px;
-  max-height: 80vh;
+  max-width: 620px;
+  max-height: 78vh;
   position: relative;
   display: flex;
   align-items: center;
@@ -38,70 +40,64 @@
 .india-svg-map {
   width: 100%;
   height: auto;
-  max-height: 75vh;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6));
+  max-height: 72vh;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.75));
 }
 
-/* Base State Vector Styles */
+/* Vector State Territory Styles */
 .state-path {
-  fill: #1E293B;
-  stroke: rgba(255, 255, 255, 0.18);
+  fill: #162035;
+  stroke: rgba(229, 184, 105, 0.2);
   stroke-width: 1.2;
   stroke-linejoin: round;
-  transition: all 0.25s ease;
+  transition: fill var(--motion-fast) ease, stroke var(--motion-fast) ease, filter var(--motion-fast) ease;
   cursor: pointer;
 }
 
 .state-path:hover {
-  fill: #334155;
-  stroke: rgba(255, 255, 255, 0.4);
+  fill: #22314E;
+  stroke: rgba(229, 184, 105, 0.5);
 }
 
-/* Playable State: Gujarat */
+/* Playable Focus State: Gujarat */
 .state-path.playable {
-  fill: #064E3B;
-  stroke: #FFD700;
+  fill: #0B4A3A;
+  stroke: var(--gold-400);
   stroke-width: 2.2;
-  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.5));
+  filter: drop-shadow(0 0 10px rgba(229, 184, 105, 0.45));
 }
 
 .state-path.playable:hover {
-  fill: #047857;
-  stroke: #FFE566;
-  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+  fill: #0E5C49;
+  stroke: var(--gold-300);
+  filter: drop-shadow(0 0 18px rgba(229, 184, 105, 0.7));
 }
 
-/* Locked States */
+/* Locked Prototype States */
 .state-path.locked-state {
-  fill: #182030;
-  stroke: rgba(148, 163, 184, 0.25);
-  stroke-width: 1.2;
+  fill: #121927;
+  stroke: rgba(148, 163, 184, 0.2);
+  stroke-width: 1.1;
 }
 
 .state-path.locked-state:hover {
-  fill: #222C42;
-  stroke: rgba(248, 113, 113, 0.6);
+  fill: #1B2438;
+  stroke: rgba(248, 113, 113, 0.5);
 }
 
-/* Specific Tinting for Preview States */
-.state-path[data-state-id="rajasthan"] {
-  fill: #271E1B;
-}
-.state-path[data-state-id="tamil-nadu"] {
-  fill: #182032;
-}
-.state-path[data-state-id="west-bengal"] {
-  fill: #231C2E;
-}
+/* Regional Tinting */
+.state-path[data-state-id="rajasthan"] { fill: #241A16; }
+.state-path[data-state-id="tamil-nadu"] { fill: #131B2A; }
+.state-path[data-state-id="west-bengal"] { fill: #1D1626; }
 
 /* Active Selected State */
 .state-path.selected {
-  stroke-width: 3;
-  stroke: #FF7A00;
-  filter: drop-shadow(0 0 18px rgba(255, 122, 0, 0.8));
+  stroke-width: 2.8;
+  stroke: var(--saffron-400);
+  filter: drop-shadow(0 0 16px rgba(217, 107, 39, 0.75));
 }
 
-/* State Map Markers / Pins Layer */
+/* Map Markers / POI Beacon Layer */
 .map-pins-layer {
   position: absolute;
   inset: 0;
@@ -117,109 +113,116 @@
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  transition: transform 0.2s ease;
+  transition: transform var(--motion-fast) var(--ease-out-back);
   z-index: 10;
 }
 
 .map-pin:hover {
-  transform: translate(-50%, -55%) scale(1.08);
+  transform: translate(-50%, -55%) scale(1.06);
 }
 
 /* Playable Gujarat Pin */
 .pin-playable .pin-icon-wrap {
   position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #FF7A00, #FFD700);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #D96B27, #E5B869);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px rgba(255, 122, 0, 0.6);
-  border: 2px solid #FFFFFF;
+  box-shadow: 0 4px 16px rgba(217, 107, 39, 0.55);
+  border: 1.5px solid #FFFFFF;
 }
 
 .pin-radar-ring {
   position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 2px solid #FFD700;
+  inset: -6px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--gold-400);
   pointer-events: none;
 }
 
 /* Locked Pin */
 .pin-locked .pin-icon-wrap {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: rgba(16, 23, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #94A3B8;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: var(--sand-300);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 0.85rem;
 }
 
 .pin-locked:hover .pin-icon-wrap {
-  border-color: #F87171;
-  color: #F87171;
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+  border-color: var(--terracotta-400);
+  color: var(--terracotta-400);
 }
 
 .pin-label {
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(11, 16, 28, 0.92);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 0.2rem 0.65rem;
-  border-radius: var(--border-radius-pill);
-  font-family: var(--font-title);
+  border: 1px solid var(--gold-border);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  color: #F8FAFC;
+  color: var(--sand-100);
   white-space: nowrap;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .pin-playable .pin-label {
-  border-color: var(--color-royal-gold);
-  color: var(--color-royal-gold);
+  border-color: var(--gold-400);
+  color: var(--gold-300);
 }
 
-/* State Info Sidebar / Panel */
+/* State Info Travel Dossier Sidebar */
 .state-info-panel {
   width: 360px;
   max-width: 100%;
   height: auto;
-  max-height: 80vh;
+  max-height: 82vh;
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  gap: 1.25rem;
+  gap: 1.1rem;
   overflow-y: auto;
   z-index: 20;
+  background: var(--surface-glass-elevated);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-glass);
 }
 
 .state-info-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .state-title-group h2 {
   font-family: var(--font-display);
-  font-size: 1.6rem;
-  color: #FFFFFF;
-  line-height: 1.1;
-  margin-bottom: 0.25rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--sand-50);
+  line-height: 1.2;
 }
 
 .state-tagline {
-  font-size: 0.82rem;
-  color: var(--color-peacock-light);
-  font-weight: 500;
+  font-size: 0.78rem;
+  color: var(--peacock-300);
+  font-family: var(--font-mono);
+  margin-top: 0.15rem;
 }
 
+/* State Stats Matrix */
 .state-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -227,26 +230,28 @@
 }
 
 .stat-box {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--border-radius-sm);
-  padding: 0.5rem;
+  background: rgba(11, 16, 28, 0.7);
+  border: 1px solid rgba(229, 184, 105, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.35rem;
   text-align: center;
 }
 
 .stat-box .val {
   font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--color-royal-gold);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gold-400);
 }
 
 .stat-box .lbl {
-  font-size: 0.68rem;
-  color: #94A3B8;
+  font-size: 0.65rem;
+  color: var(--sand-300);
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
+/* Cultural Pillars List */
 .pillars-list {
   display: flex;
   flex-direction: column;
@@ -257,32 +262,30 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.85rem;
-  color: #CBD5E1;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.4rem 0.6rem;
-  border-radius: var(--border-radius-sm);
+  background: rgba(22, 32, 53, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-xs);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.78rem;
+  color: var(--sand-200);
 }
 
-/* Responsive Rules */
-@media (max-width: 900px) {
+/* Responsive */
+@media (max-width: 860px) {
   .map-screen-layout {
     flex-direction: column;
-    padding-top: calc(var(--hud-height) + 0.75rem);
+    padding-top: calc(var(--hud-height) + 0.5rem);
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-bottom: 1rem;
     overflow-y: auto;
-  }
-  
-  .map-viewport {
-    min-height: 45vh;
-    flex: none;
-    width: 100%;
   }
 
   .state-info-panel {
     width: 100%;
     max-height: none;
+  }
+
+  .map-svg-container {
+    max-height: 50vh;
   }
 }

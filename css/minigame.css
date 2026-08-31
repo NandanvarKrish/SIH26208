@@ -1,8 +1,4 @@
-/* css/minigame.css - Visual styling for the Gujarat Heritage Puzzle Mini-Game */
-
-/* ==========================================================================
-   1. MINI-GAME SCREEN LAYOUT
-   ========================================================================== */
+/* css/minigame.css - Visual styling for the Heritage Puzzle Mini-Game Engine */
 
 .game-screen-layout {
   display: flex;
@@ -13,75 +9,68 @@
   padding-bottom: 1.25rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-  max-width: 1100px;
+  max-width: 1080px;
   margin: 0 auto;
   overflow-y: auto;
-  gap: 1rem;
+  gap: 0.9rem;
   position: relative;
 }
 
-/* Game Top HUD Bar */
+/* Game Top HUD */
 .game-top-hud {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(15, 23, 42, 0.88);
+  background: rgba(16, 23, 40, 0.9);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 215, 0, 0.35);
-  border-radius: var(--border-radius-pill);
-  padding: 0.5rem 1.25rem;
-  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 1.1rem;
 }
 
 .game-hud-stat {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 0.95rem;
-  color: #F8FAFC;
+  font-size: 0.88rem;
+  color: var(--sand-200);
 }
 
 .game-hud-stat .val {
-  color: var(--color-royal-gold);
-  font-size: 1.1rem;
+  color: var(--gold-300);
+  font-size: 1.05rem;
+  font-weight: 800;
 }
 
-/* ==========================================================================
-   2. GAME INSTRUCTION BANNER
-   ========================================================================== */
-
+/* Game Instruction Banner */
 .game-instruction-banner {
-  background: linear-gradient(135deg, rgba(6, 78, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
-  border: 1px solid rgba(0, 210, 196, 0.35);
-  border-radius: var(--border-radius-md);
-  padding: 0.875rem 1.25rem;
+  background: linear-gradient(135deg, rgba(14, 96, 107, 0.45) 0%, rgba(16, 23, 40, 0.9) 100%);
+  border: 1px solid rgba(70, 199, 194, 0.3);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.1rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .game-instruction-text {
-  font-size: 0.88rem;
-  color: #E2E8F0;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  color: var(--sand-100);
+  line-height: 1.45;
 }
 
-/* ==========================================================================
-   3. PUZZLE BOARD & SLOTS (THE ROYAL BRASS PLATTER)
-   ========================================================================== */
-
+/* Royal Brass Platter Puzzle Board */
 .puzzle-board-container {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  border: 2px solid rgba(255, 215, 0, 0.4);
-  border-radius: var(--border-radius-lg);
-  padding: 1.25rem;
-  box-shadow: 0 0 35px rgba(255, 122, 0, 0.15), inset 0 0 25px rgba(0, 0, 0, 0.5);
+  background: var(--surface-glass-elevated);
+  border: 1.5px solid var(--gold-border-bright);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-elevation), var(--shadow-gold-inset);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .board-header {
@@ -92,68 +81,68 @@
 
 .board-title {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--color-royal-gold);
+  color: var(--gold-300);
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
 
-/* Grid of Puzzle Slots / Katoris */
+/* Katori / Platter Slots Grid */
 .puzzle-slots-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 0.75rem;
 }
 
 .puzzle-slot {
-  background: rgba(30, 41, 59, 0.6);
-  border: 2px dashed rgba(255, 255, 255, 0.2);
-  border-radius: var(--border-radius-md);
-  padding: 1rem 0.85rem;
+  background: rgba(11, 16, 28, 0.7);
+  border: 1.5px dashed rgba(229, 184, 105, 0.25);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 155px;
+  transition: all var(--motion-fast) ease;
+  min-height: 145px;
   justify-content: center;
   position: relative;
 }
 
 .puzzle-slot:hover {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: var(--color-royal-gold);
+  background: rgba(22, 32, 53, 0.85);
+  border-color: var(--gold-400);
   transform: translateY(-2px);
 }
 
 .puzzle-slot.highlight-target {
-  background: rgba(255, 122, 0, 0.15);
-  border-color: var(--color-kesariya);
-  box-shadow: 0 0 20px rgba(255, 122, 0, 0.4);
+  background: rgba(217, 107, 39, 0.15);
+  border-color: var(--saffron-400);
+  box-shadow: 0 0 16px rgba(217, 107, 39, 0.4);
 }
 
 .puzzle-slot.slot-filled {
-  background: rgba(6, 78, 59, 0.65);
-  border: 2px solid var(--color-success);
-  box-shadow: 0 0 18px rgba(16, 185, 129, 0.35);
+  background: var(--emerald-surface);
+  border: 1.5px solid var(--emerald-500);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.3);
 }
 
 .slot-label {
-  font-family: var(--font-title);
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-peacock-light);
+  color: var(--peacock-300);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .slot-clue-text {
-  font-size: 0.72rem;
-  color: #94A3B8;
+  font-size: 0.7rem;
+  color: var(--sand-300);
   line-height: 1.35;
 }
 
@@ -161,18 +150,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  gap: 0.2rem;
+  animation: popReveal var(--motion-base) var(--ease-out-back);
 }
 
 .slot-filled-icon {
-  font-size: 2.2rem;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .slot-filled-name {
   font-family: var(--font-title);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #FFFFFF;
 }
@@ -181,32 +170,34 @@
   position: absolute;
   top: 4px;
   right: 4px;
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  color: #F87171;
-  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--terracotta-400);
+  font-size: 0.65rem;
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: var(--radius-xs);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all var(--motion-fast) ease;
 }
 
-/* ==========================================================================
-   4. ITEM TRAY / KITCHEN CONVEYOR
-   ========================================================================== */
+.slot-remove-btn:hover {
+  background: var(--terracotta-500);
+  color: #FFFFFF;
+}
 
+/* Item Tray Section */
 .item-tray-section {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--border-radius-lg);
-  padding: 1.25rem;
+  background: rgba(16, 23, 40, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
 .tray-header {
@@ -217,118 +208,92 @@
 
 .tray-title {
   font-family: var(--font-title);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: #E2E8F0;
+  color: var(--sand-200);
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .puzzle-items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.6rem;
 }
 
 .puzzle-item-card {
-  background: rgba(30, 41, 59, 0.8);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--border-radius-md);
-  padding: 0.75rem 0.5rem;
+  background: rgba(22, 32, 53, 0.75);
+  border: 1px solid rgba(229, 184, 105, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
   cursor: pointer;
-  user-select: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--motion-fast) ease;
 }
 
 .puzzle-item-card:hover {
-  background: rgba(30, 41, 59, 1);
-  border-color: var(--color-royal-gold);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+  background: rgba(27, 39, 64, 0.95);
+  border-color: var(--gold-400);
+  transform: translateY(-2px);
 }
 
 .puzzle-item-card.selected {
-  background: rgba(255, 122, 0, 0.2);
-  border-color: var(--color-kesariya);
-  box-shadow: 0 0 20px rgba(255, 122, 0, 0.6);
-  transform: scale(1.05);
+  background: rgba(217, 107, 39, 0.2);
+  border-color: var(--saffron-400);
+  box-shadow: 0 0 16px rgba(217, 107, 39, 0.5);
+  transform: scale(1.04);
 }
 
 .puzzle-item-card.already-placed {
-  opacity: 0.35;
+  opacity: 0.3;
   pointer-events: none;
   border-style: dashed;
 }
 
 .item-card-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   line-height: 1;
 }
 
 .item-card-name {
   font-family: var(--font-title);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: #F8FAFC;
+  color: var(--sand-50);
   line-height: 1.2;
 }
 
 .item-card-taste {
-  font-size: 0.68rem;
-  color: var(--color-peacock-light);
+  font-size: 0.65rem;
+  color: var(--peacock-300);
+  font-family: var(--font-mono);
   font-weight: 600;
 }
 
-/* ==========================================================================
-   5. MINI-GAME VICTORY & RESULTS SCREEN
-   ========================================================================== */
-
+/* Victory Screen */
 .game-victory-card {
-  background: linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(15, 23, 42, 0.98) 100%);
-  border: 2px solid var(--color-royal-gold);
-  border-radius: var(--border-radius-lg);
-  padding: 2.5rem 1.5rem;
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.94) 0%, rgba(16, 23, 40, 0.98) 100%);
+  border: 1.5px solid var(--gold-400);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 1.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
-  box-shadow: 0 0 45px rgba(255, 215, 0, 0.35);
-  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  gap: 1.1rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), var(--shadow-gold-inset);
+  animation: popReveal var(--motion-enter) var(--ease-out-back);
 }
 
 .game-stars-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 2.5rem;
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
-}
-
-@keyframes popIn {
-  0% { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* Responsive Rules */
-@media (max-width: 640px) {
-  .game-screen-layout {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    padding-top: calc(var(--hud-height) + 0.25rem);
-  }
-
-  .puzzle-slots-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .puzzle-items-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  gap: 0.6rem;
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 12px rgba(229, 184, 105, 0.7));
 }

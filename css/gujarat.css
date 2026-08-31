@@ -1,4 +1,4 @@
-/* css/gujarat.css - Styles for Gujarat Intro Hero, Mira Guide, Regional Map, and Location Deck */
+/* css/gujarat.css - Gujarat Regional Hub, Mira Character & Location Dossier */
 
 /* ==========================================================================
    1. GUJARAT INTRO HERO SCREEN
@@ -13,63 +13,51 @@
   padding-bottom: 1.5rem;
   padding-left: 2rem;
   padding-right: 2rem;
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   overflow-y: auto;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .breadcrumb-nav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-title);
-  font-size: 0.85rem;
-  color: #94A3B8;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--sand-300);
 }
 
 .breadcrumb-btn {
   background: transparent;
   border: none;
-  color: var(--color-peacock-light);
+  color: var(--peacock-300);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius-sm);
-  transition: all 0.2s ease;
-  font-family: var(--font-title);
-  font-size: 0.85rem;
-  font-weight: 600;
+  padding: 0.2rem 0.45rem;
+  border-radius: var(--radius-xs);
+  transition: all var(--motion-fast) ease;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .breadcrumb-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  color: #FFFFFF;
+  color: var(--sand-50);
 }
 
-/* Gujarat Intro Banner */
+/* Gujarat Hero Banner */
 .gujarat-hero-banner {
-  background: linear-gradient(135deg, rgba(6, 78, 59, 0.85) 0%, rgba(15, 23, 42, 0.92) 100%);
-  border: 1px solid rgba(255, 215, 0, 0.35);
-  border-radius: var(--border-radius-lg);
-  padding: 2rem;
+  background: linear-gradient(135deg, rgba(14, 96, 107, 0.5) 0%, rgba(16, 23, 40, 0.95) 100%);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-}
-
-.gujarat-hero-banner::before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 122, 0, 0.25) 0%, transparent 70%);
-  pointer-events: none;
+  box-shadow: var(--shadow-glass);
 }
 
 .gujarat-title-row {
@@ -78,25 +66,21 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .gujarat-main-title {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3.5vw, 2.75rem);
-  font-weight: 900;
-  color: #FFFFFF;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 50%, #FF7A00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  font-weight: 700;
+  color: var(--sand-50);
   line-height: 1.15;
 }
 
 .gujarat-subtitle {
-  font-family: var(--font-title);
-  font-size: 1rem;
-  color: var(--color-peacock-light);
-  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--peacock-300);
+  font-family: var(--font-mono);
 }
 
 /* ==========================================================================
@@ -106,13 +90,12 @@
 .mira-dialog-container {
   display: flex;
   gap: 1.25rem;
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  border-radius: var(--border-radius-lg);
+  background: var(--surface-glass-elevated);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--gold-border-bright);
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
-  box-shadow: var(--shadow-glass), 0 0 25px rgba(255, 122, 0, 0.15);
-  position: relative;
+  box-shadow: var(--shadow-elevation), var(--shadow-gold-inset);
   align-items: flex-start;
 }
 
@@ -120,32 +103,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
-  min-width: 90px;
+  gap: 0.35rem;
+  min-width: 85px;
 }
 
 .mira-avatar-orb {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFE259 0%, #FF7A00 70%, #E65100 100%);
-  border: 3px solid #FFD700;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #D96B27, #E5B869);
+  border: 2px solid var(--gold-300);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.4rem;
-  box-shadow: 0 0 25px rgba(255, 122, 0, 0.5);
+  font-size: 2.2rem;
+  box-shadow: 0 4px 16px rgba(217, 107, 39, 0.45);
   position: relative;
 }
 
 .mira-badge-online {
   position: absolute;
-  bottom: 0;
-  right: 2px;
-  width: 14px;
-  height: 14px;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
   background: #10B981;
-  border: 2px solid #0F172A;
+  border: 2px solid var(--space-950);
   border-radius: 50%;
 }
 
@@ -153,21 +136,21 @@
   font-family: var(--font-title);
   font-weight: 700;
   font-size: 0.85rem;
-  color: var(--color-royal-gold);
+  color: var(--gold-400);
 }
 
 .mira-role-tag {
   font-size: 0.65rem;
-  color: #94A3B8;
+  color: var(--sand-300);
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .mira-speech-bubble {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
 .mira-speech-header {
@@ -178,17 +161,17 @@
 
 .mira-speech-step {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-peacock-light);
-  letter-spacing: 0.05em;
+  color: var(--peacock-300);
+  letter-spacing: 0.04em;
 }
 
 .mira-speech-text {
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   line-height: 1.6;
-  color: #F1F5F9;
-  min-height: 54px;
+  color: var(--sand-100);
+  min-height: 48px;
 }
 
 .mira-speech-actions {
@@ -199,10 +182,7 @@
   margin-top: 0.25rem;
 }
 
-/* ==========================================================================
-   3. GUJARAT 4-PILLAR CARDS GRID
-   ========================================================================== */
-
+/* 4 Cultural Highlights Grid */
 .gujarat-pillars-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -210,63 +190,64 @@
 }
 
 .pillar-card {
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-md);
-  padding: 1.25rem;
+  background: rgba(22, 32, 53, 0.65);
+  border: 1px solid rgba(229, 184, 105, 0.18);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  transition: all 0.25s ease;
+  gap: 0.35rem;
+  transition: all var(--motion-fast) ease;
 }
 
 .pillar-card:hover {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: var(--color-peacock-light);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: rgba(27, 39, 64, 0.85);
+  border-color: var(--gold-400);
+  transform: translateY(-2px);
 }
 
 .pillar-card-icon {
   font-size: 1.75rem;
+  margin-bottom: 0.15rem;
 }
 
 .pillar-card-title {
   font-family: var(--font-title);
+  font-size: 0.92rem;
   font-weight: 700;
-  font-size: 1rem;
-  color: #F8FAFC;
+  color: var(--sand-50);
 }
 
 .pillar-card-desc {
-  font-size: 0.82rem;
-  color: #94A3B8;
-  line-height: 1.5;
+  font-size: 0.78rem;
+  color: var(--sand-300);
+  line-height: 1.4;
 }
 
 /* ==========================================================================
-   4. GUJARAT REGIONAL MAP SCREEN
+   3. GUJARAT REGIONAL MAP & LOCATION DOSSIER
    ========================================================================== */
 
 .gujarat-map-screen-layout {
   display: flex;
   width: 100%;
   height: 100%;
-  padding-top: calc(var(--hud-height) + 1rem);
-  padding-bottom: 1.5rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  gap: 1.75rem;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  padding-top: calc(var(--hud-height) + 0.75rem);
+  padding-bottom: 1.25rem;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  gap: 1.5rem;
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .gujarat-map-canvas-container {
-  flex: 1.3;
+  flex: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
   position: relative;
   overflow: hidden;
 }
@@ -275,250 +256,192 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.gujarat-svg-viewport {
-  flex: 1;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 23, 42, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--border-radius-lg);
-  overflow: hidden;
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+  background: rgba(16, 23, 40, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.85rem;
 }
 
 .gujarat-regional-svg {
   width: 100%;
-  max-width: 600px;
-  height: auto;
-  max-height: 65vh;
-  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.7));
+  height: 100%;
+  max-height: calc(100vh - 170px);
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.7));
 }
 
-/* Regional SVG Zone Paths */
-.zone-path {
-  fill: #132235;
-  stroke: rgba(255, 255, 255, 0.2);
+/* Regional Zone Polygons */
+.zone-polygon {
+  fill: #162035;
+  stroke: rgba(229, 184, 105, 0.25);
   stroke-width: 1.5;
   stroke-linejoin: round;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all var(--motion-fast) ease;
 }
 
-.zone-path:hover {
-  fill: #1E3A5F;
-  stroke: var(--color-peacock-light);
-  stroke-width: 2.2;
+.zone-polygon:hover {
+  fill: #1B2945;
+  stroke: var(--gold-300);
 }
 
-.zone-path.active-zone {
-  fill: #064E3B;
-  stroke: #FFD700;
-  stroke-width: 3;
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7));
+.zone-polygon.selected {
+  stroke-width: 2.8;
+  stroke: var(--saffron-400);
+  fill: #104A3E;
+  filter: drop-shadow(0 0 14px rgba(217, 107, 39, 0.65));
 }
 
-/* Location POI Pins Layer */
-.gujarat-pins-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.gujarat-loc-pin {
+/* Zone POI Pins */
+.poi-pin-wrap {
   position: absolute;
   transform: translate(-50%, -50%);
-  pointer-events: all;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  gap: 0.25rem;
   z-index: 15;
+  transition: transform var(--motion-fast) var(--ease-out-back);
 }
 
-.gujarat-loc-pin:hover {
-  transform: translate(-50%, -60%) scale(1.12);
+.poi-pin-wrap:hover {
+  transform: translate(-50%, -55%) scale(1.08);
 }
 
-.loc-pin-icon-wrap {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-  border: 2px solid #FFD700;
+.poi-pin-beacon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #1B828F, #0E606B);
+  border: 1.5px solid var(--gold-400);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 215, 0, 0.4);
-  transition: all 0.25s ease;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
 }
 
-.gujarat-loc-pin.active .loc-pin-icon-wrap {
-  background: linear-gradient(135deg, #FF7A00 0%, #E65100 100%);
+.poi-pin-wrap.selected .poi-pin-beacon {
+  background: linear-gradient(135deg, #D96B27, #E5B869);
   border-color: #FFFFFF;
-  box-shadow: 0 0 25px rgba(255, 122, 0, 0.8), 0 0 10px #FFD700;
-  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(217, 107, 39, 0.7);
 }
 
-.loc-pin-badge {
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.25rem 0.75rem;
-  border-radius: var(--border-radius-pill);
-  font-family: var(--font-title);
-  font-size: 0.75rem;
+.poi-pin-label {
+  background: rgba(11, 16, 28, 0.95);
+  border: 1px solid var(--gold-border);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   font-weight: 700;
-  color: #F8FAFC;
+  color: var(--sand-100);
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: all 0.2s ease;
 }
 
-.gujarat-loc-pin.active .loc-pin-badge {
-  border-color: var(--color-royal-gold);
-  color: var(--color-royal-gold);
-  background: rgba(15, 23, 42, 0.98);
-}
-
-/* ==========================================================================
-   5. LOCATION INSPECTION DRAWER & QUEST DECK
-   ========================================================================== */
-
+/* Location Dossier Deck Panel */
 .location-deck-panel {
-  flex: 0.95;
-  width: 400px;
+  width: 380px;
   max-width: 100%;
-  height: auto;
-  max-height: 80vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
-  gap: 1.25rem;
+  padding: 1.4rem;
+  gap: 1rem;
   overflow-y: auto;
-  z-index: 20;
+  background: var(--surface-glass-elevated);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
 }
 
 .location-deck-header {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .loc-region-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-peacock-light);
+  color: var(--peacock-300);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .loc-name-title {
   font-family: var(--font-display);
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #FFFFFF;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--sand-50);
   line-height: 1.2;
 }
 
 .loc-tagline-text {
-  font-size: 0.85rem;
-  color: #CBD5E1;
-  font-weight: 500;
+  font-size: 0.78rem;
+  color: var(--sand-300);
 }
 
-/* Mira Live Tip in Location Deck */
+/* Mira Live Tip Callout */
 .mira-live-tip-box {
   display: flex;
-  gap: 0.75rem;
-  background: rgba(255, 122, 0, 0.1);
-  border: 1px solid rgba(255, 122, 0, 0.3);
-  border-radius: var(--border-radius-md);
-  padding: 0.875rem;
+  gap: 0.65rem;
+  background: rgba(229, 184, 105, 0.08);
+  border: 1px solid rgba(229, 184, 105, 0.25);
+  border-left: 3px solid var(--gold-400);
+  border-radius: var(--radius-xs);
+  padding: 0.65rem 0.75rem;
   align-items: flex-start;
 }
 
-.mira-mini-avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFE259, #FF7A00);
-  border: 1.5px solid #FFD700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
-.mira-tip-content {
-  font-size: 0.82rem;
-  color: #F8FAFC;
-  line-height: 1.45;
-}
-
-/* Questline Checklist Grid */
+/* Questline Checklist */
 .quest-checklist {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .quest-item-card {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(16, 23, 40, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--border-radius-sm);
-  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-xs);
+  padding: 0.55rem 0.75rem;
   display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--motion-fast) ease;
+}
+
+.quest-item-card:hover {
+  background: rgba(22, 32, 53, 0.95);
+  border-color: var(--gold-400);
 }
 
 .quest-item-title {
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #E2E8F0;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sand-100);
 }
 
 .quest-item-sub {
-  font-size: 0.7rem;
-  color: #94A3B8;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--sand-300);
 }
 
-/* Responsive Rules */
-@media (max-width: 960px) {
+/* Responsive */
+@media (max-width: 860px) {
   .gujarat-map-screen-layout {
     flex-direction: column;
-    padding-top: calc(var(--hud-height) + 0.5rem);
+    overflow-y: auto;
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-bottom: 1rem;
-    overflow-y: auto;
-  }
-
-  .gujarat-map-canvas-container {
-    min-height: 50vh;
-    flex: none;
-    width: 100%;
   }
 
   .location-deck-panel {
     width: 100%;
-    max-height: none;
+    height: auto;
   }
 }

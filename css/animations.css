@@ -1,14 +1,17 @@
-/* css/animations.css - Keyframes, glow pulses, radar markers, and screen transitions */
+/* css/animations.css - Structured Motion System, Tactile Microinteractions & Transitions */
 
-/* 1. Radar Pulse (Playable Gujarat Marker) */
-@keyframes radar-pulse {
+/* ==========================================================================
+   1. MAP & POI RADAR PULSE (PURPOSEFUL EXPLORATION LIFE)
+   ========================================================================== */
+
+@keyframes radar-ping {
   0% {
-    transform: scale(0.9);
-    opacity: 0.9;
+    transform: scale(0.95);
+    opacity: 0.8;
   }
-  50% {
-    transform: scale(1.6);
-    opacity: 0.4;
+  60% {
+    transform: scale(1.75);
+    opacity: 0.25;
   }
   100% {
     transform: scale(2.2);
@@ -17,39 +20,49 @@
 }
 
 .anim-radar {
-  animation: radar-pulse 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  animation: radar-ping 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  will-change: transform, opacity;
 }
 
-/* 2. Floating Gentle Bobbing (Splash Logo & Avatars) */
-@keyframes float-bob {
+/* ==========================================================================
+   2. SUBTLE GOLDEN AMBIENT BREATHING (FOCUS EMBLEMS ONLY)
+   ========================================================================== */
+
+@keyframes ambient-glow {
   0%, 100% {
-    transform: translateY(0px);
+    box-shadow: 0 0 16px rgba(229, 184, 105, 0.25), inset 0 0 8px rgba(229, 184, 105, 0.15);
   }
   50% {
-    transform: translateY(-8px);
-  }
-}
-
-.anim-float {
-  animation: float-bob 3.5s ease-in-out infinite;
-}
-
-/* 3. Golden Aura Breathing */
-@keyframes aura-breathe {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 122, 0, 0.4), inset 0 0 10px rgba(255, 215, 0, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 35px rgba(255, 215, 0, 0.7), inset 0 0 15px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 28px rgba(229, 184, 105, 0.48), inset 0 0 14px rgba(229, 184, 105, 0.28);
   }
 }
 
 .anim-glow-aura {
-  animation: aura-breathe 2.8s ease-in-out infinite;
+  animation: ambient-glow 3.6s ease-in-out infinite;
 }
 
-/* 4. Button Light Shimmer Streak */
-@keyframes shimmer-sweep {
+/* ==========================================================================
+   3. TACTILE FLOATING BOBBING (MINIMAL & GENTLE)
+   ========================================================================== */
+
+@keyframes subtle-hover-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.anim-float {
+  animation: subtle-hover-float 4.2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   4. PRIMARY CTA SHIMMER SWEEP
+   ========================================================================== */
+
+@keyframes subtle-shimmer {
   0% {
     transform: translateX(-150%) skewX(-20deg);
   }
@@ -58,34 +71,85 @@
   }
 }
 
+.btn-shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
 .btn-shimmer-effect::after {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 40%;
+  width: 35%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  animation: shimmer-sweep 4s infinite ease-in-out;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  animation: subtle-shimmer 4.8s infinite ease-in-out;
+  pointer-events: none;
 }
 
-/* 5. Locked State Error Shake */
-@keyframes shake-x {
+/* ==========================================================================
+   5. TACTILE STAGGERED ENTRANCES
+   ========================================================================== */
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.anim-enter-slide {
+  animation: fadeSlideUp var(--motion-enter) var(--ease-out-expo) forwards;
+}
+
+.anim-pop-reveal {
+  animation: popReveal var(--motion-enter) var(--ease-out-back) forwards;
+}
+
+/* ==========================================================================
+   6. ERROR / WRONG SELECTION GENTLE SHAKE
+   ========================================================================== */
+
+@keyframes gentle-shake {
   0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-5px); }
-  40%, 80% { transform: translateX(5px); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
 }
 
 .anim-shake {
-  animation: shake-x 0.4s ease-in-out;
+  animation: gentle-shake 0.32s ease-in-out;
 }
 
-/* 6. Spin / Rotation (Ashoka Chakra / Loader) */
-@keyframes continuous-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+/* ==========================================================================
+   7. REDUCED MOTION OVERRIDE (ACCESSIBILITY)
+   ========================================================================== */
 
-.anim-spin {
-  animation: continuous-spin 12s linear infinite;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .screen {
+    transition: opacity 0.15s ease !important;
+    transform: none !important;
+  }
 }

@@ -1,8 +1,4 @@
-/* css/story.css - Visual design for the story-driven learning experience, slide deck, and interactive choices */
-
-/* ==========================================================================
-   1. STORY SCREEN LAYOUT & HEADER
-   ========================================================================== */
+/* css/story.css - Story-Driven Cultural Learning & Heritage Dilemma Arena */
 
 .story-screen-layout {
   display: flex;
@@ -11,21 +7,25 @@
   width: 100%;
   padding-top: calc(var(--hud-height) + 0.75rem);
   padding-bottom: 1.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  max-width: 1000px;
+  padding-left: 1.75rem;
+  padding-right: 1.75rem;
+  max-width: 980px;
   margin: 0 auto;
   overflow-y: auto;
-  gap: 1.25rem;
+  gap: 1.1rem;
   position: relative;
 }
 
+/* Story Top Bar */
 .story-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.75rem;
+  background: rgba(16, 23, 40, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 1rem;
 }
 
 .story-progress-pills {
@@ -35,117 +35,85 @@
 }
 
 .story-step-dot {
-  width: 28px;
+  width: 24px;
   height: 6px;
-  border-radius: var(--border-radius-pill);
-  background: rgba(255, 255, 255, 0.15);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-pill);
+  transition: all var(--motion-fast) ease;
 }
 
 .story-step-dot.active {
-  background: var(--color-royal-gold);
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-  width: 40px;
+  background: var(--gold-400);
+  box-shadow: 0 0 8px rgba(229, 184, 105, 0.6);
+  width: 32px;
 }
 
 .story-step-dot.completed {
-  background: var(--color-success);
+  background: var(--emerald-500);
 }
 
-/* ==========================================================================
-   2. STORY SLIDE CARD DECK
-   ========================================================================== */
-
+/* Story Slide Card */
 .story-slide-card {
-  background: rgba(15, 23, 42, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 215, 0, 0.35);
-  border-radius: var(--border-radius-lg);
+  background: var(--surface-glass-elevated);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
   padding: 1.75rem;
-  box-shadow: var(--shadow-glass), 0 0 30px rgba(255, 122, 0, 0.15);
+  box-shadow: var(--shadow-elevation);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   position: relative;
-  overflow: hidden;
-  transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .story-slide-header {
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 1rem;
 }
 
 .scene-tag-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-peacock-light);
-  background: rgba(0, 210, 196, 0.12);
-  border: 1px solid rgba(0, 210, 196, 0.3);
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--border-radius-pill);
-  letter-spacing: 0.08em;
+  color: var(--peacock-300);
+  background: rgba(14, 96, 107, 0.2);
+  border: 1px solid rgba(70, 199, 194, 0.35);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-xs);
   text-transform: uppercase;
 }
 
 .story-slide-title {
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
-  font-weight: 800;
-  color: #FFFFFF;
-  line-height: 1.2;
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  font-weight: 700;
+  color: var(--sand-50);
+  line-height: 1.25;
   margin-top: 0.35rem;
 }
 
 .story-narration-text {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: #E2E8F0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--sand-100);
 }
 
-/* Mira Story Dialogue Companion Box */
+/* Mira Story Companion Bubble */
 .mira-story-bubble {
   display: flex;
-  gap: 1rem;
-  background: linear-gradient(135deg, rgba(255, 122, 0, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
-  border: 1px solid rgba(255, 122, 0, 0.35);
-  border-radius: var(--border-radius-md);
-  padding: 1rem 1.25rem;
+  gap: 0.85rem;
+  background: rgba(11, 16, 28, 0.8);
+  border: 1px solid rgba(229, 184, 105, 0.25);
+  border-left: 3px solid var(--gold-400);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
   align-items: flex-start;
-  position: relative;
-}
-
-.mira-story-bubble::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--color-kesariya);
-  border-top-left-radius: var(--border-radius-md);
-  border-bottom-left-radius: var(--border-radius-md);
 }
 
 .mira-story-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFE259, #FF7A00);
-  border: 2px solid #FFD700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   flex-shrink: 0;
-  box-shadow: 0 0 15px rgba(255, 122, 0, 0.5);
 }
 
 .mira-story-content {
@@ -156,36 +124,35 @@
 }
 
 .mira-story-name {
-  font-family: var(--font-title);
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--color-royal-gold);
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--gold-400);
 }
 
 .mira-story-quote {
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: #F8FAFC;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--sand-200);
   font-style: italic;
 }
 
-/* Inspectable Cultural Artifact Micro-Card */
+/* Inspectable Cultural Artifact Micro-Pill */
 .inspectable-artifact-pill {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(30, 41, 59, 0.5);
+  background: rgba(22, 32, 53, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-md);
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.9rem;
 }
 
 .artifact-pill-icon {
-  font-size: 1.8rem;
-  line-height: 1;
+  font-size: 1.75rem;
 }
 
 .artifact-pill-info {
@@ -195,252 +162,124 @@
 }
 
 .artifact-pill-label {
-  font-family: var(--font-title);
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--color-peacock-light);
+  color: var(--gold-400);
+  text-transform: uppercase;
 }
 
 .artifact-pill-detail {
-  font-size: 0.8rem;
-  color: #94A3B8;
-  line-height: 1.4;
+  font-size: 0.82rem;
+  color: var(--sand-200);
 }
 
-/* 3D Flippable Did You Know? Card */
+/* Flippable "Did You Know?" Card */
 .did-you-know-card {
-  background: rgba(255, 215, 0, 0.06);
-  border: 1px dashed rgba(255, 215, 0, 0.4);
-  border-radius: var(--border-radius-md);
-  padding: 1rem 1.25rem;
+  background: rgba(14, 96, 107, 0.18);
+  border: 1px dashed rgba(70, 199, 194, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.25s ease;
+  gap: 0.4rem;
+  transition: all var(--motion-fast) ease;
 }
 
 .did-you-know-card:hover {
-  background: rgba(255, 215, 0, 0.12);
-  border-color: var(--color-royal-gold);
-  transform: translateY(-2px);
+  background: rgba(14, 96, 107, 0.28);
+  border-color: var(--peacock-300);
 }
 
 .dyk-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  font-family: var(--font-title);
-  font-size: 0.8rem;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-royal-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--peacock-300);
 }
 
 .dyk-question {
-  font-size: 0.9rem;
   font-weight: 600;
-  color: #F8FAFC;
+  font-size: 0.88rem;
+  color: var(--sand-50);
 }
 
 .dyk-answer {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   line-height: 1.5;
-  color: #CBD5E1;
-  padding-top: 0.4rem;
-  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  color: var(--sand-200);
+  animation: fadeSlideUp var(--motion-base) var(--ease-out-expo);
 }
 
-/* ==========================================================================
-   3. STORY NAVIGATION DOCK
-   ========================================================================== */
-
-.story-nav-dock {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 0.5rem;
-}
-
-/* ==========================================================================
-   4. INTERACTIVE CHALLENGE / DILEMMA ARENA
-   ========================================================================== */
-
-.challenge-arena-container {
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 215, 0, 0.4);
-  border-radius: var(--border-radius-lg);
+/* Story Dilemma Arena */
+.story-dilemma-card {
+  background: var(--surface-glass-elevated);
+  border: 1px solid var(--gold-border-bright);
+  border-radius: var(--radius-lg);
   padding: 1.75rem;
-  box-shadow: var(--shadow-glass), 0 0 35px rgba(255, 122, 0, 0.2);
+  box-shadow: var(--shadow-elevation);
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-}
-
-.challenge-context-box {
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-md);
-  padding: 1rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.challenge-question-text {
-  font-family: var(--font-title);
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #FFFFFF;
-  line-height: 1.4;
-}
-
-/* 4 Interactive Choice Buttons Grid */
-.story-choices-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.choice-option-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: rgba(30, 41, 59, 0.7);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--border-radius-md);
-  padding: 1rem 1.25rem;
-  cursor: pointer;
-  outline: none;
-  color: #F1F5F9;
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-align: left;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   gap: 1rem;
 }
 
-.choice-option-btn:hover:not(:disabled) {
-  background: rgba(30, 41, 59, 0.95);
-  border-color: var(--color-royal-gold);
-  transform: translateX(4px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.choice-option-btn.selected-correct {
-  background: rgba(6, 78, 59, 0.85);
-  border-color: var(--color-success);
-  color: #FFFFFF;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
-}
-
-.choice-option-btn.selected-wrong {
-  background: rgba(127, 29, 29, 0.85);
-  border-color: var(--color-error);
-  color: #FFFFFF;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
-  animation: shake-x 0.4s ease-in-out;
-}
-
-.choice-option-btn:disabled {
-  cursor: default;
-}
-
-/* Feedback Box */
-.choice-feedback-box {
-  background: rgba(15, 23, 42, 0.95);
-  border-radius: var(--border-radius-md);
-  padding: 1.25rem;
+.dilemma-options-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  animation: fadeIn 0.3s ease;
+  gap: 0.65rem;
 }
 
-.feedback-status-title {
-  font-family: var(--font-title);
-  font-weight: 700;
-  font-size: 1.05rem;
+.dilemma-option-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.feedback-status-title.correct {
-  color: var(--color-success);
-}
-
-.feedback-status-title.incorrect {
-  color: var(--color-error);
-}
-
-.feedback-explanation {
+  gap: 0.75rem;
+  width: 100%;
+  background: rgba(16, 23, 40, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1.1rem;
+  cursor: pointer;
+  color: var(--sand-100);
+  font-family: var(--font-body);
   font-size: 0.92rem;
-  line-height: 1.6;
-  color: #E2E8F0;
+  text-align: left;
+  transition: all var(--motion-fast) ease;
 }
 
-.feedback-cultural-insight {
-  font-size: 0.82rem;
-  color: var(--color-royal-gold);
-  background: rgba(255, 215, 0, 0.08);
-  padding: 0.5rem 0.75rem;
-  border-radius: var(--border-radius-sm);
-  border-left: 3px solid var(--color-royal-gold);
+.dilemma-option-btn:hover:not(:disabled) {
+  background: rgba(27, 39, 64, 0.95);
+  border-color: var(--gold-400);
+  color: var(--sand-50);
+  transform: translateX(3px);
 }
 
-/* ==========================================================================
-   5. STORY VICTORY & REPLAY BANNER
-   ========================================================================== */
+.dilemma-option-btn.opt-correct {
+  background: var(--emerald-surface) !important;
+  border-color: var(--emerald-500) !important;
+  color: #FFFFFF;
+}
 
+.dilemma-option-btn.opt-wrong {
+  background: var(--terracotta-surface) !important;
+  border-color: var(--terracotta-500) !important;
+  color: #FFFFFF;
+}
+
+/* Story Victory Card */
 .story-victory-card {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(16, 23, 40, 0.98) 100%);
+  border: 1.5px solid var(--gold-400);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 1.75rem;
   text-align: center;
-  background: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
-  border: 2px solid var(--color-royal-gold);
-  border-radius: var(--border-radius-lg);
-  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
-  box-shadow: 0 0 45px rgba(255, 215, 0, 0.3);
-}
-
-.victory-xp-burst {
-  font-family: var(--font-mono);
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: var(--color-royal-gold);
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .story-screen-layout {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: calc(var(--hud-height) + 0.5rem);
-  }
-
-  .story-slide-card,
-  .challenge-arena-container {
-    padding: 1.25rem;
-  }
-
-  .story-nav-dock {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .story-nav-dock button {
-    width: 100%;
-  }
+  gap: 1.1rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), var(--shadow-gold-inset);
+  animation: popReveal var(--motion-enter) var(--ease-out-back);
 }

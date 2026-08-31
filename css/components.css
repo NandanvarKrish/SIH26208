@@ -1,10 +1,9 @@
-/* css/components.css - Reusable UI components: Buttons, HUD, Cards, Modals, Badges */
+/* css/components.css - Handcrafted Adventure Game UI Components */
 
 /* ==========================================================================
-   1. BUTTON SYSTEM
+   1. TACTILE BUTTON SYSTEM
    ========================================================================== */
 
-/* Base Button */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -12,117 +11,198 @@
   gap: 0.5rem;
   font-family: var(--font-title);
   font-weight: 600;
-  font-size: 0.95rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius-md);
-  border: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
   cursor: pointer;
   outline: none;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--motion-quick) var(--ease-out-expo),
+              background var(--motion-fast) ease,
+              border-color var(--motion-fast) ease,
+              box-shadow var(--motion-fast) ease;
   position: relative;
-  overflow: hidden;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .btn:focus-visible {
-  box-shadow: 0 0 0 3px var(--color-peacock-light);
+  outline: 2px solid var(--gold-400);
+  outline-offset: 2px;
 }
 
-/* Primary Adventure CTA (Saffron / Gold 3D Bevel) */
+.btn:active:not(:disabled) {
+  transform: translateY(1.5px) scale(0.99);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+  pointer-events: none;
+}
+
+/* Primary Adventure CTA (Rich Saffron & Gold Inlay) */
 .btn-primary {
-  background: linear-gradient(135deg, #FF7A00 0%, #E65100 100%);
-  color: #FFFFFF;
-  border: 1px solid #FFD700;
-  box-shadow: 0 4px 0 #993300, 0 8px 25px rgba(255, 122, 0, 0.45);
+  background: linear-gradient(135deg, #D96B27 0%, #B34E14 100%);
+  color: var(--sand-50);
+  border: 1px solid var(--gold-400);
+  box-shadow: 0 3px 0 #7A310A, 0 8px 20px rgba(217, 107, 39, 0.3);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   font-weight: 700;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 #993300, 0 12px 30px rgba(255, 122, 0, 0.65);
-  background: linear-gradient(135deg, #FFA040 0%, #FF6F00 100%);
-}
-
-.btn-primary:active {
-  transform: translateY(2px);
-  box-shadow: 0 2px 0 #993300, 0 4px 15px rgba(255, 122, 0, 0.4);
-}
-
-/* Secondary Peacock Button */
-.btn-secondary {
-  background: rgba(0, 142, 138, 0.25);
-  color: #E0F7F6;
-  border: 1px solid var(--color-peacock-light);
-  backdrop-filter: blur(8px);
-}
-
-.btn-secondary:hover {
-  background: rgba(0, 142, 138, 0.45);
-  box-shadow: var(--shadow-glow-teal);
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #E27933 0%, #C45719 100%);
+  border-color: var(--gold-300);
+  box-shadow: 0 4px 0 #7A310A, 0 10px 24px rgba(217, 107, 39, 0.45);
   transform: translateY(-1px);
 }
 
-/* Guest / Outline Button */
-.btn-outline {
-  background: rgba(255, 255, 255, 0.05);
-  color: #CBD5E1;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Secondary Mineral Peacock Button */
+.btn-secondary {
+  background: rgba(14, 96, 107, 0.32);
+  color: #D4F4F3;
+  border: 1px solid rgba(70, 199, 194, 0.45);
+  backdrop-filter: blur(8px);
 }
 
-.btn-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(14, 96, 107, 0.55);
+  border-color: var(--peacock-300);
+  box-shadow: 0 4px 16px rgba(14, 96, 107, 0.35);
   color: #FFFFFF;
 }
 
-/* Icon Action Button */
+/* Outline Slate & Sandstone Button */
+.btn-outline {
+  background: rgba(22, 32, 53, 0.6);
+  color: var(--sand-200);
+  border: 1px solid rgba(229, 184, 105, 0.25);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: rgba(27, 39, 64, 0.85);
+  border-color: var(--gold-400);
+  color: var(--gold-300);
+}
+
+/* Icon Buttons */
 .btn-icon {
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border-radius: var(--border-radius-pill);
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #F8FAFC;
-  display: flex;
+  background: rgba(22, 32, 53, 0.7);
+  border: 1px solid rgba(229, 184, 105, 0.2);
+  color: var(--sand-200);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all var(--motion-fast) ease;
+  flex-shrink: 0;
 }
 
 .btn-icon:hover {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: var(--color-royal-gold);
-  transform: scale(1.05);
-  color: var(--color-royal-gold);
+  background: rgba(27, 39, 64, 0.95);
+  border-color: var(--gold-400);
+  color: var(--gold-300);
+  transform: translateY(-1px);
+}
+
+/* Avatar Onboarding Selection Grid */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  margin-top: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.avatar-card {
+  background: rgba(16, 23, 40, 0.85);
+  border: 1.5px solid rgba(229, 184, 105, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.35rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: all var(--motion-fast) ease;
+  outline: none;
+}
+
+.avatar-card:hover {
+  background: rgba(27, 39, 64, 0.95);
+  border-color: var(--gold-400);
+  transform: translateY(-2px);
+}
+
+.avatar-card.selected {
+  background: rgba(217, 107, 39, 0.2);
+  border-color: var(--gold-400);
+  box-shadow: 0 0 16px rgba(229, 184, 105, 0.35);
+}
+
+.avatar-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.avatar-name {
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--sand-50);
+}
+
+/* Form Input Field */
+.input-field {
+  width: 100%;
+  background: rgba(16, 23, 40, 0.85);
+  border: 1px solid rgba(229, 184, 105, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.95rem;
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
+}
+
+.input-field:focus {
+  border-color: var(--gold-400);
+  box-shadow: 0 0 12px rgba(229, 184, 105, 0.25);
 }
 
 /* ==========================================================================
-   2. TOP HUD (HEADS-UP DISPLAY)
+   2. TOP EXPEDITION HUD (RPG ADVENTURE GAME BAR)
    ========================================================================== */
 
 .top-hud {
   position: fixed;
-  top: 1rem;
+  top: 0.75rem;
   left: 50%;
   transform: translateX(-50%);
-  width: calc(100% - 2rem);
-  max-width: 1200px;
+  width: calc(100% - 1.5rem);
+  max-width: var(--container-max-width);
   height: var(--hud-height);
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 1.25rem;
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--border-radius-pill);
-  box-shadow: var(--shadow-glass);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  padding: 0.4rem 1.1rem;
+  background: rgba(11, 16, 28, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevation), var(--shadow-gold-inset);
+  transition: transform var(--motion-base) var(--ease-out-expo), opacity var(--motion-base) ease;
 }
 
 .top-hud.hidden {
@@ -131,38 +211,39 @@
   pointer-events: none;
 }
 
+/* Player Profile Badge */
 .hud-player-profile {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
 
 .hud-avatar-frame {
   position: relative;
-  width: 46px;
-  height: 46px;
-  border-radius: var(--border-radius-pill);
-  border: 2px solid var(--color-royal-gold);
-  background: #1E293B;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--gold-400);
+  background: var(--space-850);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  font-size: 1.35rem;
+  box-shadow: 0 0 12px rgba(229, 184, 105, 0.2);
 }
 
 .hud-level-badge {
   position: absolute;
   bottom: -4px;
-  right: -6px;
-  background: var(--color-kesariya);
+  right: -5px;
+  background: var(--saffron-500);
   color: #FFFFFF;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  padding: 1px 5px;
-  border-radius: var(--border-radius-pill);
-  border: 1px solid #FFFFFF;
+  padding: 0px 4px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--gold-300);
 }
 
 .hud-player-info {
@@ -172,182 +253,142 @@
 
 .hud-player-name {
   font-family: var(--font-title);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #F8FAFC;
+  color: var(--sand-50);
   line-height: 1.2;
 }
 
 .hud-player-title {
-  font-size: 0.75rem;
-  color: var(--color-peacock-light);
-  font-weight: 500;
+  font-size: 0.72rem;
+  color: var(--gold-400);
+  font-family: var(--font-mono);
+  letter-spacing: 0.03em;
 }
 
-/* XP Bar Component */
+/* XP Level Progress Bar */
 .hud-xp-container {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 180px;
+  width: 220px;
 }
 
 .hud-xp-header {
   display: flex;
   justify-content: space-between;
-  font-size: 0.72rem;
+  align-items: center;
   font-family: var(--font-mono);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #94A3B8;
-  letter-spacing: 0.05em;
+  color: var(--sand-300);
 }
 
 .hud-xp-track {
   width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: var(--border-radius-pill);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
   overflow: hidden;
-  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hud-xp-fill {
   height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--color-peacock-light) 0%, var(--color-kesariya) 100%);
-  box-shadow: 0 0 10px rgba(255, 122, 0, 0.8);
-  border-radius: var(--border-radius-pill);
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, #1B828F, #34D399, #E5B869);
+  border-radius: var(--radius-pill);
+  transition: width 0.4s var(--ease-out-expo);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);
 }
 
-/* Stats / Coins */
+/* Treasury & State Progress Counters */
 .hud-stats-group {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+}
+
+.hud-score-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(22, 32, 53, 0.7);
+  border: 1px solid rgba(229, 184, 105, 0.2);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--gold-300);
+}
+
+.hud-mastery-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(217, 107, 39, 0.12);
+  border: 1px solid rgba(217, 107, 39, 0.3);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--saffron-400);
 }
 
 .hud-coin-pill {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  background: rgba(255, 215, 0, 0.12);
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--border-radius-pill);
+  gap: 0.35rem;
+  background: rgba(22, 32, 53, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--color-royal-gold);
+  font-size: 0.82rem;
+  color: var(--sand-100);
 }
 
 /* ==========================================================================
-   3. AVATAR SELECTOR & FORM INPUTS
-   ========================================================================== */
-
-.avatar-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  margin: 1.25rem 0;
-}
-
-.avatar-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 0.5rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 2px solid transparent;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.avatar-card:hover {
-  background: rgba(30, 41, 59, 0.9);
-  border-color: rgba(255, 215, 0, 0.4);
-  transform: translateY(-2px);
-}
-
-.avatar-card.selected {
-  background: rgba(255, 122, 0, 0.15);
-  border-color: var(--color-kesariya);
-  box-shadow: 0 0 15px rgba(255, 122, 0, 0.4);
-}
-
-.avatar-icon {
-  font-size: 2.2rem;
-  line-height: 1;
-}
-
-.avatar-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #E2E8F0;
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.875rem 1.25rem;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--border-radius-md);
-  color: #FFFFFF;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.input-field:focus {
-  border-color: var(--color-kesariya);
-  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25);
-  background: rgba(15, 23, 42, 0.95);
-}
-
-.input-field::placeholder {
-  color: #64748B;
-}
-
-/* ==========================================================================
-   4. MODALS & POPUPS
+   3. GLOBAL REUSABLE MODAL
    ========================================================================== */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
-  background: rgba(7, 11, 20, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  z-index: 500;
+  background: rgba(7, 10, 17, 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  pointer-events: none;
+  transition: opacity var(--motion-base) var(--ease-in-out-smooth), visibility var(--motion-base);
 }
 
 .modal-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: all;
 }
 
 .modal-container {
+  background: var(--space-900);
+  border: 1px solid var(--gold-border-bright);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), var(--shadow-gold-inset);
+  max-width: 540px;
   width: 100%;
-  max-width: 520px;
-  background: #0F172A;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-  padding: 2rem;
+  padding: 1.75rem;
   position: relative;
-  transform: scale(0.92) translateY(20px);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  max-height: 90vh;
+  transform: scale(0.95) translateY(8px);
+  transition: transform var(--motion-enter) var(--ease-out-back);
+  max-height: 88vh;
   overflow-y: auto;
 }
 
@@ -357,39 +398,40 @@
 
 .modal-close-btn {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 1rem;
+  right: 1rem;
   background: transparent;
   border: none;
-  color: #94A3B8;
-  font-size: 1.5rem;
+  color: var(--sand-300);
+  font-size: 1.25rem;
   cursor: pointer;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--border-radius-pill);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all var(--motion-fast) ease;
 }
 
 .modal-close-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
+  color: var(--sand-50);
 }
 
-/* Locked State Badge in Modal */
+/* Heraldic Status Badges */
 .badge-locked {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.12);
   border: 1px solid rgba(239, 68, 68, 0.35);
-  color: #F87171;
-  font-size: 0.75rem;
+  color: #FCA5A5;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
   font-weight: 700;
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--border-radius-pill);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
   text-transform: uppercase;
 }
 
@@ -397,18 +439,19 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  background: rgba(16, 185, 129, 0.2);
-  border: 1px solid rgba(16, 185, 129, 0.5);
-  color: #34D399;
-  font-size: 0.75rem;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #6EE7B7;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
   font-weight: 700;
-  padding: 0.25rem 0.65rem;
-  border-radius: var(--border-radius-pill);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
   text-transform: uppercase;
 }
 
 /* ==========================================================================
-   5. REWARD NOTIFICATION TOAST SYSTEM
+   4. REWARD NOTIFICATION TOAST SYSTEM
    ========================================================================== */
 
 .reward-toast-container {
@@ -418,36 +461,36 @@
   z-index: 300;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
   pointer-events: none;
-  max-width: 380px;
+  max-width: 360px;
   width: calc(100% - 3rem);
 }
 
 .reward-toast {
   pointer-events: all;
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(16, 23, 40, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1.5px solid var(--color-royal-gold);
-  border-radius: var(--border-radius-md);
-  padding: 0.875rem 1rem;
+  border: 1px solid var(--gold-border-bright);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.95rem;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.35);
-  animation: toastSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 20px rgba(229, 184, 105, 0.2);
+  animation: toastEntrance var(--motion-enter) var(--ease-out-back) forwards;
+  transition: transform var(--motion-fast) ease, opacity var(--motion-fast) ease;
 }
 
 .reward-toast.toast-dismissing {
-  transform: translateX(120%) scale(0.9);
+  transform: translateX(115%) scale(0.95);
   opacity: 0;
 }
 
-@keyframes toastSlideIn {
+@keyframes toastEntrance {
   from {
-    transform: translateY(40px) scale(0.85);
+    transform: translateY(30px) scale(0.9);
     opacity: 0;
   }
   to {
@@ -457,41 +500,36 @@
 }
 
 .toast-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFE259, #FF7A00);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #D96B27, #E5B869);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   flex-shrink: 0;
-  border: 1.5px solid #FFFFFF;
+  border: 1px solid var(--gold-300);
 }
 
 .toast-content {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.15rem;
   flex: 1;
 }
 
 .toast-header-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .toast-badge {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
-  color: var(--color-royal-gold);
-  background: rgba(255, 215, 0, 0.12);
-  border: 1px solid rgba(255, 215, 0, 0.35);
-  padding: 0.1rem 0.45rem;
-  border-radius: var(--border-radius-pill);
+  color: var(--gold-400);
   text-transform: uppercase;
 }
 
@@ -506,58 +544,50 @@
   font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 800;
-  color: var(--color-peacock-light);
+  color: var(--peacock-300);
 }
 
 .toast-title {
   font-family: var(--font-title);
   font-weight: 700;
-  font-size: 0.88rem;
-  color: #FFFFFF;
+  font-size: 0.85rem;
+  color: var(--sand-50);
   line-height: 1.2;
 }
 
 .toast-sub {
-  font-size: 0.78rem;
-  color: #CBD5E1;
+  font-size: 0.74rem;
+  color: var(--sand-300);
   line-height: 1.35;
 }
 
 .toast-item-unlocked {
-  font-size: 0.75rem;
-  color: var(--color-royal-gold);
-  background: rgba(255, 215, 0, 0.08);
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--border-radius-sm);
+  font-size: 0.72rem;
+  color: var(--gold-300);
+  background: rgba(229, 184, 105, 0.08);
+  padding: 0.2rem 0.45rem;
+  border-radius: var(--radius-xs);
   margin-top: 0.2rem;
   display: inline-block;
+  border: 1px solid rgba(229, 184, 105, 0.25);
 }
 
-/* HUD Score & Mastery Pill */
-.hud-score-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: rgba(0, 210, 196, 0.12);
-  border: 1px solid rgba(0, 210, 196, 0.3);
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--border-radius-pill);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: var(--color-peacock-light);
-}
+/* ==========================================================================
+   5. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
 
-.hud-mastery-pill {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: rgba(255, 122, 0, 0.12);
-  border: 1px solid rgba(255, 122, 0, 0.35);
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--border-radius-pill);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: var(--color-kesariya);
+@media (max-width: 640px) {
+  .top-hud {
+    padding: 0.35rem 0.75rem;
+    height: auto;
+  }
+
+  .hud-player-title,
+  .hud-xp-container {
+    display: none;
+  }
+
+  .hud-stats-group {
+    gap: 0.35rem;
+  }
 }
