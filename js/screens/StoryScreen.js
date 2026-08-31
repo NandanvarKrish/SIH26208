@@ -256,13 +256,17 @@ export class StoryScreen {
         </p>
 
         <!-- Action Buttons -->
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem;">
-          <button id="victory-replay-btn" class="btn btn-outline" style="padding: 0.75rem 1.75rem;">
-            🔄 Replay Story Chapter
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem;">
+          <button id="victory-play-game-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.75rem 1.75rem;">
+            🎮 Play Regional Mini-Game (+100 XP) →
           </button>
           
-          <button id="victory-return-map-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.75rem 2rem;">
-            🗺️ Return to Gujarat Hub →
+          <button id="victory-replay-btn" class="btn btn-outline" style="padding: 0.75rem 1.5rem;">
+            🔄 Replay Story
+          </button>
+          
+          <button id="victory-return-map-btn" class="btn btn-secondary" style="padding: 0.75rem 1.5rem;">
+            🗺️ Gujarat Hub
           </button>
         </div>
 
@@ -414,6 +418,14 @@ export class StoryScreen {
       returnMapBtn.addEventListener('click', () => {
         soundFx.playChime();
         router.navigateTo('gujarat-map');
+      });
+    }
+
+    const playGameBtn = this.screenEl.querySelector('#victory-play-game-btn');
+    if (playGameBtn) {
+      playGameBtn.addEventListener('click', () => {
+        soundFx.playChime();
+        router.navigateTo('game', { locationId: this.locationId });
       });
     }
   }

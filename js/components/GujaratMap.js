@@ -200,14 +200,14 @@ export class GujaratMap {
             <span class="quest-item-sub">${location.questline.story.title} (+${location.questline.story.xp} XP)</span>
           </div>
 
-          <div class="quest-item-card">
-            <span class="quest-item-title">🎮 Mini-Game</span>
-            <span class="quest-item-sub">${location.questline.miniGame.title} (+${location.questline.miniGame.xp} XP)</span>
+          <div class="quest-item-card" style="border-color: rgba(0, 210, 196, 0.4); cursor: pointer;" id="deck-game-card">
+            <span class="quest-item-title">🎮 Mini-Game (Playable)</span>
+            <span class="quest-item-sub">${location.questline.miniGame.title} (+100 XP)</span>
           </div>
 
-          <div class="quest-item-card">
-            <span class="quest-item-title">🏆 Cultural Quiz</span>
-            <span class="quest-item-sub">${location.questline.quiz.title} (${location.questline.quiz.questionCount} Qs)</span>
+          <div class="quest-item-card" style="border-color: rgba(255, 215, 0, 0.4); cursor: pointer;" id="deck-quiz-card">
+            <span class="quest-item-title">🏆 Cultural Quiz (Playable)</span>
+            <span class="quest-item-sub">${location.questline.quiz.title} (+150 XP)</span>
           </div>
 
           <div class="quest-item-card">
@@ -218,14 +218,19 @@ export class GujaratMap {
       </div>
 
       <!-- Action Buttons -->
-      <div class="mt-auto pt-3" style="display: flex; flex-direction: column; gap: 0.6rem;">
+      <div class="mt-auto pt-3" style="display: flex; flex-direction: column; gap: 0.4rem;">
         <button id="loc-play-story-btn" class="btn btn-primary btn-shimmer-effect" style="width: 100%;">
-          ${isStoryDone ? '🔄 Replay Cultural Story (+100 XP) →' : '📖 Discover Cultural Story (+100 XP) →'}
+          ${isStoryDone ? '🔄 Replay Story (+100 XP) →' : '📖 Discover Story (+100 XP) →'}
         </button>
 
-        <button id="loc-start-expedition-btn" class="btn btn-outline" style="width: 100%;">
-          ${isVisited ? '📍 Location Mapped (Overview)' : '⚡ Quick Location Check-in (+50 XP)'}
-        </button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+          <button id="loc-play-game-btn" class="btn btn-secondary" style="font-size: 0.82rem; padding: 0.6rem 0.5rem;">
+            🎮 Mini-Game
+          </button>
+          <button id="loc-play-quiz-btn" class="btn btn-outline" style="font-size: 0.82rem; padding: 0.6rem 0.5rem; border-color: var(--color-royal-gold); color: var(--color-royal-gold);">
+            🏆 Take Quiz
+          </button>
+        </div>
       </div>
     `;
 
@@ -238,12 +243,23 @@ export class GujaratMap {
       });
     }
 
-    const expeditionBtn = this.deckPanel.querySelector('#loc-start-expedition-btn');
-    if (expeditionBtn) {
-      expeditionBtn.addEventListener('click', () => {
-        this.handleStartExpedition(location);
-      });
-    }
+    const playGameBtn = this.deckPanel.querySelector('#loc-play-game-btn');
+    const deckGameCard = this.deckPanel.querySelector('#deck-game-card');
+    const handleLaunchGame = () => {
+      soundFx.playChime();
+      router.navigateTo('game', { locationId: location.id });
+    };
+    if (playGameBtn) playGameBtn.addEventListener('click', handleLaunchGame);
+    if (deckGameCard) deckGameCard.addEventListener('click', handleLaunchGame);
+
+    const playQuizBtn = this.deckPanel.querySelector('#loc-play-quiz-btn');
+    const deckQuizCard = this.deckPanel.querySelector('#deck-quiz-card');
+    const handleLaunchQuiz = () => {
+      soundFx.playChime();
+      router.navigateTo('quiz', { locationId: 'gujarat-master' });
+    };
+    if (playQuizBtn) playQuizBtn.addEventListener('click', handleLaunchQuiz);
+    if (deckQuizCard) deckQuizCard.addEventListener('click', handleLaunchQuiz);
 
     const ttsBtn = this.deckPanel.querySelector('#mira-deck-tts-btn');
     if (ttsBtn) {

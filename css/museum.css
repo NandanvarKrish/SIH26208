@@ -1,0 +1,320 @@
+/* css/museum.css - Visual styling for the BharatVerse Cultural Museum & Reward Vault */
+
+/* ==========================================================================
+   1. MUSEUM SCREEN LAYOUT & HERO BANNER
+   ========================================================================== */
+
+.museum-screen-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-top: calc(var(--hud-height) + 0.5rem);
+  padding-bottom: 2rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-y: auto;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.museum-header-banner {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(6, 78, 59, 0.75) 100%);
+  border: 1.5px solid var(--color-royal-gold);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.25), var(--shadow-glass);
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.museum-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.museum-vault-icon {
+  font-size: 2.75rem;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+}
+
+.museum-main-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.15;
+}
+
+.museum-sub-title {
+  font-size: 0.85rem;
+  color: var(--color-peacock-light);
+  margin-top: 0.2rem;
+}
+
+/* Completion Metrics in Header */
+.museum-completion-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 220px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem 1rem;
+}
+
+.museum-progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-pill);
+  overflow: hidden;
+}
+
+.museum-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00D2C4, #FFD700);
+  border-radius: var(--border-radius-pill);
+  transition: width 0.4s ease;
+}
+
+/* ==========================================================================
+   2. CATEGORY FILTER TABS
+   ========================================================================== */
+
+.museum-filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.museum-tab-btn {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-pill);
+  padding: 0.45rem 1.1rem;
+  color: #CBD5E1;
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.museum-tab-btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: var(--color-royal-gold);
+  color: #FFFFFF;
+}
+
+.museum-tab-btn.active {
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.4) 0%, rgba(255, 215, 0, 0.3) 100%);
+  border-color: var(--color-royal-gold);
+  color: var(--color-royal-gold);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* ==========================================================================
+   3. ARTIFACTS EXHIBITION GRID & CARDS
+   ========================================================================== */
+
+.museum-artifacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.artifact-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.85rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Unlocked Glowing State */
+.artifact-card.unlocked {
+  background: radial-gradient(circle at 50% 30%, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+}
+
+.artifact-card.unlocked:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.35);
+  border-color: var(--color-royal-gold);
+}
+
+/* Locked Frosted State */
+.artifact-card.locked {
+  opacity: 0.75;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1.5px dashed rgba(255, 255, 255, 0.2);
+}
+
+.artifact-card.locked:hover {
+  opacity: 0.95;
+  border-color: rgba(255, 122, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Pedestal Display */
+.artifact-pedestal {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  position: relative;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease;
+}
+
+.artifact-card.unlocked:hover .artifact-pedestal {
+  transform: scale(1.1);
+}
+
+.artifact-card.locked .artifact-pedestal {
+  filter: grayscale(0.8) brightness(0.7);
+}
+
+.artifact-lock-overlay {
+  position: absolute;
+  font-size: 1.5rem;
+  background: rgba(15, 23, 42, 0.85);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  bottom: -4px;
+  right: -4px;
+}
+
+.artifact-rarity-badge {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--border-radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.artifact-name {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.25;
+}
+
+.artifact-location {
+  font-size: 0.75rem;
+  color: var(--color-peacock-light);
+}
+
+.artifact-desc-snippet {
+  font-size: 0.8rem;
+  color: #CBD5E1;
+  line-height: 1.4;
+}
+
+.artifact-unlock-hint {
+  font-size: 0.72rem;
+  color: var(--color-royal-gold);
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px dashed rgba(255, 215, 0, 0.3);
+  border-radius: var(--border-radius-sm);
+  padding: 0.4rem 0.6rem;
+  width: 100%;
+}
+
+/* ==========================================================================
+   4. ARTIFACT DETAIL SHOWCASE MODAL
+   ========================================================================== */
+
+.artifact-modal-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.modal-artifact-icon-glow {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE259 0%, #FF7A00 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
+}
+
+.modal-artifact-provenance-box {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+}
+
+.modal-fun-fact-box {
+  background: rgba(255, 215, 0, 0.08);
+  border-left: 3px solid var(--color-royal-gold);
+  border-radius: var(--border-radius-sm);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+  color: var(--color-royal-gold);
+  text-align: left;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .museum-screen-layout {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .museum-artifacts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-artifact-provenance-box {
+    grid-template-columns: 1fr;
+  }
+}

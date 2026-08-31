@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="css/gujarat.css">
   <link rel="stylesheet" href="css/story.css">
+  <link rel="stylesheet" href="css/minigame.css">
+  <link rel="stylesheet" href="css/quiz.css">
 </head>
 <body>
   <!-- Ambient Cosmic & Sacred Mandala Background -->
@@ -54,6 +56,14 @@
 
       <!-- Treasury & Quick Actions -->
       <div class="hud-stats-group">
+        <div class="hud-score-pill" title="Total Exploration Score">
+          <span>🏆</span>
+          <span id="hud-score-val">0</span>
+        </div>
+        <div class="hud-mastery-pill" title="Gujarat State Mastery Completion">
+          <span>🗺️</span>
+          <span id="hud-mastery-val">0%</span>
+        </div>
         <div class="hud-coin-pill" title="Bharat Coins">
           <span>🪙</span>
           <span id="hud-coins-val">100</span>
@@ -61,7 +71,7 @@
         <button id="hud-sound-toggle-btn" class="btn-icon" title="Toggle Sound (Mute/Unmute)" aria-label="Sound Toggle">
           🔊
         </button>
-        <button id="hud-logout-btn" class="btn-icon" title="Switch Explorer Profile" aria-label="Switch Profile">
+        <button id="hud-settings-btn" class="btn-icon" title="Expedition Settings & Progress" aria-label="Settings and Progress">
           ⚙️
         </button>
       </div>
@@ -201,6 +211,20 @@
            ==================================================================== -->
       <section id="screen-story" class="screen" aria-label="Story-Driven Learning Screen">
         <!-- Dynamically rendered by StoryScreen.js -->
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 7: EDUCATIONAL HERITAGE PUZZLE MINI-GAME
+           ==================================================================== -->
+      <section id="screen-game" class="screen" aria-label="Heritage Puzzle Mini-Game Screen">
+        <!-- Dynamically rendered by MiniGameScreen.js -->
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 8: CULTURAL KNOWLEDGE & HERITAGE QUIZ ENGINE
+           ==================================================================== -->
+      <section id="screen-quiz" class="screen" aria-label="Cultural Knowledge Quiz Screen">
+        <!-- Dynamically rendered by QuizScreen.js -->
       </section>
 
     </main>

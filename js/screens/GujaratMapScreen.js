@@ -41,7 +41,10 @@ export class GujaratMapScreen {
             </nav>
 
             <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span class="badge-playable">🟢 4 Active Zones</span>
+              <span class="badge-playable" id="gujarat-header-mastery-badge">State Mastery: 0%</span>
+              <button id="gujarat-map-to-museum-btn" class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border-color: var(--color-royal-gold); color: var(--color-royal-gold);">
+                🏛️ Museum
+              </button>
             </div>
           </div>
 
@@ -87,11 +90,26 @@ export class GujaratMapScreen {
         router.navigateTo('map');
       });
     }
+
+    const toMuseumBtn = this.screenEl.querySelector('#gujarat-map-to-museum-btn');
+    if (toMuseumBtn) {
+      toMuseumBtn.addEventListener('click', () => {
+        soundFx.playChime();
+        router.navigateTo('museum');
+      });
+    }
   }
 
   onEnter() {
     topHUD.show();
     const state = playerState.getState();
+    const stats = playerState.getGujaratCompletionStats();
+
+    const badgeEl = this.screenEl ? this.screenEl.querySelector('#gujarat-header-mastery-badge') : null;
+    if (badgeEl) {
+      badgeEl.textContent = `State Mastery: ${stats.overallPercentage}% (${stats.masteryRank})`;
+    }
+
     if (this.gujaratMap) {
       this.gujaratMap.selectLocation(state.selectedGujaratLocationId || 'kutch', false);
     }
