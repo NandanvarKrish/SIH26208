@@ -103,9 +103,9 @@
 .mira-story-bubble {
   display: flex;
   gap: 0.85rem;
-  background: rgba(11, 16, 28, 0.8);
+  background: rgba(11, 16, 28, 0.85);
   border: 1px solid rgba(229, 184, 105, 0.25);
-  border-left: 3px solid var(--gold-400);
+  border-left: 3.5px solid var(--gold-400);
   border-radius: var(--radius-sm);
   padding: 0.85rem 1rem;
   align-items: flex-start;
@@ -215,71 +215,237 @@
   animation: fadeSlideUp var(--motion-base) var(--ease-out-expo);
 }
 
-/* Story Dilemma Arena */
-.story-dilemma-card {
-  background: var(--surface-glass-elevated);
-  border: 1px solid var(--gold-border-bright);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  box-shadow: var(--shadow-elevation);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+/* ==========================================================================
+   INTERACTIVE KNOWLEDGE CHALLENGE / DILEMMA ARENA
+   ========================================================================== */
+
+.challenge-arena-container {
+  background: var(--surface-glass-elevated) !important;
+  border: 1.5px solid var(--gold-border-bright) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 1.75rem !important;
+  box-shadow: var(--shadow-elevation), var(--shadow-gold-inset) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.1rem !important;
+  animation: popReveal var(--motion-enter) var(--ease-out-back) !important;
 }
 
-.dilemma-options-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+.challenge-context-box {
+  background: rgba(14, 96, 107, 0.18) !important;
+  border: 1px solid rgba(70, 199, 194, 0.3) !important;
+  border-left: 3.5px solid var(--peacock-300) !important;
+  border-radius: var(--radius-xs) !important;
+  padding: 0.75rem 0.95rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.25rem !important;
 }
 
-.dilemma-option-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  background: rgba(16, 23, 40, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-sm);
-  padding: 0.85rem 1.1rem;
-  cursor: pointer;
-  color: var(--sand-100);
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  text-align: left;
-  transition: all var(--motion-fast) ease;
+.challenge-question-text {
+  font-family: var(--font-title) !important;
+  font-size: clamp(1.1rem, 2vw, 1.35rem) !important;
+  font-weight: 700 !important;
+  color: var(--sand-50) !important;
+  line-height: 1.4 !important;
+  margin: 0.25rem 0 !important;
 }
 
-.dilemma-option-btn:hover:not(:disabled) {
-  background: rgba(27, 39, 64, 0.95);
-  border-color: var(--gold-400);
-  color: var(--sand-50);
-  transform: translateX(3px);
+/* 4 Options Grid */
+.story-choices-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 0.9rem !important;
+  width: 100% !important;
 }
 
-.dilemma-option-btn.opt-correct {
+.choice-option-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  background: rgba(16, 23, 40, 0.92) !important;
+  border: 1.5px solid rgba(229, 184, 105, 0.3) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 1rem 1.15rem !important;
+  cursor: pointer !important;
+  color: var(--sand-100) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  line-height: 1.45 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  transition: all var(--motion-fast) ease !important;
+  outline: none !important;
+}
+
+.choice-option-btn:hover:not(:disabled) {
+  background: rgba(27, 39, 64, 0.98) !important;
+  border-color: var(--gold-400) !important;
+  color: var(--sand-50) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 14px rgba(229, 184, 105, 0.25) !important;
+}
+
+.choice-option-btn:active:not(:disabled) {
+  transform: scale(0.99) !important;
+}
+
+.choice-keycap {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: var(--radius-xs) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(229, 184, 105, 0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
+  color: var(--gold-400) !important;
+  flex-shrink: 0 !important;
+}
+
+.choice-text-wrap {
+  flex: 1 !important;
+}
+
+.choice-option-text {
+  display: block !important;
+  color: var(--sand-100) !important;
+  font-size: 0.88rem !important;
+}
+
+.choice-status-icon {
+  font-size: 1rem !important;
+  color: var(--sand-300) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Correct & Wrong Answer States */
+.choice-option-btn.selected-correct {
   background: var(--emerald-surface) !important;
   border-color: var(--emerald-500) !important;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 22px rgba(16, 185, 129, 0.45) !important;
 }
 
-.dilemma-option-btn.opt-wrong {
+.choice-option-btn.selected-correct .choice-keycap {
+  background: var(--emerald-500) !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+.choice-option-btn.selected-correct .choice-option-text {
+  color: #FFFFFF !important;
+}
+
+.choice-option-btn.selected-wrong {
   background: var(--terracotta-surface) !important;
   border-color: var(--terracotta-500) !important;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
+  animation: gentle-shake 0.32s ease-in-out !important;
+}
+
+.choice-option-btn.selected-wrong .choice-keycap {
+  background: var(--terracotta-500) !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+.choice-option-btn.selected-wrong .choice-option-text {
+  color: #FFFFFF !important;
+}
+
+/* Dilemma Feedback Box */
+.choice-feedback-box {
+  background: rgba(11, 16, 28, 0.94) !important;
+  border: 1.5px solid var(--gold-border-bright) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 1.15rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.45rem !important;
+  animation: fadeSlideUp var(--motion-base) var(--ease-out-expo) !important;
+}
+
+.feedback-status-title {
+  font-family: var(--font-title) !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+}
+
+.feedback-status-title.correct { color: var(--emerald-400) !important; }
+.feedback-status-title.incorrect { color: var(--terracotta-400) !important; }
+
+.feedback-explanation {
+  font-size: 0.88rem !important;
+  line-height: 1.55 !important;
+  color: var(--sand-100) !important;
+}
+
+.feedback-cultural-insight {
+  font-size: 0.78rem !important;
+  color: var(--gold-300) !important;
+  background: rgba(229, 184, 105, 0.08) !important;
+  padding: 0.45rem 0.65rem !important;
+  border-radius: var(--radius-xs) !important;
+  border-left: 2.5px solid var(--gold-400) !important;
+}
+
+/* Navigation Dock */
+.story-nav-dock {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  margin-top: 0.5rem !important;
 }
 
 /* Story Victory Card */
 .story-victory-card {
-  background: linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(16, 23, 40, 0.98) 100%);
-  border: 1.5px solid var(--gold-400);
-  border-radius: var(--radius-lg);
-  padding: 2.25rem 1.75rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), var(--shadow-gold-inset);
-  animation: popReveal var(--motion-enter) var(--ease-out-back);
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.92) 0%, rgba(16, 23, 40, 0.98) 100%) !important;
+  border: 1.5px solid var(--gold-400) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 2.25rem 1.75rem !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1.1rem !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), var(--shadow-gold-inset) !important;
+  animation: popReveal var(--motion-enter) var(--ease-out-back) !important;
+}
+
+.victory-xp-burst {
+  font-family: var(--font-mono) !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  color: var(--gold-300) !important;
+  background: rgba(229, 184, 105, 0.12) !important;
+  border: 1px solid var(--gold-border-bright) !important;
+  padding: 0.45rem 1.2rem !important;
+  border-radius: var(--radius-sm) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+  .story-choices-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .story-nav-dock {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .story-nav-dock .btn {
+    width: 100% !important;
+  }
 }

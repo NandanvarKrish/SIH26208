@@ -573,7 +573,111 @@
 }
 
 /* ==========================================================================
-   5. RESPONSIVE BREAKPOINTS
+   5. INTERACTIVE CHOICE OPTION BUTTONS (STORIES & DILEMMAS)
+   ========================================================================== */
+
+.story-choices-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+  width: 100%;
+}
+
+.choice-option-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.85rem !important;
+  width: 100% !important;
+  background: rgba(16, 23, 40, 0.92) !important;
+  border: 1.5px solid rgba(229, 184, 105, 0.3) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 1rem 1.15rem !important;
+  cursor: pointer !important;
+  color: var(--sand-100) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  line-height: 1.45 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  transition: all var(--motion-fast) ease !important;
+  outline: none !important;
+}
+
+.choice-option-btn:hover:not(:disabled) {
+  background: rgba(27, 39, 64, 0.98) !important;
+  border-color: var(--gold-400) !important;
+  color: var(--sand-50) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65), 0 0 14px rgba(229, 184, 105, 0.25) !important;
+}
+
+.choice-keycap {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: var(--radius-xs) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1.5px solid rgba(229, 184, 105, 0.4) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: var(--font-mono) !important;
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
+  color: var(--gold-400) !important;
+  flex-shrink: 0 !important;
+}
+
+.choice-option-text {
+  display: block !important;
+  color: var(--sand-100) !important;
+  font-size: 0.88rem !important;
+}
+
+.choice-status-icon {
+  font-size: 1rem !important;
+  color: var(--sand-300) !important;
+  flex-shrink: 0 !important;
+}
+
+/* Correct / Wrong States */
+.choice-option-btn.selected-correct {
+  background: var(--emerald-surface) !important;
+  border-color: var(--emerald-500) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 22px rgba(16, 185, 129, 0.45) !important;
+}
+
+.choice-option-btn.selected-correct .choice-keycap {
+  background: var(--emerald-500) !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+.choice-option-btn.selected-correct .choice-option-text {
+  color: #FFFFFF !important;
+}
+
+.choice-option-btn.selected-wrong {
+  background: var(--terracotta-surface) !important;
+  border-color: var(--terracotta-500) !important;
+  color: #FFFFFF !important;
+  animation: gentle-shake 0.32s ease-in-out !important;
+}
+
+.choice-option-btn.selected-wrong .choice-keycap {
+  background: var(--terracotta-500) !important;
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+
+.choice-option-btn.selected-wrong .choice-option-text {
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   6. RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
 @media (max-width: 640px) {

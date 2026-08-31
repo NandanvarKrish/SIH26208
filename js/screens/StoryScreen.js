@@ -156,22 +156,22 @@ export class StoryScreen {
   // 2. RENDER INTERACTIVE CHALLENGE / QUESTION
   renderChallengeHtml(challenge) {
     return `
-      <div class="challenge-arena-container">
+      <div class="story-slide-card challenge-arena-container glass-panel">
         
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span class="badge-playable">🎯 INTERACTIVE KNOWLEDGE CHALLENGE</span>
-          <span style="font-family: var(--font-mono); font-weight: 700; color: var(--color-royal-gold);">+100 XP REWARD</span>
+        <div class="story-slide-header">
+          <div>
+            <span class="scene-tag-badge">🎯 INTERACTIVE KNOWLEDGE CHALLENGE</span>
+            <h2 class="story-slide-title">${challenge.title}</h2>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--gold-400);">
+            +100 XP REWARD
+          </div>
         </div>
 
-        <!-- Situation Context Box -->
-        <div class="challenge-context-box">
-          <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-peacock-light); text-transform: uppercase;">
-            ${challenge.title}
-          </span>
-          <p style="font-size: 0.88rem; color: #CBD5E1; line-height: 1.5;">${challenge.context}</p>
-        </div>
+        <!-- Situation Context Narrative -->
+        <p class="story-narration-text" style="color: var(--sand-200);">${challenge.context}</p>
 
-        <!-- Mira Prompt -->
+        <!-- Mira Prompt Bubble -->
         <div class="mira-story-bubble">
           <div class="mira-story-avatar anim-float">🪔</div>
           <div class="mira-story-content">
@@ -184,7 +184,9 @@ export class StoryScreen {
         </div>
 
         <!-- Question Title -->
-        <h3 class="challenge-question-text">${challenge.question}</h3>
+        <h3 class="challenge-question-text" style="color: var(--sand-50); font-family: var(--font-title); font-size: 1.15rem; font-weight: 700; margin: 0.25rem 0 0.5rem 0;">
+          ${challenge.question}
+        </h3>
 
         <!-- 4 Interactive Choice Buttons Grid -->
         <div class="story-choices-grid">
@@ -196,11 +198,17 @@ export class StoryScreen {
             return `
               <button class="choice-option-btn ${stateClass}" 
                       data-option-id="${opt.id}" 
-                      ${this.hasAnswered && this.selectedOption && this.selectedOption.isCorrect ? 'disabled' : ''}>
-                <span>${String.fromCharCode(65 + idx)}. ${opt.text}</span>
-                ${this.selectedOption && this.selectedOption.id === opt.id 
-                  ? (opt.isCorrect ? '<span>✅</span>' : '<span>❌</span>') 
-                  : '<span style="color: #64748B;">→</span>'}
+                      ${this.hasAnswered && this.selectedOption && this.selectedOption.isCorrect ? 'disabled' : ''}
+                      aria-label="Option ${String.fromCharCode(65 + idx)}: ${opt.text}">
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                  <span class="choice-keycap">${String.fromCharCode(65 + idx)}</span>
+                  <span class="choice-option-text">${opt.text}</span>
+                </div>
+                <span class="choice-status-icon">
+                  ${this.selectedOption && this.selectedOption.id === opt.id 
+                    ? (opt.isCorrect ? '✅' : '❌') 
+                    : '→'}
+                </span>
               </button>
             `;
           }).join('')}
