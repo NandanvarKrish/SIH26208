@@ -1,0 +1,423 @@
+/* css/aiguide.css - Visual styling for the Mira AI Cultural Guide drawer & chat interface */
+
+/* ==========================================================================
+   1. FLOATING AI GUIDE FAB (FLOATING ACTION BUTTON)
+   ========================================================================== */
+
+.ai-guide-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 250;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(6, 78, 59, 0.9) 100%);
+  border: 2px solid var(--color-royal-gold);
+  border-radius: var(--border-radius-pill);
+  padding: 0.5rem 1rem 0.5rem 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.35);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+}
+
+.ai-guide-fab:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.55);
+}
+
+.ai-guide-fab.hidden {
+  display: none !important;
+}
+
+.fab-avatar-ring {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE259, #FF7A00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  position: relative;
+  border: 1.5px solid #FFFFFF;
+}
+
+.fab-online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #34D399;
+  border-radius: 50%;
+  border: 1.5px solid #0F172A;
+  box-shadow: 0 0 8px #34D399;
+}
+
+.fab-label-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.fab-label-title {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.fab-label-sub {
+  font-size: 0.68rem;
+  color: var(--color-peacock-light);
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   2. AI GUIDE CHAT DRAWER PANEL
+   ========================================================================== */
+
+.ai-guide-drawer {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 420px;
+  max-width: calc(100vw - 2rem);
+  height: 600px;
+  max-height: calc(100vh - calc(var(--hud-height) + 3rem));
+  z-index: 260;
+  background: rgba(15, 23, 42, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid var(--color-royal-gold);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 215, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.ai-guide-drawer.drawer-closed {
+  transform: translateY(40px) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Drawer Header */
+.drawer-header {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.drawer-header-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.drawer-mira-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE259, #FF7A00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.drawer-title {
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.drawer-status-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #34D399;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.drawer-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.drawer-btn-icon {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--border-radius-pill);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.drawer-btn-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* Context Banner */
+.drawer-context-bar {
+  background: rgba(0, 210, 196, 0.08);
+  border-bottom: 1px solid rgba(0, 210, 196, 0.2);
+  padding: 0.35rem 1rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--color-peacock-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ==========================================================================
+   3. CHAT MESSAGES STREAM
+   ========================================================================== */
+
+.chat-messages-viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  scroll-behavior: smooth;
+}
+
+/* Mira Response Bubble */
+.chat-msg-row.mira-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  max-width: 90%;
+  animation: fadeIn 0.3s ease;
+}
+
+.chat-msg-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE259, #FF7A00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.chat-bubble-mira {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 4px 14px 14px 14px;
+  padding: 0.75rem 0.9rem;
+  color: #F1F5F9;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.chat-insight-box {
+  background: rgba(255, 215, 0, 0.08);
+  border-left: 2.5px solid var(--color-royal-gold);
+  border-radius: 3px;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.78rem;
+  color: var(--color-royal-gold);
+}
+
+.chat-next-step-box {
+  font-size: 0.74rem;
+  color: var(--color-peacock-light);
+  font-style: italic;
+}
+
+.chat-tts-btn {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.chat-tts-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* User Message Bubble */
+.chat-msg-row.user-row {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 90%;
+  align-self: flex-end;
+  animation: fadeIn 0.25s ease;
+}
+
+.chat-bubble-user {
+  background: linear-gradient(135deg, #FF7A00 0%, #E65100 100%);
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 14px 4px 14px 14px;
+  padding: 0.65rem 0.9rem;
+  color: #FFFFFF;
+  font-size: 0.86rem;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 4px 15px rgba(255, 122, 0, 0.35);
+}
+
+/* Typing Indicator */
+.typing-indicator-bubble {
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  border-radius: 4px 14px 14px 14px;
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-royal-gold);
+  border-radius: 50%;
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ==========================================================================
+   4. SUGGESTED QUESTIONS BAR & INPUT DOCK
+   ========================================================================== */
+
+.drawer-suggested-prompts {
+  padding: 0.4rem 0.75rem;
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.9);
+  scrollbar-width: thin;
+}
+
+.prompt-chip-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-pill);
+  padding: 0.3rem 0.75rem;
+  color: #CBD5E1;
+  font-size: 0.74rem;
+  font-family: var(--font-title);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prompt-chip-btn:hover {
+  background: rgba(30, 41, 59, 1);
+  border-color: var(--color-royal-gold);
+  color: var(--color-royal-gold);
+}
+
+/* Input Bar */
+.drawer-input-bar {
+  padding: 0.65rem 0.85rem;
+  background: rgba(15, 23, 42, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chat-text-input {
+  flex: 1;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-pill);
+  padding: 0.55rem 1rem;
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.chat-text-input:focus {
+  border-color: var(--color-royal-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.chat-send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF7A00, #E65100);
+  border: 1px solid var(--color-royal-gold);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.chat-send-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .ai-guide-drawer {
+    right: 0.5rem;
+    left: 0.5rem;
+    width: auto;
+    bottom: 0.5rem;
+    height: 75vh;
+  }
+}

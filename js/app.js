@@ -1,3 +1,4 @@
+import { aiGuideDrawer } from './components/AIGuideDrawer.js';
 import { modal } from './components/Modal.js';
 import { topHUD } from './components/TopHUD.js';
 import { gujaratIntroScreen } from './screens/GujaratIntroScreen.js';
@@ -15,11 +16,12 @@ import { router } from './utils/router.js';
 
 class App {
   init() {
-    console.log('🚀 Initializing BharatVerse Museum & Cultural Hub...');
+    console.log('🚀 Initializing BharatVerse AI Guide & Cultural Metaverse...');
 
     // 1. Initialize Reusable Components
     modal.init();
     topHUD.init();
+    aiGuideDrawer.init();
 
     // 2. Register Screens in Router
     router.register('splash', splashScreen);
