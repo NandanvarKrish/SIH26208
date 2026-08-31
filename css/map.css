@@ -1,0 +1,288 @@
+/* css/map.css - Styles for the interactive India SVG Map and State POI Markers */
+
+.map-screen-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-top: calc(var(--hud-height) + 1.5rem);
+  padding-bottom: 1.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Map Canvas Container */
+.map-viewport {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.map-svg-container {
+  width: 100%;
+  max-width: 650px;
+  max-height: 80vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.india-svg-map {
+  width: 100%;
+  height: auto;
+  max-height: 75vh;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.6));
+}
+
+/* Base State Vector Styles */
+.state-path {
+  fill: #1E293B;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.state-path:hover {
+  fill: #334155;
+  stroke: rgba(255, 255, 255, 0.4);
+}
+
+/* Playable State: Gujarat */
+.state-path.playable {
+  fill: #064E3B;
+  stroke: #FFD700;
+  stroke-width: 2.2;
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.5));
+}
+
+.state-path.playable:hover {
+  fill: #047857;
+  stroke: #FFE566;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+}
+
+/* Locked States */
+.state-path.locked-state {
+  fill: #182030;
+  stroke: rgba(148, 163, 184, 0.25);
+  stroke-width: 1.2;
+}
+
+.state-path.locked-state:hover {
+  fill: #222C42;
+  stroke: rgba(248, 113, 113, 0.6);
+}
+
+/* Specific Tinting for Preview States */
+.state-path[data-state-id="rajasthan"] {
+  fill: #271E1B;
+}
+.state-path[data-state-id="tamil-nadu"] {
+  fill: #182032;
+}
+.state-path[data-state-id="west-bengal"] {
+  fill: #231C2E;
+}
+
+/* Active Selected State */
+.state-path.selected {
+  stroke-width: 3;
+  stroke: #FF7A00;
+  filter: drop-shadow(0 0 18px rgba(255, 122, 0, 0.8));
+}
+
+/* State Map Markers / Pins Layer */
+.map-pins-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: all;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transition: transform 0.2s ease;
+  z-index: 10;
+}
+
+.map-pin:hover {
+  transform: translate(-50%, -55%) scale(1.08);
+}
+
+/* Playable Gujarat Pin */
+.pin-playable .pin-icon-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF7A00, #FFD700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255, 122, 0, 0.6);
+  border: 2px solid #FFFFFF;
+}
+
+.pin-radar-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid #FFD700;
+  pointer-events: none;
+}
+
+/* Locked Pin */
+.pin-locked .pin-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94A3B8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.pin-locked:hover .pin-icon-wrap {
+  border-color: #F87171;
+  color: #F87171;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+.pin-label {
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--border-radius-pill);
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.pin-playable .pin-label {
+  border-color: var(--color-royal-gold);
+  color: var(--color-royal-gold);
+}
+
+/* State Info Sidebar / Panel */
+.state-info-panel {
+  width: 360px;
+  max-width: 100%;
+  height: auto;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.25rem;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.state-info-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.state-title-group h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+
+.state-tagline {
+  font-size: 0.82rem;
+  color: var(--color-peacock-light);
+  font-weight: 500;
+}
+
+.state-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius-sm);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.stat-box .val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--color-royal-gold);
+}
+
+.stat-box .lbl {
+  font-size: 0.68rem;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+
+.pillars-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.pillar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #CBD5E1;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Responsive Rules */
+@media (max-width: 900px) {
+  .map-screen-layout {
+    flex-direction: column;
+    padding-top: calc(var(--hud-height) + 0.75rem);
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    overflow-y: auto;
+  }
+  
+  .map-viewport {
+    min-height: 45vh;
+    flex: none;
+    width: 100%;
+  }
+
+  .state-info-panel {
+    width: 100%;
+    max-height: none;
+  }
+}

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BharatVerse — The Cultural Metaverse of India (SIH 2026 Prototype)</title>
+  
+  <!-- Google Fonts: Cinzel Decorative, Poppins, Plus Jakarta Sans, Rajdhani -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+  <!-- Ambient Cosmic & Sacred Mandala Background -->
+  <div class="bg-bharat-universe">
+    <div class="bg-mandala-overlay"></div>
+  </div>
+
+  <!-- App Shell Container -->
+  <div id="app">
+
+    <!-- Global Top Game HUD (Heads-Up Display) -->
+    <header id="top-hud" class="top-hud hidden" role="banner" aria-label="Game HUD">
+      <!-- Player Profile Info -->
+      <div class="hud-player-profile">
+        <div class="hud-avatar-frame">
+          <span id="hud-avatar-icon">🪖</span>
+          <span id="hud-level-badge" class="hud-level-badge">L1</span>
+        </div>
+        <div class="hud-player-info">
+          <span id="hud-player-name" class="hud-player-name">Yatri Explorer</span>
+          <span id="hud-player-title" class="hud-player-title">Novice Yatri</span>
+        </div>
+      </div>
+
+      <!-- XP Level Progress Bar -->
+      <div class="hud-xp-container" role="progressbar" aria-label="XP Level Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="250">
+        <div class="hud-xp-header">
+          <span>PROGRESS</span>
+          <span id="hud-xp-text">50 / 250 XP</span>
+        </div>
+        <div class="hud-xp-track">
+          <div id="hud-xp-fill" class="hud-xp-fill" style="width: 20%;"></div>
+        </div>
+      </div>
+
+      <!-- Treasury & Quick Actions -->
+      <div class="hud-stats-group">
+        <div class="hud-coin-pill" title="Bharat Coins">
+          <span>🪙</span>
+          <span id="hud-coins-val">100</span>
+        </div>
+        <button id="hud-sound-toggle-btn" class="btn-icon" title="Toggle Sound (Mute/Unmute)" aria-label="Sound Toggle">
+          🔊
+        </button>
+        <button id="hud-logout-btn" class="btn-icon" title="Switch Explorer Profile" aria-label="Switch Profile">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Screens Viewport -->
+    <main class="screens-viewport">
+
+      <!-- ====================================================================
+           SCREEN 1: SPLASH SCREEN
+           ==================================================================== -->
+      <section id="screen-splash" class="screen" aria-label="Splash Screen">
+        <div class="flex flex-col items-center justify-center h-full text-center px-4" style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem;">
+          
+          <!-- Animated Golden Emblem -->
+          <div class="anim-float mb-6" style="margin-bottom: 1.5rem;">
+            <div style="width: 110px; height: 110px; border-radius: 50%; background: radial-gradient(circle, #FFD700 0%, #FF7A00 70%, transparent 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 45px rgba(255, 122, 0, 0.6); border: 2px solid #FFE259;">
+              <span style="font-size: 3.5rem;">🪔</span>
+            </div>
+          </div>
+
+          <!-- Title & Tagline -->
+          <h1 style="font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; letter-spacing: 0.06em; background: linear-gradient(135deg, #FFFFFF 0%, #FFD700 50%, #FF7A00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; text-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            BHARATVERSE
+          </h1>
+          
+          <p style="font-family: var(--font-title); font-size: clamp(0.95rem, 2vw, 1.25rem); color: var(--color-peacock-light); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;">
+            The Interactive Cultural Metaverse of India
+          </p>
+
+          <p style="max-width: 480px; font-size: 0.95rem; color: #94A3B8; margin-bottom: 2.5rem; line-height: 1.6;">
+            Embark on a gamified journey across Indian heritage, folklore, wildlife, culinary art, and ancient architecture.
+          </p>
+
+          <!-- Call to Action Button -->
+          <button id="splash-enter-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 1rem 2.75rem; font-size: 1.1rem;">
+            Begin Your Yatra →
+          </button>
+
+          <div style="margin-top: 2rem; font-size: 0.75rem; color: #64748B; font-family: var(--font-mono); letter-spacing: 0.08em;">
+            SIH 2026 PROTOTYPE • GUJARAT EXPEDITION
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 2: LOGIN & AVATAR ONBOARDING
+           ==================================================================== -->
+      <section id="screen-login" class="screen" aria-label="Login & Onboarding">
+        <div style="height: 100%; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+          <div class="glass-panel" style="width: 100%; max-width: 480px; padding: 2rem; text-align: center;">
+            
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: rgba(255, 122, 0, 0.15); border: 1px solid var(--color-kesariya); font-size: 1.8rem; margin-bottom: 1rem;">
+              🧭
+            </div>
+
+            <h2 style="font-family: var(--font-display); font-size: 1.75rem; color: #FFFFFF; margin-bottom: 0.25rem;">
+              Create Explorer Profile
+            </h2>
+            <p style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 1.5rem;">
+              Choose your cultural companion avatar and enter your name.
+            </p>
+
+            <!-- Avatar Selection Grid -->
+            <div style="text-align: left;">
+              <label style="font-size: 0.75rem; font-weight: 700; color: #CBD5E1; text-transform: uppercase; letter-spacing: 0.05em;">
+                Select Avatar
+              </label>
+              <div id="login-avatar-grid" class="avatar-grid">
+                <!-- Dynamically populated from statesData.js -->
+              </div>
+            </div>
+
+            <!-- Name Input Field -->
+            <div style="text-align: left; margin-bottom: 1.5rem;">
+              <label for="login-name-input" style="font-size: 0.75rem; font-weight: 700; color: #CBD5E1; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.4rem;">
+                Explorer Name
+              </label>
+              <input type="text" id="login-name-input" class="input-field" placeholder="e.g. Yatri Vikram" maxlength="24" autocomplete="off">
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <button id="login-submit-btn" class="btn btn-primary btn-shimmer-effect" style="width: 100%;">
+                Enter BharatVerse →
+              </button>
+              
+              <button id="login-guest-btn" class="btn btn-outline" style="width: 100%;">
+                ⚡ Quick Play as Guest
+              </button>
+            </div>
+
+            <p style="font-size: 0.72rem; color: #64748B; margin-top: 1.25rem;">
+              Progress is securely stored locally on your device.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SCREEN 3: INDIA MAP HUB SCREEN
+           ==================================================================== -->
+      <section id="screen-map" class="screen" aria-label="India Map Hub">
+        <div class="map-screen-layout">
+          
+          <!-- Interactive Map Viewport -->
+          <div class="map-viewport">
+            <div id="map-canvas-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+              <!-- IndiaMap SVG injected here -->
+            </div>
+          </div>
+
+          <!-- State Info & Quest Sidebar -->
+          <aside id="state-info-panel" class="state-info-panel glass-panel" aria-label="State Information Panel">
+            <!-- Dynamically populated by IndiaMap.js -->
+          </aside>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ======================================================================
+         GLOBAL REUSABLE MODAL
+         ====================================================================== -->
+    <div id="global-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div id="global-modal-container" class="modal-container">
+        <button id="modal-close-btn" class="modal-close-btn" aria-label="Close Dialog">✕</button>
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+          <div id="modal-badge-slot"></div>
+        </div>
+
+        <h3 id="modal-title" style="font-family: var(--font-display); font-size: 1.5rem; color: #FFFFFF; margin-bottom: 0.25rem;"></h3>
+        <p id="modal-subtitle" style="font-size: 0.85rem; color: var(--color-peacock-light); font-weight: 600; margin-bottom: 1.25rem;"></p>
+
+        <div id="modal-body" style="margin-bottom: 1.75rem;"></div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button id="modal-secondary-btn" class="btn btn-outline" style="display: none;"></button>
+          <button id="modal-primary-btn" class="btn btn-primary" style="display: none;"></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Vanilla JavaScript Module Entry -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

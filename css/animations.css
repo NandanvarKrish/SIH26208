@@ -1,0 +1,91 @@
+/* css/animations.css - Keyframes, glow pulses, radar markers, and screen transitions */
+
+/* 1. Radar Pulse (Playable Gujarat Marker) */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.anim-radar {
+  animation: radar-pulse 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* 2. Floating Gentle Bobbing (Splash Logo & Avatars) */
+@keyframes float-bob {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.anim-float {
+  animation: float-bob 3.5s ease-in-out infinite;
+}
+
+/* 3. Golden Aura Breathing */
+@keyframes aura-breathe {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 122, 0, 0.4), inset 0 0 10px rgba(255, 215, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.7), inset 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+}
+
+.anim-glow-aura {
+  animation: aura-breathe 2.8s ease-in-out infinite;
+}
+
+/* 4. Button Light Shimmer Streak */
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  20%, 100% {
+    transform: translateX(250%) skewX(-20deg);
+  }
+}
+
+.btn-shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: shimmer-sweep 4s infinite ease-in-out;
+}
+
+/* 5. Locked State Error Shake */
+@keyframes shake-x {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.anim-shake {
+  animation: shake-x 0.4s ease-in-out;
+}
+
+/* 6. Spin / Rotation (Ashoka Chakra / Loader) */
+@keyframes continuous-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.anim-spin {
+  animation: continuous-spin 12s linear infinite;
+}

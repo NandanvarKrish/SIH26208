@@ -1,0 +1,408 @@
+/* css/components.css - Reusable UI components: Buttons, HUD, Cards, Modals, Badges */
+
+/* ==========================================================================
+   1. BUTTON SYSTEM
+   ========================================================================== */
+
+/* Base Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  border: none;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-peacock-light);
+}
+
+/* Primary Adventure CTA (Saffron / Gold 3D Bevel) */
+.btn-primary {
+  background: linear-gradient(135deg, #FF7A00 0%, #E65100 100%);
+  color: #FFFFFF;
+  border: 1px solid #FFD700;
+  box-shadow: 0 4px 0 #993300, 0 8px 25px rgba(255, 122, 0, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #993300, 0 12px 30px rgba(255, 122, 0, 0.65);
+  background: linear-gradient(135deg, #FFA040 0%, #FF6F00 100%);
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #993300, 0 4px 15px rgba(255, 122, 0, 0.4);
+}
+
+/* Secondary Peacock Button */
+.btn-secondary {
+  background: rgba(0, 142, 138, 0.25);
+  color: #E0F7F6;
+  border: 1px solid var(--color-peacock-light);
+  backdrop-filter: blur(8px);
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 142, 138, 0.45);
+  box-shadow: var(--shadow-glow-teal);
+  transform: translateY(-1px);
+}
+
+/* Guest / Outline Button */
+.btn-outline {
+  background: rgba(255, 255, 255, 0.05);
+  color: #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #FFFFFF;
+}
+
+/* Icon Action Button */
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--border-radius-pill);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: var(--color-royal-gold);
+  transform: scale(1.05);
+  color: var(--color-royal-gold);
+}
+
+/* ==========================================================================
+   2. TOP HUD (HEADS-UP DISPLAY)
+   ========================================================================== */
+
+.top-hud {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+  height: var(--hud-height);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.25rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--border-radius-pill);
+  box-shadow: var(--shadow-glass);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.top-hud.hidden {
+  transform: translate(-50%, -120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hud-player-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hud-avatar-frame {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--border-radius-pill);
+  border: 2px solid var(--color-royal-gold);
+  background: #1E293B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.hud-level-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -6px;
+  background: var(--color-kesariya);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: var(--border-radius-pill);
+  border: 1px solid #FFFFFF;
+}
+
+.hud-player-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-player-name {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #F8FAFC;
+  line-height: 1.2;
+}
+
+.hud-player-title {
+  font-size: 0.75rem;
+  color: var(--color-peacock-light);
+  font-weight: 500;
+}
+
+/* XP Bar Component */
+.hud-xp-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 180px;
+}
+
+.hud-xp-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+}
+
+.hud-xp-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-pill);
+  overflow: hidden;
+  position: relative;
+}
+
+.hud-xp-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-peacock-light) 0%, var(--color-kesariya) 100%);
+  box-shadow: 0 0 10px rgba(255, 122, 0, 0.8);
+  border-radius: var(--border-radius-pill);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stats / Coins */
+.hud-stats-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hud-coin-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(255, 215, 0, 0.12);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--border-radius-pill);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-royal-gold);
+}
+
+/* ==========================================================================
+   3. AVATAR SELECTOR & FORM INPUTS
+   ========================================================================== */
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.avatar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  background: rgba(30, 41, 59, 0.6);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.avatar-card:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.avatar-card.selected {
+  background: rgba(255, 122, 0, 0.15);
+  border-color: var(--color-kesariya);
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.4);
+}
+
+.avatar-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.avatar-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #E2E8F0;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  border-color: var(--color-kesariya);
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.input-field::placeholder {
+  color: #64748B;
+}
+
+/* ==========================================================================
+   4. MODALS & POPUPS
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(7, 11, 20, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-container {
+  width: 100%;
+  max-width: 520px;
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  padding: 2rem;
+  position: relative;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.active .modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+/* Locked State Badge in Modal */
+.badge-locked {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #F87171;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--border-radius-pill);
+  text-transform: uppercase;
+}
+
+.badge-playable {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34D399;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--border-radius-pill);
+  text-transform: uppercase;
+}
