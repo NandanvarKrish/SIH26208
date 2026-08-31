@@ -1,0 +1,446 @@
+/* css/story.css - Visual design for the story-driven learning experience, slide deck, and interactive choices */
+
+/* ==========================================================================
+   1. STORY SCREEN LAYOUT & HEADER
+   ========================================================================== */
+
+.story-screen-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding-top: calc(var(--hud-height) + 0.75rem);
+  padding-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow-y: auto;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.story-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.story-progress-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.story-step-dot {
+  width: 28px;
+  height: 6px;
+  border-radius: var(--border-radius-pill);
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.story-step-dot.active {
+  background: var(--color-royal-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  width: 40px;
+}
+
+.story-step-dot.completed {
+  background: var(--color-success);
+}
+
+/* ==========================================================================
+   2. STORY SLIDE CARD DECK
+   ========================================================================== */
+
+.story-slide-card {
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: var(--border-radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-glass), 0 0 30px rgba(255, 122, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.story-slide-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.scene-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-peacock-light);
+  background: rgba(0, 210, 196, 0.12);
+  border: 1px solid rgba(0, 210, 196, 0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--border-radius-pill);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.story-slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+  margin-top: 0.35rem;
+}
+
+.story-narration-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #E2E8F0;
+}
+
+/* Mira Story Dialogue Companion Box */
+.mira-story-bubble {
+  display: flex;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.1) 0%, rgba(15, 23, 42, 0.6) 100%);
+  border: 1px solid rgba(255, 122, 0, 0.35);
+  border-radius: var(--border-radius-md);
+  padding: 1rem 1.25rem;
+  align-items: flex-start;
+  position: relative;
+}
+
+.mira-story-bubble::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--color-kesariya);
+  border-top-left-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--border-radius-md);
+}
+
+.mira-story-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE259, #FF7A00);
+  border: 2px solid #FFD700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.5);
+}
+
+.mira-story-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mira-story-name {
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-royal-gold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mira-story-quote {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #F8FAFC;
+  font-style: italic;
+}
+
+/* Inspectable Cultural Artifact Micro-Card */
+.inspectable-artifact-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem 1rem;
+}
+
+.artifact-pill-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.artifact-pill-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.artifact-pill-label {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-peacock-light);
+}
+
+.artifact-pill-detail {
+  font-size: 0.8rem;
+  color: #94A3B8;
+  line-height: 1.4;
+}
+
+/* 3D Flippable Did You Know? Card */
+.did-you-know-card {
+  background: rgba(255, 215, 0, 0.06);
+  border: 1px dashed rgba(255, 215, 0, 0.4);
+  border-radius: var(--border-radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.did-you-know-card:hover {
+  background: rgba(255, 215, 0, 0.12);
+  border-color: var(--color-royal-gold);
+  transform: translateY(-2px);
+}
+
+.dyk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-royal-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dyk-question {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #F8FAFC;
+}
+
+.dyk-answer {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #CBD5E1;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+/* ==========================================================================
+   3. STORY NAVIGATION DOCK
+   ========================================================================== */
+
+.story-nav-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+/* ==========================================================================
+   4. INTERACTIVE CHALLENGE / DILEMMA ARENA
+   ========================================================================== */
+
+.challenge-arena-container {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: var(--border-radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-glass), 0 0 35px rgba(255, 122, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.challenge-context-box {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.challenge-question-text {
+  font-family: var(--font-title);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.4;
+}
+
+/* 4 Interactive Choice Buttons Grid */
+.story-choices-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.choice-option-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: rgba(30, 41, 59, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--border-radius-md);
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  outline: none;
+  color: #F1F5F9;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 1rem;
+}
+
+.choice-option-btn:hover:not(:disabled) {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: var(--color-royal-gold);
+  transform: translateX(4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.choice-option-btn.selected-correct {
+  background: rgba(6, 78, 59, 0.85);
+  border-color: var(--color-success);
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
+}
+
+.choice-option-btn.selected-wrong {
+  background: rgba(127, 29, 29, 0.85);
+  border-color: var(--color-error);
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
+  animation: shake-x 0.4s ease-in-out;
+}
+
+.choice-option-btn:disabled {
+  cursor: default;
+}
+
+/* Feedback Box */
+.choice-feedback-box {
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: var(--border-radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback-status-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-status-title.correct {
+  color: var(--color-success);
+}
+
+.feedback-status-title.incorrect {
+  color: var(--color-error);
+}
+
+.feedback-explanation {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #E2E8F0;
+}
+
+.feedback-cultural-insight {
+  font-size: 0.82rem;
+  color: var(--color-royal-gold);
+  background: rgba(255, 215, 0, 0.08);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius-sm);
+  border-left: 3px solid var(--color-royal-gold);
+}
+
+/* ==========================================================================
+   5. STORY VICTORY & REPLAY BANNER
+   ========================================================================== */
+
+.story-victory-card {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 2px solid var(--color-royal-gold);
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 0 45px rgba(255, 215, 0, 0.3);
+}
+
+.victory-xp-burst {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--color-royal-gold);
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .story-screen-layout {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: calc(var(--hud-height) + 0.5rem);
+  }
+
+  .story-slide-card,
+  .challenge-arena-container {
+    padding: 1.25rem;
+  }
+
+  .story-nav-dock {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .story-nav-dock button {
+    width: 100%;
+  }
+}

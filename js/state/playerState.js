@@ -20,6 +20,8 @@ const DEFAULT_STATE = {
   selectedStateId: 'gujarat',
   selectedGujaratLocationId: 'kutch',
   visitedLocations: [],
+  completedStories: [],
+  storyScores: {},
   completedZones: []
 };
 
@@ -133,6 +135,22 @@ class PlayerStateManager {
       this.state.visitedLocations.push(locationId);
       this.saveState();
     }
+  }
+
+  completeStory(locationId, xpAmount = 100) {
+    if (!this.state.completedStories.includes(locationId)) {
+      this.state.completedStories.push(locationId);
+    }
+    this.state.storyScores[locationId] = {
+      completed: true,
+      timestamp: Date.now()
+    };
+    this.saveState();
+    return this.addXP(xpAmount);
+  }
+
+  isStoryCompleted(locationId) {
+    return this.state.completedStories && this.state.completedStories.includes(locationId);
   }
 
   completeZone(zoneId) {

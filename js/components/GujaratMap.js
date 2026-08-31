@@ -3,6 +3,7 @@
 import { GUJARAT_LOCATIONS, getLocationById } from '../data/gujaratLocationsData.js';
 import { playerState } from '../state/playerState.js';
 import { soundFx } from '../utils/audio.js';
+import { router } from '../utils/router.js';
 import { modal } from './Modal.js';
 
 export class GujaratMap {
@@ -146,6 +147,7 @@ export class GujaratMap {
 
     const state = playerState.getState();
     const isVisited = state.visitedLocations && state.visitedLocations.includes(location.id);
+    const isStoryDone = playerState.isStoryCompleted(location.id);
 
     this.deckPanel.innerHTML = `
       <div class="location-deck-header">
@@ -193,8 +195,8 @@ export class GujaratMap {
       <div>
         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Expedition Questline</h4>
         <div class="quest-checklist">
-          <div class="quest-item-card">
-            <span class="quest-item-title">📖 Story Chapter</span>
+          <div class="quest-item-card" style="border-color: ${isStoryDone ? 'var(--color-success)' : 'rgba(255, 215, 0, 0.4)'}; background: ${isStoryDone ? 'rgba(6, 78, 59, 0.3)' : 'rgba(255, 255, 255, 0.04)'};">
+            <span class="quest-item-title">${isStoryDone ? '✅ Story Mastered' : '📖 Story Chapter'}</span>
             <span class="quest-item-sub">${location.questline.story.title} (+${location.questline.story.xp} XP)</span>
           </div>
 
@@ -215,15 +217,27 @@ export class GujaratMap {
         </div>
       </div>
 
-      <!-- Action Button -->
-      <div class="mt-auto pt-3">
-        <button id="loc-start-expedition-btn" class="btn btn-primary btn-shimmer-effect" style="width: 100%;">
-          ${isVisited ? 'Re-explore Location (+25 XP) →' : 'Begin Location Expedition (+50 XP) →'}
+      <!-- Action Buttons -->
+      <div class="mt-auto pt-3" style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <button id="loc-play-story-btn" class="btn btn-primary btn-shimmer-effect" style="width: 100%;">
+          ${isStoryDone ? '🔄 Replay Cultural Story (+100 XP) →' : '📖 Discover Cultural Story (+100 XP) →'}
+        </button>
+
+        <button id="loc-start-expedition-btn" class="btn btn-outline" style="width: 100%;">
+          ${isVisited ? '📍 Location Mapped (Overview)' : '⚡ Quick Location Check-in (+50 XP)'}
         </button>
       </div>
     `;
 
     // Bind Deck Actions
+    const playStoryBtn = this.deckPanel.querySelector('#loc-play-story-btn');
+    if (playStoryBtn) {
+      playStoryBtn.addEventListener('click', () => {
+        soundFx.playChime();
+        router.navigateTo('story', { locationId: location.id });
+      });
+    }
+
     const expeditionBtn = this.deckPanel.querySelector('#loc-start-expedition-btn');
     if (expeditionBtn) {
       expeditionBtn.addEventListener('click', () => {
@@ -254,18 +268,18 @@ export class GujaratMap {
     soundFx.playChime();
 
     modal.show({
-      title: `${location.name} Expedition Begun! 🌟`,
+      title: `${location.name} Expedition Ready! 🌟`,
       subtitle: `+${xpReward} Exploration XP Awarded`,
       badgeHtml: '<span class="badge-playable">🗺️ EXPEDITION ACTIVE</span>',
       contentHtml: `
         <div class="space-y-3">
           <p class="text-sm text-slate-200">
-            Welcome to <strong>${location.name}</strong>! Mira has mapped the full heritage chapter for you.
+            Welcome to <strong>${location.name}</strong>! Mira has prepared your interactive cultural story chapter.
           </p>
 
           <div class="bg-slate-800/80 p-3 rounded-lg border border-slate-700 space-y-2 text-xs">
             <div class="flex items-center gap-2 text-amber-300">
-              <span>📖</span> <strong>Story:</strong> ${location.questline.story.title}
+              <span>📖</span> <strong>Story:</strong> ${location.questline.story.title} (+100 XP)
             </div>
             <div class="flex items-center gap-2 text-cyan-300">
               <span>🎮</span> <strong>Mini-Game:</strong> ${location.questline.miniGame.title}
@@ -279,12 +293,16 @@ export class GujaratMap {
           </div>
 
           <p class="text-xs text-slate-400">
-            Total Exploration XP: <strong>${playerState.getState().totalXP} XP</strong>. Ready for the next phase of interactive stories and mini-game challenges!
+            Total Exploration XP: <strong>${playerState.getState().totalXP} XP</strong>. Step into the story cards to begin interactive learning!
           </p>
         </div>
       `,
-      primaryBtnText: 'Continue Exploring Gujarat',
+      primaryBtnText: '📖 Launch Story Chapter (+100 XP) →',
+      secondaryBtnText: 'Stay on Map',
       onPrimary: () => {
+        router.navigateTo('story', { locationId: location.id });
+      },
+      onSecondary: () => {
         this.renderDeckPanel(location);
       }
     });
