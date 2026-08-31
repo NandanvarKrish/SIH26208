@@ -5,6 +5,7 @@ import { gujaratMapScreen } from './screens/GujaratMapScreen.js';
 import { loginScreen } from './screens/LoginScreen.js';
 import { mapScreen } from './screens/MapScreen.js';
 import { miniGameScreen } from './screens/MiniGameScreen.js';
+import { museumScreen } from './screens/MuseumScreen.js';
 import { quizScreen } from './screens/QuizScreen.js';
 import { splashScreen } from './screens/SplashScreen.js';
 import { storyScreen } from './screens/StoryScreen.js';
@@ -14,7 +15,7 @@ import { router } from './utils/router.js';
 
 class App {
   init() {
-    console.log('🚀 Initializing BharatVerse Quiz Engine & Cultural Hub...');
+    console.log('🚀 Initializing BharatVerse Museum & Cultural Hub...');
 
     // 1. Initialize Reusable Components
     modal.init();
@@ -29,6 +30,7 @@ class App {
     router.register('story', storyScreen);
     router.register('game', miniGameScreen);
     router.register('quiz', quizScreen);
+    router.register('museum', museumScreen);
 
     // 3. Initialize Individual Screen Event Listeners
     splashScreen.init();
@@ -39,6 +41,7 @@ class App {
     storyScreen.init();
     miniGameScreen.init();
     quizScreen.init();
+    museumScreen.init();
 
     // 4. Determine Initial Route
     const state = playerState.getState();

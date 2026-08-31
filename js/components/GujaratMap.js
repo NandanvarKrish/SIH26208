@@ -210,8 +210,8 @@ export class GujaratMap {
             <span class="quest-item-sub">${location.questline.quiz.title} (+150 XP)</span>
           </div>
 
-          <div class="quest-item-card">
-            <span class="quest-item-title">🏺 Museum Collectible</span>
+          <div class="quest-item-card" style="border-color: rgba(255, 215, 0, 0.4); cursor: pointer;" id="deck-artifact-card">
+            <span class="quest-item-title">🏺 Museum Collectible (View)</span>
             <span class="quest-item-sub" style="color: var(--color-royal-gold);">${location.questline.artifact.name}</span>
           </div>
         </div>
@@ -260,6 +260,14 @@ export class GujaratMap {
     };
     if (playQuizBtn) playQuizBtn.addEventListener('click', handleLaunchQuiz);
     if (deckQuizCard) deckQuizCard.addEventListener('click', handleLaunchQuiz);
+
+    const deckArtifactCard = this.deckPanel.querySelector('#deck-artifact-card');
+    if (deckArtifactCard) {
+      deckArtifactCard.addEventListener('click', () => {
+        soundFx.playChime();
+        router.navigateTo('museum');
+      });
+    }
 
     const ttsBtn = this.deckPanel.querySelector('#mira-deck-tts-btn');
     if (ttsBtn) {
