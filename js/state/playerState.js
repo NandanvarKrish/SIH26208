@@ -18,6 +18,8 @@ const DEFAULT_STATE = {
   soundEnabled: true,
   unlockedStates: ['gujarat'],
   selectedStateId: 'gujarat',
+  selectedGujaratLocationId: 'kutch',
+  visitedLocations: [],
   completedZones: []
 };
 
@@ -119,6 +121,18 @@ class PlayerStateManager {
   setSelectedState(stateId) {
     this.state.selectedStateId = stateId;
     this.saveState();
+  }
+
+  setSelectedGujaratLocation(locationId) {
+    this.state.selectedGujaratLocationId = locationId;
+    this.saveState();
+  }
+
+  visitGujaratLocation(locationId) {
+    if (!this.state.visitedLocations.includes(locationId)) {
+      this.state.visitedLocations.push(locationId);
+      this.saveState();
+    }
   }
 
   completeZone(zoneId) {

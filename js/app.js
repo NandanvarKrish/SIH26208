@@ -1,7 +1,7 @@
-// js/app.js - Application bootstrap & entry point
-
 import { modal } from './components/Modal.js';
 import { topHUD } from './components/TopHUD.js';
+import { gujaratIntroScreen } from './screens/GujaratIntroScreen.js';
+import { gujaratMapScreen } from './screens/GujaratMapScreen.js';
 import { loginScreen } from './screens/LoginScreen.js';
 import { mapScreen } from './screens/MapScreen.js';
 import { splashScreen } from './screens/SplashScreen.js';
@@ -11,7 +11,7 @@ import { router } from './utils/router.js';
 
 class App {
   init() {
-    console.log('🚀 Initializing BharatVerse Foundation Shell...');
+    console.log('🚀 Initializing BharatVerse Exploration Hub...');
 
     // 1. Initialize Reusable Components
     modal.init();
@@ -21,11 +21,15 @@ class App {
     router.register('splash', splashScreen);
     router.register('login', loginScreen);
     router.register('map', mapScreen);
+    router.register('gujarat-intro', gujaratIntroScreen);
+    router.register('gujarat-map', gujaratMapScreen);
 
     // 3. Initialize Individual Screen Event Listeners
     splashScreen.init();
     loginScreen.init();
     mapScreen.init();
+    gujaratIntroScreen.init();
+    gujaratMapScreen.init();
 
     // 4. Determine Initial Route
     const state = playerState.getState();

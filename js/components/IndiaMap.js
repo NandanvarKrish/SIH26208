@@ -3,6 +3,7 @@
 import { STATES_DATA } from '../data/statesData.js';
 import { playerState } from '../state/playerState.js';
 import { soundFx } from '../utils/audio.js';
+import { router } from '../utils/router.js';
 import { modal } from './Modal.js';
 
 export class IndiaMap {
@@ -270,51 +271,7 @@ export class IndiaMap {
   }
 
   launchGujaratExpedition() {
-    modal.show({
-      title: 'Gujarat: Land of Legends',
-      subtitle: 'Prototype Expedition Ready',
-      badgeHtml: '<span class="badge-playable">✨ 100% Playable</span>',
-      contentHtml: `
-        <div class="space-y-3">
-          <p class="text-sm text-slate-200">
-            You are about to enter Gujarat's 4 legendary exploration zones:
-          </p>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="bg-slate-800/80 p-2 rounded border border-slate-700 text-amber-300">
-              🏜️ <strong>Great Rann of Kutch</strong><br><span class="text-slate-400">White Desert & Rogan Art</span>
-            </div>
-            <div class="bg-slate-800/80 p-2 rounded border border-slate-700 text-amber-300">
-              🦁 <strong>Gir National Park</strong><br><span class="text-slate-400">Asiatic Lions & Somnath</span>
-            </div>
-            <div class="bg-slate-800/80 p-2 rounded border border-slate-700 text-amber-300">
-              🏛️ <strong>Ahmedabad Heritage</strong><br><span class="text-slate-400">Sabarmati & Street Food</span>
-            </div>
-            <div class="bg-slate-800/80 p-2 rounded border border-slate-700 text-amber-300">
-              🧵 <strong>Patan Stepwell</strong><br><span class="text-slate-400">Rani ki Vav & Patola Silk</span>
-            </div>
-          </div>
-          <p class="text-xs text-slate-400">Next milestone: Detailed Zone Exploration, Mini-Games & Cultural Quizzes.</p>
-        </div>
-      `,
-      primaryBtnText: 'Start Gujarat Yatra (+50 XP)',
-      secondaryBtnText: 'Back to Map',
-      onPrimary: () => {
-        const result = playerState.addXP(50);
-        soundFx.playChime();
-        modal.show({
-          title: 'Expedition Journal Updated! ⚡',
-          subtitle: `+50 XP Awarded (Total: ${playerState.getState().totalXP} XP)`,
-          contentHtml: `
-            <p class="text-sm text-slate-200">
-              You earned <strong>+50 Exploration XP</strong> for discovering Gujarat on the National Map!
-            </p>
-            <p class="text-xs text-emerald-400 mt-2">
-              Ready for Phase 2: Detailed Zone Stories, Garba Rhythm Mini-Games & Heritage Quizzes!
-            </p>
-          `,
-          primaryBtnText: 'Got It!'
-        });
-      }
-    });
+    soundFx.playChime();
+    router.navigateTo('gujarat-intro');
   }
 }
