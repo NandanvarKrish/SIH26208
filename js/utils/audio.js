@@ -152,7 +152,33 @@ class AudioManager {
       });
     } catch (e) {}
   }
+
+  // Multi-Language Text-to-Speech (TTS) Voice Guide
+  speak(text, preferredLang = null) {
+    if (!('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const lang = preferredLang || playerState.getLanguage() || 'en';
+      const cleanText = text.replace(/<[^>]*>?/gm, '').replace(/[*_~`]/g, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+
+      if (lang === 'hi') {
+        utterance.lang = 'hi-IN';
+      } else if (lang === 'gu') {
+        utterance.lang = 'gu-IN';
+      } else {
+        utterance.lang = 'en-IN';
+      }
+
+      utterance.rate = 0.95;
+      utterance.pitch = 1.05;
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn('TTS playback error:', e);
+    }
+  }
 }
 
 export const soundFx = new AudioManager();
+
 

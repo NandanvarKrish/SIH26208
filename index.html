@@ -34,8 +34,18 @@
 
     <!-- Global Top Game HUD (Heads-Up Display) -->
     <header id="top-hud" class="top-hud hidden" role="banner" aria-label="Game HUD">
-      <!-- Player Profile Info -->
-      <div class="hud-player-profile">
+      
+      <!-- Brand & Home Nav Button -->
+      <div class="hud-brand-section" id="nav-home-btn" role="button" tabindex="0" title="Return to India Map">
+        <div class="hud-brand-emblem anim-float">🪔</div>
+        <div class="hud-brand-titles">
+          <span class="hud-brand-name">BHARATVERSE</span>
+          <span class="hud-brand-tag">Living Heritage</span>
+        </div>
+      </div>
+
+      <!-- Player Profile & Explorer Passport Badge -->
+      <div class="hud-player-profile" id="user-profile-badge" role="button" tabindex="0" title="Open Heritage Passport & Explorer Profile">
         <div class="hud-avatar-frame">
           <span id="hud-avatar-icon">🪖</span>
           <span id="hud-level-badge" class="hud-level-badge">L1</span>
@@ -57,20 +67,28 @@
         </div>
       </div>
 
-      <!-- Treasury & Quick Actions -->
+      <!-- Treasury, Relics & Quick Actions -->
       <div class="hud-stats-group">
         <div class="hud-score-pill" title="Total Exploration Score">
-          <span>🏆</span>
-          <span id="hud-score-val">0</span>
+          <span>⭐</span>
+          <span id="hud-score-val">0 pts</span>
         </div>
-        <div class="hud-mastery-pill" title="Gujarat State Mastery Completion">
-          <span>🗺️</span>
-          <span id="hud-mastery-val">0%</span>
+
+        <div class="hud-relics-pill" id="nav-museum-btn" role="button" tabindex="0" title="Open Heritage Relics Vault">
+          <span>🏛️ Relics:</span>
+          <span id="hud-relics-count">0/8</span>
         </div>
-        <div class="hud-coin-pill" title="Bharat Coins">
-          <span>🪙</span>
-          <span id="hud-coins-val">100</span>
-        </div>
+
+        <!-- Multi-Language Voice Selector (EN, HI, GU) -->
+        <select class="lang-selector-select" id="hud-lang-selector" title="Choose Voice & Text Language">
+          <option value="en">🌐 EN</option>
+          <option value="hi">🇮🇳 HI</option>
+          <option value="gu">🦁 GU</option>
+        </select>
+
+        <button class="btn btn-sm btn-outline" id="nav-map-btn" title="Open Exploration Map">🗺️ Map</button>
+        <button class="btn btn-sm btn-outline" id="nav-ai-btn" title="Open Mira AI Guide">🤖 Ask Mira</button>
+
         <button id="hud-sound-toggle-btn" class="btn-icon" title="Toggle Sound (Mute/Unmute)" aria-label="Sound Toggle">
           🔊
         </button>

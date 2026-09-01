@@ -1,5 +1,6 @@
 // js/components/TopHUD.js - Top game HUD controller & progression dashboard
 
+import { aiGuideDrawer } from './AIGuideDrawer.js';
 import { playerState } from '../state/playerState.js';
 import { soundFx } from '../utils/audio.js';
 import { router } from '../utils/router.js';
@@ -15,8 +16,8 @@ class TopHUD {
     this.xpFillEl = null;
     this.xpTextEl = null;
     this.scoreEl = null;
-    this.masteryEl = null;
-    this.coinsEl = null;
+    this.relicsEl = null;
+    this.langSelector = null;
     this.soundBtn = null;
   }
 
@@ -29,10 +30,60 @@ class TopHUD {
     this.xpFillEl = document.getElementById('hud-xp-fill');
     this.xpTextEl = document.getElementById('hud-xp-text');
     this.scoreEl = document.getElementById('hud-score-val');
-    this.masteryEl = document.getElementById('hud-mastery-val');
-    this.coinsEl = document.getElementById('hud-coins-val');
+    this.relicsEl = document.getElementById('hud-relics-count');
+    this.langSelector = document.getElementById('hud-lang-selector');
     this.soundBtn = document.getElementById('hud-sound-toggle-btn');
+
+    const homeBtn = document.getElementById('nav-home-btn');
+    const passportBadge = document.getElementById('user-profile-badge');
+    const museumBtn = document.getElementById('nav-museum-btn');
+    const mapBtn = document.getElementById('nav-map-btn');
+    const aiBtn = document.getElementById('nav-ai-btn');
     const settingsBtn = document.getElementById('hud-settings-btn');
+
+    if (homeBtn) {
+      homeBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        router.navigateTo('map');
+      });
+    }
+
+    if (passportBadge) {
+      passportBadge.addEventListener('click', () => {
+        soundFx.playClick();
+        this.showSettingsDashboard();
+      });
+    }
+
+    if (museumBtn) {
+      museumBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        router.navigateTo('museum');
+      });
+    }
+
+    if (mapBtn) {
+      mapBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        router.navigateTo('gujarat-map');
+      });
+    }
+
+    if (aiBtn) {
+      aiBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        aiGuideDrawer.toggle();
+      });
+    }
+
+    if (this.langSelector) {
+      this.langSelector.addEventListener('change', (e) => {
+        const lang = e.target.value;
+        playerState.setLanguage(lang);
+        soundFx.playClick();
+        soundFx.speak(lang === 'hi' ? 'नमस्ते! भाषा अपडेट की गई।' : (lang === 'gu' ? 'નમસ્તે! ભાષા અપડેટ થઈ ગઈ.' : 'Welcome! Language updated to English.'), lang);
+      });
+    }
 
     if (this.soundBtn) {
       this.soundBtn.addEventListener('click', () => {
@@ -58,7 +109,7 @@ class TopHUD {
     const state = playerState.getState();
 
     modal.show({
-      title: 'Yatri Journal & Expedition Settings',
+      title: 'Explorer Heritage Passport & Stats',
       subtitle: `Player: ${state.name} • ${stats.masteryRank}`,
       badgeHtml: `<span class="badge-playable">STATE MASTERY: ${stats.overallPercentage}%</span>`,
       contentHtml: `
@@ -93,8 +144,8 @@ class TopHUD {
               <div class="text-sm font-bold text-emerald-300 font-mono">${state.totalXP} XP</div>
             </div>
             <div class="bg-slate-800/60 p-2 rounded border border-slate-700">
-              <div class="text-slate-400">ARTIFACTS</div>
-              <div class="text-sm font-bold text-cyan-300 font-mono">${stats.unlockedItemsCount} 🏺</div>
+              <div class="text-slate-400">RELICS</div>
+              <div class="text-sm font-bold text-cyan-300 font-mono">${state.unlockedItems.length}/8 🏺</div>
             </div>
           </div>
 
@@ -174,13 +225,12 @@ class TopHUD {
     if (this.xpTextEl) this.xpTextEl.textContent = `${state.xp} / ${state.xpToNextLevel} XP`;
 
     // Score & Gujarat Mastery %
-    if (this.scoreEl) this.scoreEl.textContent = `${state.score || 0}`;
+    if (this.scoreEl) this.scoreEl.textContent = `${state.score || 0} pts`;
+    if (this.relicsEl) this.relicsEl.textContent = `${state.unlockedItems.length || 0}/8`;
 
-    const stats = playerState.getGujaratCompletionStats();
-    if (this.masteryEl) this.masteryEl.textContent = `${stats.overallPercentage}%`;
-
-    // Coins
-    if (this.coinsEl) this.coinsEl.textContent = state.coins || 100;
+    if (this.langSelector) {
+      this.langSelector.value = state.language || 'en';
+    }
 
     this.updateSoundIcon(state.soundEnabled);
   }

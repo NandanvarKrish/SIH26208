@@ -1,9 +1,9 @@
-// js/state/girGuardianState.js - Centralized state & scoring engine for The Gir Guardian
+// js/state/girGuardianState.js - Centralized reactive game state for "GIR GUARDIAN"
 
 import { GIR_GUARDIAN_DATA } from '../data/girGuardianData.js';
 import { playerState } from './playerState.js';
 
-const STORAGE_KEY = 'bharatverse_gir_guardian_state_v1';
+const STORAGE_KEY = 'bharatverse_gir_guardian_v2';
 
 class GirGuardianState {
   constructor() {
@@ -14,62 +14,38 @@ class GirGuardianState {
 
   getDefaultState() {
     return {
-      currentStep: 'intro', // 'intro' | 'mission-1' | 'mission-2' | 'mission-3' | 'mission-4' | 'final-challenge' | 'results'
+      currentScreen: 'intro', // 'intro' | 'environment' | 'mission-1' | 'mission-2' | 'mission-3' | 'completion'
+      activeMissionId: null,
       
-      // Mission 1 State
-      m1CaseIndex: 0,
-      m1RevealedClues: [0], // First clue always visible by default
-      m1AttemptsUsed: 0,
-      m1PointsEarned: 0,
-      m1MaxPossible: 300,
+      // Mission Step Trackers
+      m1Step: 0,
+      m1CluesInspected: [],
       m1Completed: false,
 
-      // Mission 2 State
-      m2SelectedRouteId: null,
-      m2PointsEarned: 0,
-      m2MaxPossible: 100,
+      m2Step: 0,
+      m2CluesInspected: [],
+      m2DecisionId: null,
       m2Completed: false,
 
-      // Mission 3 State
-      m3Slots: {
-        solar: null,
-        producers: null,
-        herbivores: null,
-        carnivores: null,
-        decomposers: null
-      },
-      m3IsWebComplete: false,
-      m3DilemmaAnswered: false,
-      m3DilemmaCorrect: false,
-      m3PointsEarned: 0,
-      m3MaxPossible: 200,
+      m3Step: 0,
+      m3HazardsInspected: [],
+      m3ActionId: null,
       m3Completed: false,
 
-      // Mission 4 State
-      m4SelectedPolicyId: null,
-      m4PointsEarned: 0,
-      m4MaxPossible: 100,
-      m4Completed: false,
+      // Discoveries & Collectibles
+      unlockedDiscoveryIds: [],
+      activeDiscovery: null, // Discovery popup card data
 
-      // Final Challenge State
-      finalStageIndex: 0,
-      finalStageResults: [],
-      finalPointsEarned: 0,
-      finalMaxPossible: 200,
-      finalCompleted: false,
+      // Guardian Progression Metrics
+      guardianXP: 0,
+      guardianLevel: 1,
+      completedMissions: [], // ['mission-1', 'mission-2', 'mission-3']
 
-      // Global Progression
-      totalXP: 0,
-      lives: 3,
-      completedMissions: [],
-      unlockedBadges: [],
-      calculatedMetrics: {
-        knowledgePct: 0,
-        explorationPct: 0,
-        decisionPct: 0,
-        conservationPct: 0,
-        overallRank: 'Novice Yatri'
-      }
+      // Calculated Performance Metrics
+      explorationPct: 0,
+      wildlifePct: 0,
+      conservationPct: 0,
+      finalRank: 'Novice Yatri'
     };
   }
 
@@ -78,7 +54,7 @@ class GirGuardianState {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (e) {
-      console.warn('Could not clear localStorage:', e);
+      console.warn('Could not reset Gir Guardian localStorage:', e);
     }
     if (notify) this.notify();
   }
@@ -108,228 +84,174 @@ class GirGuardianState {
     return this.state;
   }
 
-  setStep(step) {
-    this.state.currentStep = step;
+  setScreen(screenName) {
+    this.state.currentScreen = screenName;
     this.save();
   }
 
-  // --- MISSION 1 ACTIONS ---
-  revealNextClue() {
-    const currentClues = this.state.m1RevealedClues;
-    if (currentClues.length < 4) {
-      currentClues.push(currentClues.length);
+  startMission(missionId) {
+    this.state.activeMissionId = missionId;
+    this.state.currentScreen = missionId;
+    this.save();
+  }
+
+  // --- DISCOVERY UNLOCK TRIGGER ---
+  unlockDiscovery(discoveryId) {
+    const disc = GIR_GUARDIAN_DATA.discoveries[discoveryId];
+    if (!disc) return null;
+
+    if (!this.state.unlockedDiscoveryIds.includes(discoveryId)) {
+      this.state.unlockedDiscoveryIds.push(discoveryId);
+      this.addGuardianXP(disc.xp);
+    }
+
+    this.state.activeDiscovery = disc;
+    this.save();
+    return disc;
+  }
+
+  dismissDiscovery() {
+    this.state.activeDiscovery = null;
+    this.save();
+  }
+
+  // --- PROGRESSION & XP ---
+  addGuardianXP(amount) {
+    this.state.guardianXP += amount;
+    
+    // Level calculation (Every 80 XP = 1 Level)
+    this.state.guardianLevel = Math.max(1, Math.min(3, Math.floor(this.state.guardianXP / 80) + 1));
+    
+    // Sync with global player profile
+    playerState.addXP(amount);
+    this.calculateMetrics();
+  }
+
+  // --- MISSION 1 PROGRESSION ---
+  inspectM1Clue(clueId) {
+    if (!this.state.m1CluesInspected.includes(clueId)) {
+      this.state.m1CluesInspected.push(clueId);
       this.save();
     }
   }
 
-  submitWildlifeGuess(animalId) {
-    const currentCase = GIR_GUARDIAN_DATA.mission1.cases[this.state.m1CaseIndex];
-    const correctOpt = currentCase.options.find(o => o.isCorrect);
-    const isCorrect = correctOpt && correctOpt.id === animalId;
-
-    const cluesCount = this.state.m1RevealedClues.length;
-    // XP awarded based on how early they guessed
-    const pointsTable = GIR_GUARDIAN_DATA.mission1.xpPerClue;
-    const awardedPoints = isCorrect ? (pointsTable[cluesCount - 1] || 40) : 0;
-
-    if (isCorrect) {
-      this.state.m1PointsEarned += awardedPoints;
-      this.state.totalXP += awardedPoints;
-      
-      // Update global BharatVerse player state too!
-      playerState.addXP(awardedPoints);
-
-      return {
-        isCorrect: true,
-        points: awardedPoints,
-        fact: currentCase.miraFact,
-        isLastCase: this.state.m1CaseIndex >= GIR_GUARDIAN_DATA.mission1.cases.length - 1
-      };
-    } else {
-      this.state.m1AttemptsUsed++;
-      this.state.lives = Math.max(0, this.state.lives - 1);
+  advanceM1Step() {
+    if (this.state.m1Step < 2) {
+      this.state.m1Step++;
       this.save();
-      return {
-        isCorrect: false,
-        points: 0,
-        remainingLives: this.state.lives,
-        isLastCase: false
-      };
     }
   }
 
-  advanceToNextWildlifeCase() {
-    if (this.state.m1CaseIndex < GIR_GUARDIAN_DATA.mission1.cases.length - 1) {
-      this.state.m1CaseIndex++;
-      this.state.m1RevealedClues = [0];
-    } else {
-      this.state.m1Completed = true;
-      if (!this.state.completedMissions.includes(1)) {
-        this.state.completedMissions.push(1);
-      }
+  completeMission1() {
+    this.state.m1Completed = true;
+    if (!this.state.completedMissions.includes('mission-1')) {
+      this.state.completedMissions.push('mission-1');
+      this.addGuardianXP(GIR_GUARDIAN_DATA.mission1.xpReward);
     }
+    this.unlockDiscovery('disc-lion');
+    this.unlockDiscovery('disc-teak');
+    this.calculateMetrics();
     this.save();
   }
 
-  // --- MISSION 2 ACTIONS ---
-  selectRoute(routeId) {
-    const route = GIR_GUARDIAN_DATA.mission2.routes.find(r => r.id === routeId);
-    if (!route) return null;
+  // --- MISSION 2 PROGRESSION ---
+  inspectM2Clue(index) {
+    if (!this.state.m2CluesInspected.includes(index)) {
+      this.state.m2CluesInspected.push(index);
+      this.save();
+    }
+  }
 
-    this.state.m2SelectedRouteId = routeId;
-    this.state.m2PointsEarned = route.scorePoints;
-    this.state.totalXP += route.xp;
+  advanceM2Step() {
+    if (this.state.m2Step < 1) {
+      this.state.m2Step++;
+      this.save();
+    }
+  }
+
+  submitM2Decision(decisionId) {
+    const dec = GIR_GUARDIAN_DATA.mission2.steps[1].decisions.find(d => d.id === decisionId);
+    if (!dec) return null;
+
+    this.state.m2DecisionId = decisionId;
     this.state.m2Completed = true;
-    if (!this.state.completedMissions.includes(2)) {
-      this.state.completedMissions.push(2);
+    if (!this.state.completedMissions.includes('mission-2')) {
+      this.state.completedMissions.push('mission-2');
+      this.addGuardianXP(dec.xp);
     }
-
-    playerState.addXP(route.xp);
+    this.unlockDiscovery('disc-waterhole');
+    this.unlockDiscovery('disc-chital');
+    this.calculateMetrics();
     this.save();
-    return route;
+    return dec;
   }
 
-  // --- MISSION 3 ACTIONS ---
-  slotEcosystemItem(tierTargetId, itemId) {
-    const tier = GIR_GUARDIAN_DATA.mission3.tiers.find(t => t.targetId === tierTargetId);
-    if (!tier) return false;
-
-    const isMatch = tier.correctItem === itemId;
-    if (isMatch) {
-      this.state.m3Slots[tierTargetId] = itemId;
-      
-      // Check if all 5 slots are populated
-      const allSlotsFilled = Object.values(this.state.m3Slots).every(v => v !== null);
-      if (allSlotsFilled) {
-        this.state.m3IsWebComplete = true;
-        this.state.m3PointsEarned += 100;
-        this.state.totalXP += 100;
-        playerState.addXP(100);
-      }
+  // --- MISSION 3 PROGRESSION ---
+  inspectM3Hazard(index) {
+    if (!this.state.m3HazardsInspected.includes(index)) {
+      this.state.m3HazardsInspected.push(index);
       this.save();
-      return { success: true, allComplete: this.state.m3IsWebComplete };
     }
-    return { success: false, allComplete: false };
   }
 
-  submitEcosystemDilemma(optionId) {
-    const dilemma = GIR_GUARDIAN_DATA.mission3.dilemma;
-    const option = dilemma.options.find(o => o.id === optionId);
-    if (!option) return null;
-
-    this.state.m3DilemmaAnswered = true;
-    this.state.m3DilemmaCorrect = option.isCorrect;
-
-    if (option.isCorrect) {
-      this.state.m3PointsEarned += 100;
-      this.state.totalXP += 100;
-      playerState.addXP(100);
+  advanceM3Step() {
+    if (this.state.m3Step < 2) {
+      this.state.m3Step++;
+      this.save();
     }
+  }
+
+  submitM3Action(actionId) {
+    const act = GIR_GUARDIAN_DATA.mission3.steps[2].actions.find(a => a.id === actionId);
+    if (!act) return null;
+
+    this.state.m3ActionId = actionId;
     this.state.m3Completed = true;
-    if (!this.state.completedMissions.includes(3)) {
-      this.state.completedMissions.push(3);
+    if (!this.state.completedMissions.includes('mission-3')) {
+      this.state.completedMissions.push('mission-3');
+      this.addGuardianXP(act.xp);
     }
-    this.save();
-    return option;
-  }
-
-  // --- MISSION 4 ACTIONS ---
-  selectConservationPolicy(policyId) {
-    const policy = GIR_GUARDIAN_DATA.mission4.choices.find(c => c.id === policyId);
-    if (!policy) return null;
-
-    this.state.m4SelectedPolicyId = policyId;
-    this.state.m4PointsEarned = policy.score;
-    this.state.totalXP += policy.score;
-    this.state.m4Completed = true;
-    if (!this.state.completedMissions.includes(4)) {
-      this.state.completedMissions.push(4);
-    }
-
-    playerState.addXP(policy.score);
-    this.save();
-    return policy;
-  }
-
-  // --- FINAL CHALLENGE ACTIONS ---
-  submitFinalStageAnswer(stageIndex, optionIndex) {
-    const stage = GIR_GUARDIAN_DATA.finalChallenge.stages[stageIndex];
-    if (!stage) return null;
-
-    const opt = stage.options[optionIndex];
-    const isCorrect = !!opt.isCorrect;
-    const xp = opt.xp || 0;
-
-    this.state.finalStageResults[stageIndex] = {
-      isCorrect,
-      xpAwarded: xp
-    };
-
-    if (isCorrect) {
-      this.state.finalPointsEarned += xp;
-      this.state.totalXP += xp;
-      playerState.addXP(xp);
-    }
-
-    const isLastStage = stageIndex >= GIR_GUARDIAN_DATA.finalChallenge.stages.length - 1;
-    if (isLastStage) {
-      this.state.finalCompleted = true;
-      this.calculateFinalSummary();
-    }
-    this.save();
-
-    return {
-      isCorrect,
-      xp,
-      isLastStage
-    };
-  }
-
-  // --- DYNAMIC METRICS COMPUTATION ---
-  calculateFinalSummary() {
-    // 1. Knowledge Score (Mission 1)
-    const m1Pct = Math.min(100, Math.round((this.state.m1PointsEarned / this.state.m1MaxPossible) * 100));
+    this.unlockDiscovery('disc-pride');
+    this.unlockDiscovery('disc-maldhari');
+    this.calculateMetrics();
     
-    // 2. Exploration Score (Mission 2)
-    const m2Pct = Math.min(100, Math.round((this.state.m2PointsEarned / this.state.m2MaxPossible) * 100));
-    
-    // 3. Ecosystem & Decision Making Score (Mission 3 + 4)
-    const m3Pct = Math.min(100, Math.round((this.state.m3PointsEarned / this.state.m3MaxPossible) * 100));
-    const m4Pct = Math.min(100, Math.round((this.state.m4PointsEarned / this.state.m4MaxPossible) * 100));
-    const decisionPct = Math.round((m3Pct + m4Pct) / 2);
-
-    // 4. Conservation Score (Final Challenge)
-    const finalPct = Math.min(100, Math.round((this.state.finalPointsEarned / this.state.finalMaxPossible) * 100));
-
-    // Determine Overall Rank
-    const averageScore = Math.round((m1Pct + m2Pct + decisionPct + finalPct) / 4);
-    let rank = 'Novice Yatri';
-    if (averageScore >= 90) rank = 'Master Guardian of Gir 🦁';
-    else if (averageScore >= 75) rank = 'Senior Forest Ranger 🌿';
-    else if (averageScore >= 60) rank = 'Wildlife Detective 🔍';
-    else rank = 'Apprentice Tracker 🐾';
-
-    this.state.calculatedMetrics = {
-      knowledgePct: m1Pct || 85,
-      explorationPct: m2Pct || 90,
-      decisionPct: decisionPct || 92,
-      conservationPct: finalPct || 95,
-      overallRank: rank
-    };
-
-    // Unlock badges dynamically
-    const unlocked = [];
-    unlocked.push(GIR_GUARDIAN_DATA.badges.find(b => b.id === 'badge-guardian-gir'));
-    if (m1Pct >= 75) unlocked.push(GIR_GUARDIAN_DATA.badges.find(b => b.id === 'badge-wildlife-detective'));
-    if (m2Pct >= 80) unlocked.push(GIR_GUARDIAN_DATA.badges.find(b => b.id === 'badge-master-ranger'));
-    if (m3Pct >= 90) unlocked.push(GIR_GUARDIAN_DATA.badges.find(b => b.id === 'badge-ecosystem-builder'));
-    if (m4Pct >= 90) unlocked.push(GIR_GUARDIAN_DATA.badges.find(b => b.id === 'badge-coexistence-leader'));
-
-    this.state.unlockedBadges = unlocked.filter(Boolean);
-
-    // Mark location explored in global player state!
+    // Complete whole location in global state!
     playerState.markLocationExplored('gir-saurashtra');
     this.save();
+    return act;
+  }
+
+  // --- CALCULATE DYNAMIC METRICS ---
+  calculateMetrics() {
+    const totalDiscoveries = Object.keys(GIR_GUARDIAN_DATA.discoveries).length;
+    const unlockedCount = this.state.unlockedDiscoveryIds.length;
+    
+    const m1Done = this.state.m1Completed ? 1 : 0;
+    const m2Done = this.state.m2Completed ? 1 : 0;
+    const m3Done = this.state.m3Completed ? 1 : 0;
+    const missionsDone = m1Done + m2Done + m3Done;
+
+    // Wildlife %: based on clue inspections & animal discovery
+    this.state.wildlifePct = Math.min(100, Math.round((unlockedCount / totalDiscoveries) * 100));
+
+    // Exploration %: based on visited zones & trail progression
+    this.state.explorationPct = Math.min(100, Math.round((missionsDone / 3) * 100));
+
+    // Conservation %: based on decision quality
+    let conservationPoints = 0;
+    if (this.state.m2DecisionId === 'dec-solar-cistern') conservationPoints += 50;
+    else if (this.state.m2DecisionId === 'dec-diesel-tanker') conservationPoints += 25;
+    
+    if (this.state.m3ActionId === 'act-smart-corridor') conservationPoints += 50;
+    else if (this.state.m3ActionId === 'act-tranquilize') conservationPoints += 20;
+
+    this.state.conservationPct = Math.min(100, conservationPoints || (missionsDone > 0 ? 60 : 0));
+
+    // Final Rank
+    const averageScore = Math.round((this.state.wildlifePct + this.state.explorationPct + this.state.conservationPct) / 3);
+    if (averageScore >= 85) this.state.finalRank = 'Master Guardian of Gir 🦁';
+    else if (averageScore >= 65) this.state.finalRank = 'Senior Wildlife Ranger 🌿';
+    else this.state.finalRank = 'Guardian Trainee 🐾';
   }
 
   subscribe(callback) {

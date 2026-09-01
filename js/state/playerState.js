@@ -35,7 +35,8 @@ const DEFAULT_STATE = {
   rajasthanUnlockAnimationPlayed: false,
   selectedStateId: 'gujarat',
   selectedGujaratLocationId: 'kutch',
-  soundEnabled: true
+  soundEnabled: true,
+  language: 'en' // 'en' | 'hi' | 'gu'
 };
 
 class PlayerStateManager {
@@ -52,6 +53,7 @@ class PlayerStateManager {
         return {
           ...DEFAULT_STATE,
           ...parsed,
+          language: parsed.language || 'en',
           completedLocations: Array.isArray(parsed.completedLocations) ? parsed.completedLocations : (parsed.visitedLocations || []),
           completedStories: Array.isArray(parsed.completedStories) ? parsed.completedStories : [],
           completedGames: Array.isArray(parsed.completedGames) ? parsed.completedGames : [],
@@ -66,6 +68,16 @@ class PlayerStateManager {
       console.warn('Failed to load player state from localStorage', e);
     }
     return { ...DEFAULT_STATE };
+  }
+
+  setLanguage(lang) {
+    this.state.language = lang || 'en';
+    this.saveState();
+    this.notify();
+  }
+
+  getLanguage() {
+    return this.state.language || 'en';
   }
 
   saveState() {

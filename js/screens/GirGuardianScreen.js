@@ -1,4 +1,4 @@
-// js/screens/GirGuardianScreen.js - Complete interactive screen controller for "The Gir Guardian" location mission
+// js/screens/GirGuardianScreen.js - Complete interactive screen controller for "GIR GUARDIAN"
 
 import { GIR_GUARDIAN_DATA } from '../data/girGuardianData.js';
 import { girGuardianState } from '../state/girGuardianState.js';
@@ -18,7 +18,7 @@ export class GirGuardianScreen {
       this.screenEl = document.createElement('section');
       this.screenEl.id = 'screen-gir-guardian';
       this.screenEl.className = 'screen';
-      this.screenEl.setAttribute('aria-label', 'The Gir Guardian Mission');
+      this.screenEl.setAttribute('aria-label', 'Gir Guardian Game Screen');
       const screensViewport = document.querySelector('.screens-viewport') || document.getElementById('app');
       if (screensViewport) screensViewport.appendChild(this.screenEl);
     }
@@ -43,11 +43,15 @@ export class GirGuardianScreen {
 
     const state = girGuardianState.getState();
     const data = GIR_GUARDIAN_DATA;
+    const globalPlayer = playerState.getState();
 
     let contentHtml = '';
-    switch (state.currentStep) {
+    switch (state.currentScreen) {
       case 'intro':
         contentHtml = this.renderIntroHtml(data.intro);
+        break;
+      case 'environment':
+        contentHtml = this.renderEnvironmentHtml(data, state);
         break;
       case 'mission-1':
         contentHtml = this.renderMission1Html(data.mission1, state);
@@ -58,14 +62,8 @@ export class GirGuardianScreen {
       case 'mission-3':
         contentHtml = this.renderMission3Html(data.mission3, state);
         break;
-      case 'mission-4':
-        contentHtml = this.renderMission4Html(data.mission4, state);
-        break;
-      case 'final-challenge':
-        contentHtml = this.renderFinalChallengeHtml(data.finalChallenge, state);
-        break;
-      case 'results':
-        contentHtml = this.renderResultsHtml(data, state);
+      case 'completion':
+        contentHtml = this.renderCompletionHtml(data, state);
         break;
       default:
         contentHtml = this.renderIntroHtml(data.intro);
@@ -73,38 +71,52 @@ export class GirGuardianScreen {
 
     this.screenEl.innerHTML = `
       <div class="gir-screen-container">
-        <div class="gir-ambient-fog"></div>
+        <div class="gir-ambient-mist"></div>
         <div class="gir-content-wrap">
           
-          <!-- Top Breadcrumb & Status HUD -->
-          <header class="gir-breadcrumb-bar">
-            <nav class="gir-breadcrumb-links" aria-label="Breadcrumb">
-              <button id="gir-nav-bharatverse">BHARATVERSE</button>
-              <span>/</span>
-              <button id="gir-nav-gujarat">GUJARAT</button>
-              <span>/</span>
-              <button id="gir-nav-gir">GIR NATIONAL PARK</button>
-              <span>/</span>
-              <span style="color: var(--gir-warm-gold);">THE GIR GUARDIAN</span>
-            </nav>
-
-            <div class="gir-hud-status-group">
-              <div class="gir-hud-pill gir-lives-pill" title="Guardian Lives / Attempts">
-                ${'❤️'.repeat(state.lives)}${'🖤'.repeat(Math.max(0, 3 - state.lives))}
+          <!-- GIR GUARDIAN GAME HUD -->
+          <header class="gir-guardian-hud">
+            
+            <!-- Left: Player Profile -->
+            <div class="gir-hud-profile">
+              <div class="gir-hud-avatar-orb anim-glow-aura">
+                <img src="character/mira-avatar.png" alt="Player Avatar" onerror="this.src='assets/mira/mira.png'" />
               </div>
-              <div class="gir-hud-pill" title="Total Accumulated XP">
-                <span>⚡</span>
-                <span id="gir-total-xp">${state.totalXP} XP</span>
+              <div class="gir-hud-player-meta">
+                <span class="gir-hud-player-name">${globalPlayer.name || 'Yatri Guardian'}</span>
+                <span class="gir-hud-player-rank">${state.finalRank} (Lvl ${state.guardianLevel})</span>
               </div>
-              <button id="gir-reset-btn" class="btn-icon" style="width: 28px; height: 28px; font-size: 0.75rem;" title="Reset Gir Progress">🔄</button>
             </div>
+
+            <!-- Center: Current Mission Context -->
+            <div class="gir-hud-mission-center">
+              <span class="gir-hud-mission-tag">
+                ${state.currentScreen.startsWith('mission') 
+                  ? `ACTIVE MISSION • STEP ${this.getCurrentStepNum(state)}/3` 
+                  : 'GIR NATIONAL PARK • GUJARAT'}
+              </span>
+              <span class="gir-hud-mission-title">${this.getScreenTitle(state.currentScreen)}</span>
+            </div>
+
+            <!-- Right: Guardian XP & Navigation -->
+            <div class="gir-hud-xp-group">
+              <div class="gir-hud-xp-badge">
+                <span>⚡</span>
+                <span>${state.guardianXP} XP</span>
+              </div>
+              ${state.currentScreen !== 'environment' && state.currentScreen !== 'intro' ? `
+                <button id="gir-hud-map-btn" class="gir-hud-nav-btn">🗺️ Environment</button>
+              ` : ''}
+              <button id="gir-hud-reset-btn" class="gir-hud-nav-btn" title="Reset Gir Progress">🔄</button>
+            </div>
+
           </header>
 
-          <!-- Mission Step Tracker (Hidden on Intro & Results) -->
-          ${state.currentStep !== 'intro' && state.currentStep !== 'results' ? this.renderTrackerHtml(state) : ''}
-
-          <!-- Screen Content Body -->
+          <!-- Main Screen Viewport -->
           ${contentHtml}
+
+          <!-- Animated Field Discovery Popup Overlay -->
+          ${state.activeDiscovery ? this.renderDiscoveryModalHtml(state.activeDiscovery) : ''}
 
         </div>
       </div>
@@ -113,7 +125,28 @@ export class GirGuardianScreen {
     this.bindEvents();
   }
 
-  // --- 1. INTRO SCREEN ---
+  getScreenTitle(screen) {
+    switch (screen) {
+      case 'intro': return 'Sanctuary Induction';
+      case 'environment': return 'Gir Forest Interactive Map';
+      case 'mission-1': return 'Mission 1: The Silent Trail';
+      case 'mission-2': return 'Mission 2: Water of Life';
+      case 'mission-3': return 'Mission 3: Guardian of the Pride';
+      case 'completion': return '🦁 Gir Guardian Status';
+      default: return 'The Gir Guardian';
+    }
+  }
+
+  getCurrentStepNum(state) {
+    if (state.currentScreen === 'mission-1') return state.m1Step + 1;
+    if (state.currentScreen === 'mission-2') return state.m2Step + 1;
+    if (state.currentScreen === 'mission-3') return state.m3Step + 1;
+    return 1;
+  }
+
+  // =========================================================================
+  // 1. INTRO SCREEN
+  // =========================================================================
   renderIntroHtml(intro) {
     return `
       <div class="gir-intro-hero anim-fade-in">
@@ -121,29 +154,29 @@ export class GirGuardianScreen {
         
         <div>
           <span class="badge-playable" style="background: rgba(16, 185, 129, 0.2); border-color: #10B981; color: #34D399; margin-bottom: 0.5rem;">
-            ${intro.badge}
+            🌟 PLAYABLE LOCATION MISSION
           </span>
           <h1 class="gir-hero-title">${intro.heading}</h1>
-          <p class="gir-hero-sub">${intro.subheading}</p>
+          <p class="gir-hero-sub">${intro.tagline}</p>
         </div>
 
         <p class="gir-hero-desc">${intro.description}</p>
 
         <!-- Mira Greeting Box -->
-        <div class="gir-mira-bubble" style="max-width: 680px; text-align: left;">
+        <div class="gir-mira-bubble" style="max-width: 700px; text-align: left;">
           <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
+            <img src="character/mira-avatar.png" alt="Mira" onerror="this.src='assets/mira/mira.png'" />
           </div>
           <div class="gir-mira-text-wrap">
             <div class="gir-mira-header-row">
-              <span class="gir-mira-name">MIRA • ADVENTURE COMPANION</span>
-              <button id="gir-mira-tts" class="btn-icon" style="width: 24px; height: 24px; font-size: 0.7rem;" title="Listen to Mira">🔊</button>
+              <span class="gir-mira-name">MIRA • ADVENTURE PARTNER</span>
+              <button id="gir-mira-tts-btn" class="btn-icon" style="width: 26px; height: 26px; font-size: 0.75rem;" title="Listen to Mira">🔊</button>
             </div>
-            <p class="gir-mira-speech">"${intro.miraGreeting}"</p>
+            <p class="gir-mira-speech">"${intro.miraDialogue}"</p>
           </div>
         </div>
 
-        <!-- 4 Key Sanctuary Stats -->
+        <!-- 4 Stats -->
         <div class="gir-stats-grid">
           ${intro.stats.map(s => `
             <div class="gir-stat-box">
@@ -154,382 +187,149 @@ export class GirGuardianScreen {
         </div>
 
         <div style="margin-top: 0.5rem;">
-          <button id="gir-start-mission-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.85rem 2.5rem; font-size: 1.05rem;">
-            ${intro.cta} →
+          <button id="gir-enter-game-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.85rem 2.8rem; font-size: 1.05rem;">
+            START GIR GUARDIAN →
           </button>
         </div>
       </div>
     `;
   }
 
-  // --- 2. MISSION 1: WILDLIFE DETECTIVE ---
-  renderMission1Html(m1, state) {
-    const currentCase = m1.cases[state.m1CaseIndex];
-    const revealedCount = state.m1RevealedClues.length;
-    const potentialXP = m1.xpPerClue[revealedCount - 1] || 40;
+  // =========================================================================
+  // 2. GIR ENVIRONMENT MAP & MISSION SELECTOR
+  // =========================================================================
+  renderEnvironmentHtml(data, state) {
+    const m1Done = state.m1Completed;
+    const m2Done = state.m2Completed;
+    const m3Done = state.m3Completed;
 
     return `
-      <div class="flex flex-col gap-4 anim-fade-in">
+      <div class="gir-map-arena anim-fade-in">
         
-        <!-- Mission Header & Mira Callout -->
+        <!-- Mira Briefing -->
         <div class="gir-mira-bubble">
           <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
+            <img src="character/mira-avatar.png" alt="Mira" onerror="this.src='assets/mira/mira.png'" />
           </div>
           <div class="gir-mira-text-wrap">
             <div class="gir-mira-header-row">
-              <span class="gir-mira-name">MIRA • WILDLIFE DETECTIVE</span>
-              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-warm-gold);">CASE ${state.m1CaseIndex + 1} OF ${m1.cases.length}</span>
-            </div>
-            <p class="gir-mira-speech">"${m1.miraIntro}"</p>
-          </div>
-        </div>
-
-        <div class="gir-detective-arena">
-          
-          <!-- Left: Forensic Clues Board -->
-          <div class="gir-clue-board">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
-              <h3 style="font-family: var(--font-title); font-size: 1rem; font-weight: 700; color: #FFFFFF;">
-                🔍 ${currentCase.title}
-              </h3>
-              <span class="gir-hud-pill">Current Value: +${potentialXP} XP</span>
-            </div>
-
-            <div class="space-y-2">
-              ${currentCase.clues.map((clueText, idx) => {
-                const isRevealed = state.m1RevealedClues.includes(idx);
-                return `
-                  <div class="gir-clue-card ${isRevealed ? 'revealed' : ''}">
-                    <span class="gir-clue-badge">CLUE ${idx + 1}</span>
-                    ${isRevealed 
-                      ? `<p class="gir-clue-text">${clueText}</p>` 
-                      : `<p class="gir-clue-locked-text">🔒 Locked clue (Reveal costs ${100 - (m1.xpPerClue[idx] || 40)} XP potential)</p>`}
-                  </div>
-                `;
-              }).join('')}
-            </div>
-
-            ${revealedCount < 4 ? `
-              <button id="gir-reveal-clue-btn" class="btn btn-outline w-full" style="margin-top: 0.5rem; font-size: 0.82rem;">
-                🔓 Reveal Next Clue (${4 - revealedCount} remaining)
-              </button>
-            ` : ''}
-          </div>
-
-          <!-- Right: Wildlife Identification Cards -->
-          <div class="flex flex-col gap-2">
-            <h4 style="font-family: var(--font-title); font-size: 0.9rem; font-weight: 700; color: var(--gir-emerald-bright);">
-              Select the Mystery Animal:
-            </h4>
-            <div class="gir-options-board">
-              ${currentCase.options.map(opt => `
-                <div class="gir-animal-card" data-animal-id="${opt.id}" role="button" tabindex="0">
-                  <div class="gir-animal-icon">${opt.icon}</div>
-                  <div class="gir-animal-name">${opt.name}</div>
-                  <div class="gir-animal-sci">${opt.scientific}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    `;
-  }
-
-  // --- 3. MISSION 2: BECOME A GIR RANGER ---
-  renderMission2Html(m2, state) {
-    const selectedRoute = m2.routes.find(r => r.id === state.m2SelectedRouteId);
-
-    return `
-      <div class="flex flex-col gap-4 anim-fade-in">
-        
-        <div class="gir-mira-bubble">
-          <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
-          </div>
-          <div class="gir-mira-text-wrap">
-            <div class="gir-mira-header-row">
-              <span class="gir-mira-name">MIRA • GIR RANGER PATROL</span>
-              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-warm-gold);">CORE HABITAT SURVEILLANCE</span>
-            </div>
-            <p class="gir-mira-speech">"${m2.miraIntro}"</p>
-          </div>
-        </div>
-
-        <div class="gir-ranger-layout">
-          
-          <!-- Left: Stylized Interactive Vector Map of Gir -->
-          <div class="gir-map-viewport">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-              <span style="font-family: var(--font-title); font-size: 0.85rem; font-weight: 700; color: var(--gir-warm-gold);">🗺️ GIR SANCTUARY SECTOR GRID</span>
-              <span style="font-size: 0.7rem; color: #94A3B8;">Click a route or card to patrol</span>
-            </div>
-
-            <svg class="gir-svg-map" viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="coreTeakGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#064E3B" />
-                  <stop offset="100%" stop-color="#022C22" />
-                </linearGradient>
-                <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#0284C7" />
-                  <stop offset="100%" stop-color="#0369A1" />
-                </linearGradient>
-              </defs>
-
-              <!-- Dense Teak Forest Core Zone -->
-              <path class="map-zone-path" d="M 40,40 L 220,30 L 320,80 L 280,220 L 150,260 L 30,180 Z" fill="url(#coreTeakGrad)" />
-              <text x="110" y="110" fill="#34D399" font-size="10" font-weight="bold" letter-spacing="1">DENSE TEAK CANOPY CORE</text>
-
-              <!-- Kamleshwar Reservoir & Hiran River -->
-              <path d="M 200,60 Q 250,140 280,200 Q 320,280 340,320" stroke="url(#waterGrad)" stroke-width="12" fill="none" stroke-linecap="round" />
-              <circle cx="260" cy="150" r="28" fill="url(#waterGrad)" opacity="0.8" />
-              <text x="225" y="155" fill="#FFFFFF" font-size="9" font-weight="bold">Kamleshwar Dam 💧</text>
-
-              <!-- Savanna Scrub Plains (East) -->
-              <path class="map-zone-path" d="M 320,80 L 460,70 L 470,240 L 340,280 L 280,220 Z" fill="#78350F" fill-opacity="0.4" />
-              <text x="360" y="130" fill="#FBBF24" font-size="9" font-weight="bold">SAVANNA PLAINS</text>
-
-              <!-- Village Buffer Zone (South) -->
-              <path d="M 20,280 L 480,310" stroke="#EF4444" stroke-width="2" stroke-dasharray="6,4" fill="none" />
-              <text x="50" y="325" fill="#EF4444" font-size="9" font-weight="bold">⚠️ VILLAGE BUFFER & SOLAR FENCE CORRIDOR</text>
-
-              <!-- Patrol Route Lines -->
-              <polyline points="70,120 120,80 180,70 230,90" stroke="#F59E0B" stroke-width="3" stroke-dasharray="4,4" fill="none" />
-              <polyline points="200,70 240,120 260,180" stroke="#0284C7" stroke-width="3" fill="none" />
-
-              <!-- Waypoints / Animal Markers -->
-              <g class="map-waypoint-marker" transform="translate(225, 90)">
-                <circle cx="0" cy="0" r="14" fill="#F59E0B" opacity="0.85" />
-                <text x="-6" y="5" font-size="12">🦁</text>
-              </g>
-              <g class="map-waypoint-marker" transform="translate(260, 150)">
-                <circle cx="0" cy="0" r="12" fill="#0284C7" opacity="0.9" />
-                <text x="-6" y="4" font-size="11">🐊</text>
-              </g>
-              <g class="map-waypoint-marker" transform="translate(130, 180)">
-                <circle cx="0" cy="0" r="12" fill="#10B981" opacity="0.85" />
-                <text x="-5" y="4" font-size="11">🦌</text>
-              </g>
-            </svg>
-          </div>
-
-          <!-- Right: Strategic Route Options List -->
-          <div class="gir-routes-list">
-            <h4 style="font-family: var(--font-title); font-size: 0.9rem; font-weight: 700; color: #FFFFFF;">
-              Select Patrol Route:
-            </h4>
-            ${m2.routes.map(r => `
-              <div class="gir-route-card ${state.m2SelectedRouteId === r.id ? 'selected-route' : ''}" data-route-id="${r.id}">
-                <div class="gir-route-header">
-                  <span class="gir-route-name">${r.name}</span>
-                  <span class="gir-hud-pill">+${r.xp} XP</span>
-                </div>
-                <p style="font-size: 0.78rem; color: #CBD5E1;">${r.terrain}</p>
-                <div class="gir-route-meta">
-                  <span>Dist: ${r.distance}</span>
-                  <span>Disturbance: <strong>${r.disturbanceLevel}</strong></span>
-                  <span>Risk: ${r.riskLevel}</span>
-                </div>
-              </div>
-            `).join('')}
-
-            ${selectedRoute ? `
-              <div class="p-3 rounded-lg border border-amber-500/40 bg-slate-900/90 text-xs space-y-2 mt-2 anim-scale-up">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <strong style="color: var(--gir-warm-gold); font-size: 0.85rem;">${selectedRoute.consequence.status}</strong>
-                  <span class="gir-hud-pill">+${selectedRoute.scorePoints} Ranger XP</span>
-                </div>
-                <p style="color: #E2E8F0; line-height: 1.4;">${selectedRoute.consequence.text}</p>
-                <div style="background: rgba(16,185,129,0.12); padding: 0.4rem 0.6rem; border-left: 2px solid #10B981; border-radius: 2px; color: #6EE7B7;">
-                  <strong>💡 Ecological Lesson:</strong> ${selectedRoute.consequence.ecologicalTakeaway}
-                </div>
-                <button id="gir-proceed-to-m3-btn" class="btn btn-primary btn-shimmer-effect w-full" style="margin-top: 0.5rem;">
-                  Proceed to Mission 3: Build Ecosystem →
-                </button>
-              </div>
-            ` : ''}
-          </div>
-
-        </div>
-
-      </div>
-    `;
-  }
-
-  // --- 4. MISSION 3: BUILD THE GIR ECOSYSTEM ---
-  renderMission3Html(m3, state) {
-    const allFilled = state.m3IsWebComplete;
-
-    return `
-      <div class="gir-ecosystem-arena anim-fade-in">
-        
-        <div class="gir-mira-bubble">
-          <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
-          </div>
-          <div class="gir-mira-text-wrap">
-            <div class="gir-mira-header-row">
-              <span class="gir-mira-name">MIRA • ECOSYSTEM ARCHITECT</span>
-              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-warm-gold);">TROPHIC ENERGY PYRAMID</span>
-            </div>
-            <p class="gir-mira-speech">"${m3.miraIntro}"</p>
-          </div>
-        </div>
-
-        <!-- 5 Trophic Slots -->
-        <div class="gir-trophic-slots-container">
-          ${m3.tiers.map(tier => {
-            const slottedItemId = state.m3Slots[tier.targetId];
-            const slottedItem = slottedItemId ? m3.items.find(i => i.id === slottedItemId) : null;
-
-            return `
-              <div class="gir-trophic-slot ${slottedItem ? 'slot-filled' : ''}" data-target-id="${tier.targetId}">
-                <span class="gir-slot-tier-label">${tier.category}</span>
-                ${slottedItem ? `
-                  <div style="font-size: 2.2rem;">${slottedItem.icon}</div>
-                  <strong style="font-size: 0.8rem; color: #FFFFFF;">${slottedItem.name}</strong>
-                  <span style="font-size: 0.65rem; color: #34D399;">✓ Connected</span>
-                ` : `
-                  <div style="font-size: 1.8rem; opacity: 0.4;">📦</div>
-                  <span style="font-size: 0.72rem; color: #94A3B8;">Click a token below to slot</span>
-                `}
-              </div>
-            `;
-          }).join('')}
-        </div>
-
-        <!-- Available Organism Tokens Palette -->
-        <div class="gir-trophic-palette">
-          <span style="font-size: 0.75rem; color: var(--gir-warm-gold); font-weight: 700; width: 100%; text-align: center;">
-            CLICK AN ORGANISM TOKEN TO PLACE IT IN ITS NATURAL TROPHIC LEVEL:
-          </span>
-          ${m3.items.map(item => {
-            const isUsed = Object.values(state.m3Slots).includes(item.id);
-            return `
-              <div class="gir-palette-token ${isUsed ? 'token-used' : ''}" data-item-id="${item.id}" data-item-type="${item.type}">
-                <span>${item.icon}</span>
-                <span>${item.name}</span>
-              </div>
-            `;
-          }).join('')}
-        </div>
-
-        <!-- Ecological Shockwave Dilemma (Reveals when food web is built) -->
-        ${allFilled ? `
-          <div class="p-4 rounded-xl border border-emerald-500/50 bg-slate-900/95 space-y-3 anim-scale-up">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="badge-playable" style="background: rgba(16, 185, 129, 0.2); border-color: #10B981; color: #34D399;">
-                ⚡ FOOD WEB ONLINE • ACTIVE SIMULATION
+              <span class="gir-mira-name">MIRA • SECTOR INTEL</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-gold-bright);">
+                DISCOVERIES: ${state.unlockedDiscoveryIds.length}/6 UNLOCKED
               </span>
-              <span class="gir-hud-pill">+100 XP Assembled</span>
             </div>
-            
-            <h4 style="font-family: var(--font-title); font-size: 1.05rem; font-weight: 700; color: #FFFFFF;">
-              🧪 Ecological Dilemma: ${m3.dilemma.question}
-            </h4>
-
-            <div class="space-y-2">
-              ${m3.dilemma.options.map(opt => `
-                <button class="gir-dilemma-opt-btn btn btn-outline w-full text-left" data-opt-id="${opt.id}" style="padding: 0.75rem 1rem; font-size: 0.85rem; justify-content: flex-start; text-align: left;">
-                  ${opt.text}
-                </button>
-              `).join('')}
-            </div>
-
-            ${state.m3DilemmaAnswered ? `
-              <div class="p-3 rounded-lg border border-amber-500/40 bg-slate-800/90 text-xs space-y-2 anim-fade-in">
-                <p style="color: #F8FAFC; line-height: 1.45;">
-                  ${m3.dilemma.options.find(o => o.isCorrect).feedback}
-                </p>
-                <button id="gir-proceed-to-m4-btn" class="btn btn-primary btn-shimmer-effect w-full" style="margin-top: 0.5rem;">
-                  Proceed to Mission 4: Conservation Crisis →
-                </button>
-              </div>
-            ` : ''}
-          </div>
-        ` : ''}
-
-      </div>
-    `;
-  }
-
-  // --- 5. MISSION 4: THE CONSERVATION CRISIS ---
-  renderMission4Html(m4, state) {
-    const selectedPolicy = m4.choices.find(c => c.id === state.m4SelectedPolicyId);
-
-    return `
-      <div class="flex flex-col gap-4 anim-fade-in">
-        
-        <div class="gir-mira-bubble">
-          <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
-          </div>
-          <div class="gir-mira-text-wrap">
-            <div class="gir-mira-header-row">
-              <span class="gir-mira-name">MIRA • CONSERVATION STEWARD</span>
-              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #EF4444;">COMMUNITY COEXISTENCE CRISIS</span>
-            </div>
-            <p class="gir-mira-speech">"${m4.miraIntro}"</p>
-          </div>
-        </div>
-
-        <div class="gir-crisis-dossier">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <strong style="color: #EF4444; font-family: var(--font-title); font-size: 0.95rem;">${m4.scenario.title}</strong>
-            <span class="gir-hud-pill">Stakeholder Decision</span>
-          </div>
-          <p style="font-size: 0.85rem; color: #CBD5E1; line-height: 1.5;">${m4.scenario.context}</p>
-        </div>
-
-        <h4 style="font-family: var(--font-title); font-size: 0.95rem; font-weight: 700; color: #FFFFFF;">
-          Choose Your Conservation Policy:
-        </h4>
-
-        <div class="gir-policy-grid">
-          ${m4.choices.map(policy => `
-            <div class="gir-policy-card ${state.m4SelectedPolicyId === policy.id ? 'selected-policy' : ''}" data-policy-id="${policy.id}">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.6rem;">${policy.icon}</span>
-                <span class="gir-hud-pill">Impact Score: ${policy.score} pts</span>
-              </div>
-              <h5 style="font-family: var(--font-title); font-size: 0.92rem; font-weight: 700; color: #FFFFFF;">${policy.title}</h5>
-              <p style="font-size: 0.78rem; color: #CBD5E1; line-height: 1.4;">${policy.description}</p>
-            </div>
-          `).join('')}
-        </div>
-
-        ${selectedPolicy ? `
-          <div class="p-4 rounded-xl border border-amber-500/50 bg-slate-900/95 space-y-3 anim-scale-up">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <strong style="color: var(--gir-warm-gold); font-size: 1rem;">${selectedPolicy.consequences.outcomeBadge}</strong>
-              <span class="gir-hud-pill">+${selectedPolicy.score} Decision XP</span>
-            </div>
-            
-            <p style="font-size: 0.85rem; color: #E2E8F0; line-height: 1.5;">
-              ${selectedPolicy.consequences.verdict}
+            <p class="gir-mira-speech">
+              "Here is our sector map of Gir. Choose an active mission beacon or click a region to investigate wildlife tracks, water levels, and pride movements!"
             </p>
+          </div>
+        </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; font-size: 0.75rem; text-align: center;">
-              <div style="background: rgba(16,185,129,0.1); padding: 0.5rem; border-radius: 4px;">
-                <div style="font-weight: 800; color: #34D399; font-size: 1rem;">${selectedPolicy.consequences.ecologicalHealth}%</div>
-                <div style="color: #94A3B8;">Ecological Health</div>
-              </div>
-              <div style="background: rgba(59,130,246,0.1); padding: 0.5rem; border-radius: 4px;">
-                <div style="font-weight: 800; color: #60A5FA; font-size: 1rem;">${selectedPolicy.consequences.communityTrust}%</div>
-                <div style="color: #94A3B8;">Community Trust</div>
-              </div>
-              <div style="background: rgba(245,158,11,0.1); padding: 0.5rem; border-radius: 4px;">
-                <div style="font-weight: 800; color: #FBBF24; font-size: 1rem;">${selectedPolicy.consequences.financialSustainability}%</div>
-                <div style="color: #94A3B8;">Sustainability</div>
-              </div>
+        <!-- Interactive SVG Environment Map -->
+        <div class="gir-map-viewport">
+          <svg class="gir-svg-map" viewBox="0 0 700 380" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="teakCanopyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#064E3B" />
+                <stop offset="100%" stop-color="#022C22" />
+              </linearGradient>
+              <linearGradient id="waterBasinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0284C7" />
+                <stop offset="100%" stop-color="#0369A1" />
+              </linearGradient>
+              <linearGradient id="savannaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#78350F" />
+                <stop offset="100%" stop-color="#451A03" />
+              </linearGradient>
+            </defs>
+
+            <!-- Dense Teak Core Region -->
+            <path d="M 40,40 L 320,30 L 420,110 L 360,260 L 180,290 L 30,200 Z" fill="url(#teakCanopyGrad)" opacity="0.85" stroke="#10B981" stroke-width="1.5" />
+            <text x="80" y="80" fill="#34D399" font-size="11" font-weight="bold" letter-spacing="1">DENSE TEAK CANOPY CORE</text>
+
+            <!-- Kamleshwar Reservoir & River -->
+            <path d="M 260,60 Q 320,150 360,220 Q 420,300 460,340" stroke="url(#waterBasinGrad)" stroke-width="16" fill="none" stroke-linecap="round" />
+            <circle cx="340" cy="180" r="38" fill="url(#waterBasinGrad)" opacity="0.85" stroke="#38BDF8" stroke-width="2" />
+            <text x="290" y="185" fill="#FFFFFF" font-size="11" font-weight="bold">Kamleshwar Basin 💧</text>
+
+            <!-- Savanna Plains (East) -->
+            <path d="M 420,110 L 640,90 L 660,270 L 480,310 L 360,260 Z" fill="url(#savannaGrad)" opacity="0.7" stroke="#F59E0B" stroke-width="1.5" />
+            <text x="490" y="150" fill="#FBBF24" font-size="11" font-weight="bold">SAVANNA SCRUB PLAINS</text>
+
+            <!-- Village Boundary Corridor (South) -->
+            <path d="M 20,320 L 680,350" stroke="#EF4444" stroke-width="3" stroke-dasharray="8,5" fill="none" />
+            <text x="50" y="365" fill="#EF4444" font-size="10" font-weight="bold">⚠️ VILLAGE BUFFER & RAILWAY CORRIDOR</text>
+
+            <!-- Mission 1 Beacon: The Silent Trail -->
+            <g class="map-mission-beacon" id="map-beacon-m1" transform="translate(180, 140)">
+              <circle class="map-beacon-pulse" cx="0" cy="0" r="22" fill="#F59E0B" opacity="0.35" />
+              <circle cx="0" cy="0" r="16" fill="${m1Done ? '#10B981' : '#F59E0B'}" stroke="#FFFFFF" stroke-width="2" />
+              <text x="-7" y="6" font-size="14">${m1Done ? '✓' : '🐾'}</text>
+            </g>
+
+            <!-- Mission 2 Beacon: Water of Life -->
+            <g class="map-mission-beacon" id="map-beacon-m2" transform="translate(340, 180)">
+              <circle class="map-beacon-pulse" cx="0" cy="0" r="22" fill="#0284C7" opacity="0.35" />
+              <circle cx="0" cy="0" r="16" fill="${m2Done ? '#10B981' : '#0284C7'}" stroke="#FFFFFF" stroke-width="2" />
+              <text x="-7" y="5" font-size="13">${m2Done ? '✓' : '💧'}</text>
+            </g>
+
+            <!-- Mission 3 Beacon: Guardian of the Pride -->
+            <g class="map-mission-beacon" id="map-beacon-m3" transform="translate(480, 270)">
+              <circle class="map-beacon-pulse" cx="0" cy="0" r="22" fill="#EA580C" opacity="0.35" />
+              <circle cx="0" cy="0" r="16" fill="${m3Done ? '#10B981' : '#EA580C'}" stroke="#FFFFFF" stroke-width="2" />
+              <text x="-7" y="6" font-size="14">${m3Done ? '✓' : '👑'}</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- 3 Mission Action Cards Grid -->
+        <div class="gir-missions-grid">
+          
+          <!-- Mission 1 Card -->
+          <div class="gir-mission-card ${m1Done ? 'completed' : ''}" id="gir-launch-m1">
+            <div class="gir-mission-card-header">
+              <span class="gir-mission-num">MISSION 1 • ${m1Done ? '✅ COMPLETED' : '+50 XP'}</span>
+              <span style="font-size: 1.3rem;">🐾</span>
             </div>
+            <h3 class="gir-mission-title">The Silent Trail</h3>
+            <p class="gir-mission-theme">Investigate environmental clues and identify keystone species on the riverbed trail.</p>
+            <button class="btn ${m1Done ? 'btn-outline' : 'btn-primary'} w-full" style="margin-top: auto; font-size: 0.8rem; padding: 0.45rem;">
+              ${m1Done ? 'Replay Tracking →' : 'Begin Mission 1 →'}
+            </button>
+          </div>
 
-            <button id="gir-proceed-to-boss-btn" class="btn btn-primary btn-shimmer-effect w-full" style="margin-top: 0.5rem;">
-              Enter The Final Guardian Test 🦁 →
+          <!-- Mission 2 Card -->
+          <div class="gir-mission-card ${m2Done ? 'completed' : ''}" id="gir-launch-m2">
+            <div class="gir-mission-card-header">
+              <span class="gir-mission-num">MISSION 2 • ${m2Done ? '✅ COMPLETED' : '+60 XP'}</span>
+              <span style="font-size: 1.3rem;">💧</span>
+            </div>
+            <h3 class="gir-mission-title">Water of Life</h3>
+            <p class="gir-mission-theme">Resolve a dangerous waterhole drought crisis and observe ecological consequences.</p>
+            <button class="btn ${m2Done ? 'btn-outline' : 'btn-primary'} w-full" style="margin-top: auto; font-size: 0.8rem; padding: 0.45rem;">
+              ${m2Done ? 'Replay Decision →' : 'Begin Mission 2 →'}
+            </button>
+          </div>
+
+          <!-- Mission 3 Card -->
+          <div class="gir-mission-card ${m3Done ? 'completed' : ''}" id="gir-launch-m3">
+            <div class="gir-mission-card-header">
+              <span class="gir-mission-num">MISSION 3 • ${m3Done ? '✅ COMPLETED' : '+80 XP'}</span>
+              <span style="font-size: 1.3rem;">👑</span>
+            </div>
+            <h3 class="gir-mission-title">Guardian of the Pride</h3>
+            <p class="gir-mission-theme">Track a lion pride approaching railway & farm hazards and coordinate protection.</p>
+            <button class="btn ${m3Done ? 'btn-outline' : 'btn-primary'} w-full" style="margin-top: auto; font-size: 0.8rem; padding: 0.45rem;">
+              ${m3Done ? 'View Pride Status →' : 'Begin Mission 3 →'}
+            </button>
+          </div>
+
+        </div>
+
+        ${m1Done && m2Done && m3Done ? `
+          <div style="text-align: center; margin-top: 0.5rem;" class="anim-scale-up">
+            <button id="gir-view-completion-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.75rem 2.5rem; font-size: 1rem;">
+              🏆 View Gir Guardian Status Unlocked →
             </button>
           </div>
         ` : ''}
@@ -538,130 +338,394 @@ export class GirGuardianScreen {
     `;
   }
 
-  // --- 6. FINAL CHALLENGE: SAVE GIR ---
-  renderFinalChallengeHtml(finalData, state) {
-    const stage = finalData.stages[state.finalStageIndex];
+  // =========================================================================
+  // 3. MISSION 1: “THE SILENT TRAIL”
+  // =========================================================================
+  renderMission1Html(m1, state) {
+    const step = m1.steps[state.m1Step] || m1.steps[0];
 
     return `
-      <div class="flex flex-col gap-4 anim-fade-in">
+      <div class="gir-mission-workspace anim-fade-in">
         
-        <div class="gir-emergency-banner">
-          <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <span style="font-size: 1.5rem;">🚨</span>
-            <div>
-              <div style="font-family: var(--font-title); font-weight: 800; font-size: 0.95rem; color: #FCA5A5;">FINAL GUARDIAN CRISIS RESPONSE</div>
-              <div style="font-size: 0.72rem; color: #FECACA;">Stage ${state.finalStageIndex + 1} of ${finalData.stages.length}</div>
-            </div>
-          </div>
-          <span class="gir-hud-pill" style="border-color: #EF4444; color: #FCA5A5;">High Stakes</span>
-        </div>
-
         <div class="gir-mira-bubble">
           <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
+            <img src="character/mira-avatar.png" alt="Mira" onerror="this.src='assets/mira/mira.png'" />
           </div>
           <div class="gir-mira-text-wrap">
             <div class="gir-mira-header-row">
-              <span class="gir-mira-name">MIRA • EMERGENCY COMMAND</span>
+              <span class="gir-mira-name">MIRA • WILDLIFE TRACKER</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-gold-bright);">
+                MISSION 1 • STEP ${state.m1Step + 1} OF 3
+              </span>
             </div>
-            <p class="gir-mira-speech">"${finalData.miraIntro}"</p>
+            <p class="gir-mira-speech">"${step.miraDialogue || m1.miraBrief}"</p>
           </div>
         </div>
 
-        <div class="p-4 rounded-xl border border-red-500/40 bg-slate-900/95 space-y-3">
-          <h3 style="font-family: var(--font-title); font-size: 1.05rem; font-weight: 700; color: #FFFFFF;">
-            ${stage.alert}
-          </h3>
-          <p style="font-size: 0.88rem; color: #CBD5E1; line-height: 1.45;">
-            ${stage.prompt}
-          </p>
+        <!-- STEP 1: APPROACH TRAIL -->
+        ${state.m1Step === 0 ? `
+          <div class="p-4 rounded-xl border border-amber-500/40 bg-slate-900/90 space-y-3">
+            <h3 style="font-family: var(--font-title); font-size: 1.1rem; color: #FFFFFF;">
+              🐾 ${step.title}
+            </h3>
+            <p style="font-size: 0.88rem; color: #CBD5E1; line-height: 1.5;">
+              ${step.narration}
+            </p>
+            <div style="background: rgba(245, 158, 11, 0.12); padding: 0.75rem 1rem; border-left: 3px solid #F59E0B; border-radius: 4px; font-size: 0.82rem; color: #FDE68A;">
+              <strong>🎯 Objective:</strong> ${step.prompt}
+            </div>
+            <button id="gir-m1-inspect-trail-btn" class="btn btn-primary btn-shimmer-effect" style="margin-top: 0.5rem;">
+              Inspect Environmental Clues →
+            </button>
+          </div>
+        ` : ''}
 
-          <div class="space-y-2 pt-2">
-            ${stage.options.map((opt, idx) => `
-              <button class="gir-final-opt-btn btn btn-outline w-full text-left" data-stage-idx="${state.finalStageIndex}" data-opt-idx="${idx}" style="padding: 0.85rem 1rem; font-size: 0.85rem; justify-content: flex-start; text-align: left;">
-                ${opt.text}
+        <!-- STEP 2: INVESTIGATE CLUES -->
+        ${state.m1Step === 1 ? `
+          <div>
+            <h3 style="font-family: var(--font-title); font-size: 1.05rem; color: #FFFFFF; margin-bottom: 0.75rem;">
+              🔍 Investigate Environmental Clues (Click each to examine):
+            </h3>
+            <div class="gir-clues-grid">
+              ${step.clues.map(clue => {
+                const isInspected = state.m1CluesInspected.includes(clue.id);
+                return `
+                  <div class="gir-clue-card ${isInspected ? 'inspected' : ''}" data-clue-id="${clue.id}">
+                    <span class="gir-clue-icon">${clue.icon}</span>
+                    <div>
+                      <div class="gir-clue-title">${clue.label} ${isInspected ? '✓' : ''}</div>
+                      <p class="gir-clue-detail">${clue.detail}</p>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+            <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+              <button id="gir-m1-to-deduction-btn" class="btn btn-primary btn-shimmer-effect">
+                Proceed to Identification →
               </button>
-            `).join('')}
+            </div>
           </div>
-        </div>
+        ` : ''}
+
+        <!-- STEP 3: IDENTIFY SPECIMEN -->
+        ${state.m1Step === 2 ? `
+          <div class="space-y-3">
+            <h3 style="font-family: var(--font-title); font-size: 1.05rem; color: #FFFFFF;">
+              🎯 ${step.title}
+            </h3>
+            <p style="font-size: 0.88rem; color: #CBD5E1;">
+              ${step.question}
+            </p>
+            <div class="space-y-2">
+              ${step.options.map(opt => `
+                <button class="gir-m1-opt-btn btn btn-outline w-full text-left" data-opt-id="${opt.id}" style="padding: 0.85rem 1.1rem; justify-content: flex-start; text-align: left;">
+                  <span style="font-size: 1.4rem; margin-right: 0.65rem;">${opt.icon}</span>
+                  <span style="font-weight: 700; font-size: 0.9rem;">${opt.name}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
 
       </div>
     `;
   }
 
-  // --- 7. FINAL RESULTS SCREEN ---
-  renderResultsHtml(data, state) {
-    const metrics = state.calculatedMetrics;
+  // =========================================================================
+  // 4. MISSION 2: “WATER OF LIFE”
+  // =========================================================================
+  renderMission2Html(m2, state) {
+    const step = m2.steps[state.m2Step] || m2.steps[0];
+    const selectedDec = step.decisions ? step.decisions.find(d => d.id === state.m2DecisionId) : null;
 
     return `
-      <div class="gir-results-panel anim-scale-up">
+      <div class="gir-mission-workspace anim-fade-in">
         
-        <div class="gir-intro-emblem anim-glow-aura">🏆</div>
+        <div class="gir-mira-bubble">
+          <div class="gir-mira-avatar-orb anim-float">
+            <img src="character/mira-avatar.png" alt="Mira" onerror="this.src='assets/mira/mira.png'" />
+          </div>
+          <div class="gir-mira-text-wrap">
+            <div class="gir-mira-header-row">
+              <span class="gir-mira-name">MIRA • CONSERVATION STEWARD</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-gold-bright);">
+                MISSION 2 • STEP ${state.m2Step + 1} OF 2
+              </span>
+            </div>
+            <p class="gir-mira-speech">"${m2.miraBrief}"</p>
+          </div>
+        </div>
+
+        <!-- STEP 1: INSPECT WATER CRISIS -->
+        ${state.m2Step === 0 ? `
+          <div class="space-y-3">
+            <h3 style="font-family: var(--font-title); font-size: 1.05rem; color: #FFFFFF;">
+              💧 ${step.title}
+            </h3>
+            <p style="font-size: 0.88rem; color: #CBD5E1;">
+              ${step.narration}
+            </p>
+            <div class="gir-clues-grid">
+              ${step.clues.map((clue, idx) => `
+                <div class="gir-clue-card inspected">
+                  <span class="gir-clue-icon">${clue.icon}</span>
+                  <div>
+                    <div class="gir-clue-title">${clue.label}</div>
+                    <p class="gir-clue-detail">${clue.detail}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+              <button id="gir-m2-to-decision-btn" class="btn btn-primary btn-shimmer-effect">
+                Make Conservation Decision →
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- STEP 2: GUARDIAN DECISION -->
+        ${state.m2Step === 1 ? `
+          <div class="space-y-3">
+            <div style="border-left: 3.5px solid var(--gir-gold-bright); padding-left: 0.75rem;">
+              <h3 style="font-family: var(--font-title); font-size: 1.1rem; color: #FFFFFF;">
+                🦁 You are the Guardian. What will you do?
+              </h3>
+              <p style="font-size: 0.85rem; color: #CBD5E1;">${step.prompt}</p>
+            </div>
+
+            <div class="gir-decision-list">
+              ${step.decisions.map(dec => `
+                <div class="gir-decision-card ${state.m2DecisionId === dec.id ? 'selected-best' : ''}" data-dec-id="${dec.id}">
+                  <span style="font-size: 1.8rem; line-height: 1;">${dec.icon}</span>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 700; font-size: 0.9rem; color: #FFFFFF; margin-bottom: 0.2rem;">${dec.title}</div>
+                    <span class="gir-hud-xp-badge" style="font-size: 0.7rem; padding: 0.15rem 0.5rem;">+${dec.xp} XP Potential</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            ${selectedDec ? `
+              <div class="p-4 rounded-xl border border-emerald-500/50 bg-slate-900/95 space-y-2 mt-2 anim-scale-up">
+                <strong style="color: var(--gir-gold-bright); font-size: 0.95rem;">${selectedDec.consequence.title}</strong>
+                <p style="font-size: 0.85rem; color: #E2E8F0; line-height: 1.45;">${selectedDec.consequence.text}</p>
+                <div style="background: rgba(16,185,129,0.12); padding: 0.4rem 0.75rem; border-left: 2.5px solid #10B981; font-size: 0.78rem; color: #6EE7B7;">
+                  <strong>💡 Ecological Takeaway:</strong> ${selectedDec.consequence.ecologicalLesson}
+                </div>
+                <button id="gir-m2-complete-btn" class="btn btn-primary btn-shimmer-effect w-full" style="margin-top: 0.5rem;">
+                  Collect Field Discovery & Continue →
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // 5. MISSION 3: “GUARDIAN OF THE PRIDE”
+  // =========================================================================
+  renderMission3Html(m3, state) {
+    const step = m3.steps[state.m3Step] || m3.steps[0];
+    const selectedAct = step.actions ? step.actions.find(a => a.id === state.m3ActionId) : null;
+
+    return `
+      <div class="gir-mission-workspace anim-fade-in">
+        
+        <div class="gir-mira-bubble">
+          <div class="gir-mira-avatar-orb anim-float">
+            <img src="character/mira-avatar.png" alt="Mira" onerror="this.src='assets/mira/mira.png'" />
+          </div>
+          <div class="gir-mira-text-wrap">
+            <div class="gir-mira-header-row">
+              <span class="gir-mira-name">MIRA • APEX STEWARD</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--gir-gold-bright);">
+                MISSION 3 • STEP ${state.m3Step + 1} OF 3
+              </span>
+            </div>
+            <p class="gir-mira-speech">"${m3.miraBrief}"</p>
+          </div>
+        </div>
+
+        <!-- STEP 1: DISTANT ROAR -->
+        ${state.m3Step === 0 ? `
+          <div class="p-4 rounded-xl border border-amber-500/40 bg-slate-900/90 space-y-3">
+            <h3 style="font-family: var(--font-title); font-size: 1.1rem; color: #FFFFFF;">
+              🔊 ${step.title}
+            </h3>
+            <p style="font-size: 0.88rem; color: #CBD5E1; line-height: 1.5;">
+              ${step.narration}
+            </p>
+            <div style="background: rgba(245, 158, 11, 0.12); padding: 0.75rem 1rem; border-left: 3px solid #F59E0B; border-radius: 4px; font-size: 0.82rem; color: #FDE68A;">
+              <strong>🐾 Tracking Note:</strong> The pride contains a nursing mother and two small cubs heading toward the southern fringe corridor.
+            </div>
+            <button id="gir-m3-to-assess-btn" class="btn btn-primary btn-shimmer-effect" style="margin-top: 0.5rem;">
+              Follow Trail to Southern Perimeter →
+            </button>
+          </div>
+        ` : ''}
+
+        <!-- STEP 2: ASSESS HAZARDS -->
+        ${state.m3Step === 1 ? `
+          <div class="space-y-3">
+            <h3 style="font-family: var(--font-title); font-size: 1.05rem; color: #FFFFFF;">
+              ⚠️ ${step.title}
+            </h3>
+            <p style="font-size: 0.88rem; color: #CBD5E1;">
+              ${step.narration}
+            </p>
+            <div class="gir-clues-grid">
+              ${step.hazards.map(h => `
+                <div class="gir-clue-card inspected">
+                  <span class="gir-clue-icon">${h.icon}</span>
+                  <div>
+                    <div class="gir-clue-title">${h.title}</div>
+                    <p class="gir-clue-detail">${h.desc}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            <div style="margin-top: 1rem; display: flex; justify-content: flex-end;">
+              <button id="gir-m3-to-protocol-btn" class="btn btn-primary btn-shimmer-effect">
+                Deploy Guardian Protection Protocol →
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- STEP 3: COORDINATE ACTION -->
+        ${state.m3Step === 2 ? `
+          <div class="space-y-3">
+            <div style="border-left: 3.5px solid var(--gir-gold-bright); padding-left: 0.75rem;">
+              <h3 style="font-family: var(--font-title); font-size: 1.1rem; color: #FFFFFF;">
+                🛡️ Guardian Coexistence Action
+              </h3>
+              <p style="font-size: 0.85rem; color: #CBD5E1;">${step.prompt}</p>
+            </div>
+
+            <div class="gir-decision-list">
+              ${step.actions.map(act => `
+                <div class="gir-decision-card ${state.m3ActionId === act.id ? 'selected-best' : ''}" data-act-id="${act.id}">
+                  <span style="font-size: 1.8rem; line-height: 1;">${act.icon}</span>
+                  <div style="flex: 1;">
+                    <div style="font-weight: 700; font-size: 0.9rem; color: #FFFFFF; margin-bottom: 0.2rem;">${act.title}</div>
+                    <span class="gir-hud-xp-badge" style="font-size: 0.7rem; padding: 0.15rem 0.5rem;">+${act.xp} XP Reward</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            ${selectedAct ? `
+              <div class="p-4 rounded-xl border border-emerald-500/50 bg-slate-900/95 space-y-2 mt-2 anim-scale-up">
+                <strong style="color: var(--gir-gold-bright); font-size: 0.95rem;">${selectedAct.consequence.title}</strong>
+                <p style="font-size: 0.85rem; color: #E2E8F0; line-height: 1.45;">${selectedAct.consequence.text}</p>
+                <div style="background: rgba(16,185,129,0.12); padding: 0.4rem 0.75rem; border-left: 2.5px solid #10B981; font-size: 0.78rem; color: #6EE7B7;">
+                  <strong>💡 Coexistence Takeaway:</strong> ${selectedAct.consequence.ecologicalLesson}
+                </div>
+                <button id="gir-m3-complete-btn" class="btn btn-primary btn-shimmer-effect w-full" style="margin-top: 0.5rem;">
+                  Claim Final Discovery & Unlock Status 🦁 →
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // 6. ANIMATED FIELD DISCOVERY MODAL
+  // =========================================================================
+  renderDiscoveryModalHtml(disc) {
+    return `
+      <div class="gir-discovery-overlay" id="gir-discovery-modal">
+        <div class="gir-discovery-card">
+          <span class="gir-discovery-badge">✨ NEW FIELD DISCOVERY UNLOCKED</span>
+          
+          <div class="gir-discovery-icon-orb anim-float">
+            ${disc.icon}
+          </div>
+
+          <div>
+            <h2 class="gir-discovery-title">${disc.title}</h2>
+            <p class="gir-discovery-sci">${disc.scientific}</p>
+          </div>
+
+          <p class="gir-discovery-insight">
+            ${disc.insight}
+          </p>
+
+          <div class="gir-hud-xp-badge" style="font-size: 0.9rem; padding: 0.4rem 1rem;">
+            <span>⚡</span>
+            <span>+${disc.xp} GUARDIAN XP</span>
+          </div>
+
+          <button id="gir-claim-disc-btn" class="btn btn-primary btn-shimmer-effect w-full" style="padding: 0.75rem; margin-top: 0.5rem;">
+            Collect Discovery →
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // 7. GIR COMPLETION & STATUS UNLOCKED
+  // =========================================================================
+  renderCompletionHtml(data, state) {
+    return `
+      <div class="gir-completion-panel anim-scale-up">
+        
+        <div class="gir-intro-emblem anim-glow-aura">🦁</div>
 
         <div>
-          <span class="badge-playable" style="background: rgba(251, 191, 36, 0.2); border-color: #FBBF24; color: #FBBF24; margin-bottom: 0.5rem;">
-            EXPEDITION COMPLETE • BHARATVERSE REWARD
-          </span>
+          <span class="gir-completion-header-tag">EXPEDITION COMPLETE • BHARATVERSE REWARD</span>
           <h1 class="gir-hero-title">GIR GUARDIAN</h1>
-          <p style="font-size: 0.95rem; color: var(--gir-emerald-bright); font-family: var(--font-title);">
-            Rank: ${metrics.overallRank}
-          </p>
+          <p class="gir-completion-quote">"THE FOREST REMEMBERS YOUR CHOICES."</p>
         </div>
 
         <!-- Mira Closing Celebration -->
         <div class="gir-mira-bubble" style="max-width: 680px; text-align: left;">
           <div class="gir-mira-avatar-orb anim-float">
-            <img src="assets/mira/mira.png" alt="Mira" onerror="this.src='character/mira-avatar.png'" />
+            <img src="character/mira-avatar.png" alt="Mira" onerror="this.src='assets/mira/mira.png'" />
           </div>
           <div class="gir-mira-text-wrap">
             <div class="gir-mira-header-row">
               <span class="gir-mira-name">MIRA • ADVENTURE PARTNER</span>
             </div>
             <p class="gir-mira-speech">
-              "You didn't just visit Gir, Guardian. You understood how an entire forest ecosystem survives and how humans and predators thrive together!"
+              "Outstanding work, Guardian! You didn't just observe Gir—you protected its water, tracked its king, and safeguarded peaceful coexistence."
             </p>
           </div>
         </div>
 
-        <!-- 4 Dynamic Performance Scores -->
-        <div class="gir-score-bars-grid">
-          <div class="gir-score-card">
-            <span class="gir-score-val">${metrics.knowledgePct}%</span>
-            <span class="gir-stat-lbl">Wildlife Knowledge</span>
+        <!-- Dynamic Guardian Performance Metrics -->
+        <div class="gir-metric-bars-row">
+          <div class="gir-metric-card">
+            <span class="gir-metric-val">${state.explorationPct}%</span>
+            <span class="gir-metric-lbl">Exploration</span>
           </div>
-          <div class="gir-score-card">
-            <span class="gir-score-val">${metrics.explorationPct}%</span>
-            <span class="gir-stat-lbl">Forest Patrol</span>
+          <div class="gir-metric-card">
+            <span class="gir-metric-val">${state.wildlifePct}%</span>
+            <span class="gir-metric-lbl">Wildlife</span>
           </div>
-          <div class="gir-score-card">
-            <span class="gir-score-val">${metrics.decisionPct}%</span>
-            <span class="gir-stat-lbl">Decision Making</span>
-          </div>
-          <div class="gir-score-card">
-            <span class="gir-score-val">${metrics.conservationPct}%</span>
-            <span class="gir-stat-lbl">Conservation</span>
+          <div class="gir-metric-card">
+            <span class="gir-metric-val">${state.conservationPct}%</span>
+            <span class="gir-metric-lbl">Conservation</span>
           </div>
         </div>
 
-        <!-- Total XP Pill -->
-        <div style="font-family: var(--font-mono); font-size: 1.3rem; font-weight: 800; color: var(--gir-warm-gold);">
-          TOTAL EXPEDITION XP: +${state.totalXP} XP
+        <div style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--gir-gold-bright);">
+          Discoveries: <strong>${state.unlockedDiscoveryIds.length}/6</strong> • Missions: <strong>3/3 Complete</strong> • Total: <strong>+${state.guardianXP} XP</strong>
         </div>
 
-        <!-- Unlocked Badges Showcase -->
-        <div class="gir-badge-unlock-showcase">
-          <div style="font-size: 2.5rem;">🦁</div>
-          <strong style="font-family: var(--font-title); font-size: 1.1rem; color: #FFFFFF;">
-            BADGE UNLOCKED: GUARDIAN OF GIR
-          </strong>
-          <p style="font-size: 0.78rem; color: #CBD5E1; max-width: 450px;">
-            Recognized for mastering biodiversity, food webs, and community stewardship in Gir National Park.
-          </p>
-        </div>
-
-        <!-- Action Buttons -->
+        <!-- Action Controls -->
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem;">
-          <button id="gir-restart-btn" class="btn btn-outline" style="padding: 0.75rem 1.8rem;">
+          <button id="gir-explore-again-btn" class="btn btn-outline" style="padding: 0.75rem 1.8rem;">
             🔄 Explore Gir Again
           </button>
           <button id="gir-return-hub-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.75rem 2rem;">
@@ -673,224 +737,163 @@ export class GirGuardianScreen {
     `;
   }
 
-  // --- PROGRESS TRACKER BAR ---
-  renderTrackerHtml(state) {
-    const stepMap = {
-      'mission-1': 1,
-      'mission-2': 2,
-      'mission-3': 3,
-      'mission-4': 4,
-      'final-challenge': 4
-    };
-    const currentNum = stepMap[state.currentStep] || 1;
-    const pct = Math.round((currentNum / 4) * 100);
-
-    return `
-      <div class="gir-mission-tracker">
-        <span style="font-family: var(--font-mono); font-size: 0.75rem; font-weight: 800; color: var(--gir-warm-gold);">
-          MISSION ${currentNum} / 4
-        </span>
-        <div class="gir-tracker-steps">
-          <div class="gir-tracker-step ${currentNum >= 1 ? (currentNum > 1 ? 'completed-step' : 'active-step') : ''}"></div>
-          <div class="gir-tracker-step ${currentNum >= 2 ? (currentNum > 2 ? 'completed-step' : 'active-step') : ''}"></div>
-          <div class="gir-tracker-step ${currentNum >= 3 ? (currentNum > 3 ? 'completed-step' : 'active-step') : ''}"></div>
-          <div class="gir-tracker-step ${currentNum >= 4 ? (state.finalCompleted ? 'completed-step' : 'active-step') : ''}"></div>
-        </div>
-        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #94A3B8;">${pct}%</span>
-      </div>
-    `;
-  }
-
-  // --- EVENT BINDINGS ---
+  // =========================================================================
+  // 8. EVENT BINDINGS
+  // =========================================================================
   bindEvents() {
-    // 1. Navigation Breadcrumb Links
-    const b1 = this.screenEl.querySelector('#gir-nav-bharatverse');
-    if (b1) b1.addEventListener('click', () => router.navigateTo('map'));
-
-    const b2 = this.screenEl.querySelector('#gir-nav-gujarat');
-    if (b2) b2.addEventListener('click', () => router.navigateTo('gujarat-map'));
-
-    const b3 = this.screenEl.querySelector('#gir-nav-gir');
-    if (b3) b3.addEventListener('click', () => girGuardianState.setStep('intro'));
-
-    // Reset Progress
-    const resetBtn = this.screenEl.querySelector('#gir-reset-btn');
-    if (resetBtn) {
-      resetBtn.addEventListener('click', () => {
-        if (confirm('Reset Gir Guardian progress?')) {
-          soundFx.playClick();
-          girGuardianState.reset();
-        }
-      });
-    }
-
-    // Start Mission CTA
-    const startBtn = this.screenEl.querySelector('#gir-start-mission-btn');
-    if (startBtn) {
-      startBtn.addEventListener('click', () => {
-        soundFx.playChime();
-        girGuardianState.setStep('mission-1');
-      });
-    }
-
-    // Mission 1: Reveal Clue
-    const revealBtn = this.screenEl.querySelector('#gir-reveal-clue-btn');
-    if (revealBtn) {
-      revealBtn.addEventListener('click', () => {
-        soundFx.playClick();
-        girGuardianState.revealNextClue();
-      });
-    }
-
-    // Mission 1: Wildlife Card Click
-    const animalCards = this.screenEl.querySelectorAll('.gir-animal-card');
-    animalCards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        const animalId = e.currentTarget.getAttribute('data-animal-id');
-        const res = girGuardianState.submitWildlifeGuess(animalId);
-        if (res.isCorrect) {
-          soundFx.playCorrect();
-          alert(`🎉 Correct! +${res.points} XP\n\n${res.fact}`);
-          if (res.isLastCase) {
-            girGuardianState.setStep('mission-2');
-          } else {
-            girGuardianState.advanceToNextWildlifeCase();
-          }
-        } else {
-          soundFx.playWrong();
-          alert(`❌ Not quite. The clues point elsewhere! Lives remaining: ${res.remainingLives}`);
-        }
-      });
+    // HUD Buttons
+    const mapBtn = this.screenEl.querySelector('#gir-hud-map-btn');
+    if (mapBtn) mapBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.setScreen('environment');
     });
 
-    // Mission 2: Route Selection
-    const routeCards = this.screenEl.querySelectorAll('.gir-route-card');
-    routeCards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        const routeId = e.currentTarget.getAttribute('data-route-id');
-        soundFx.playChime();
-        girGuardianState.selectRoute(routeId);
-      });
-    });
-
-    const toM3Btn = this.screenEl.querySelector('#gir-proceed-to-m3-btn');
-    if (toM3Btn) {
-      toM3Btn.addEventListener('click', () => {
-        soundFx.playChime();
-        girGuardianState.setStep('mission-3');
-      });
-    }
-
-    // Mission 3: Trophic Token Clicks
-    let selectedTokenId = null;
-    const tokens = this.screenEl.querySelectorAll('.gir-palette-token:not(.token-used)');
-    tokens.forEach(token => {
-      token.addEventListener('click', (e) => {
-        soundFx.playClick();
-        tokens.forEach(t => t.style.borderColor = 'rgba(245, 158, 11, 0.4)');
-        e.currentTarget.style.borderColor = '#FBBF24';
-        selectedTokenId = e.currentTarget.getAttribute('data-item-id');
-      });
-    });
-
-    const slots = this.screenEl.querySelectorAll('.gir-trophic-slot');
-    slots.forEach(slot => {
-      slot.addEventListener('click', (e) => {
-        if (!selectedTokenId) {
-          alert('Click an organism token below first, then click the matching trophic slot!');
-          return;
-        }
-        const targetId = e.currentTarget.getAttribute('data-target-id');
-        const res = girGuardianState.slotEcosystemItem(targetId, selectedTokenId);
-        if (res.success) {
-          soundFx.playCorrect();
-          selectedTokenId = null;
-        } else {
-          soundFx.playWrong();
-          alert('❌ That organism belongs to a different trophic level. Think about how energy flows from the sun!');
-        }
-      });
-    });
-
-    // Mission 3: Dilemma Options
-    const dilemmaBtns = this.screenEl.querySelectorAll('.gir-dilemma-opt-btn');
-    dilemmaBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const optId = e.currentTarget.getAttribute('data-opt-id');
-        const res = girGuardianState.submitEcosystemDilemma(optId);
-        if (res && res.isCorrect) {
-          soundFx.playCorrect();
-        } else {
-          soundFx.playWrong();
-        }
-      });
-    });
-
-    const toM4Btn = this.screenEl.querySelector('#gir-proceed-to-m4-btn');
-    if (toM4Btn) {
-      toM4Btn.addEventListener('click', () => {
-        soundFx.playChime();
-        girGuardianState.setStep('mission-4');
-      });
-    }
-
-    // Mission 4: Policy Choices
-    const policyCards = this.screenEl.querySelectorAll('.gir-policy-card');
-    policyCards.forEach(card => {
-      card.addEventListener('click', (e) => {
-        const policyId = e.currentTarget.getAttribute('data-policy-id');
-        soundFx.playChime();
-        girGuardianState.selectConservationPolicy(policyId);
-      });
-    });
-
-    const toBossBtn = this.screenEl.querySelector('#gir-proceed-to-boss-btn');
-    if (toBossBtn) {
-      toBossBtn.addEventListener('click', () => {
-        soundFx.playChime();
-        girGuardianState.setStep('final-challenge');
-      });
-    }
-
-    // Final Challenge Option Clicks
-    const finalBtns = this.screenEl.querySelectorAll('.gir-final-opt-btn');
-    finalBtns.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const sIdx = parseInt(e.currentTarget.getAttribute('data-stage-idx'), 10);
-        const oIdx = parseInt(e.currentTarget.getAttribute('data-opt-idx'), 10);
-        const res = girGuardianState.submitFinalStageAnswer(sIdx, oIdx);
-        if (res.isCorrect) {
-          soundFx.playCorrect();
-        } else {
-          soundFx.playWrong();
-        }
-
-        if (res.isLastStage) {
-          soundFx.playLevelUpFanfare();
-          girGuardianState.setStep('results');
-        } else {
-          girGuardianState.state.finalStageIndex++;
-          girGuardianState.save();
-        }
-      });
-    });
-
-    // Results Actions
-    const restartBtn = this.screenEl.querySelector('#gir-restart-btn');
-    if (restartBtn) {
-      restartBtn.addEventListener('click', () => {
+    const resetBtn = this.screenEl.querySelector('#gir-hud-reset-btn');
+    if (resetBtn) resetBtn.addEventListener('click', () => {
+      if (confirm('Reset Gir Guardian adventure?')) {
         soundFx.playClick();
         girGuardianState.reset();
+      }
+    });
+
+    // Intro Screen CTA
+    const enterGameBtn = this.screenEl.querySelector('#gir-enter-game-btn');
+    if (enterGameBtn) enterGameBtn.addEventListener('click', () => {
+      soundFx.playChime();
+      girGuardianState.setScreen('environment');
+    });
+
+    // Environment Mission Cards & Map Beacons
+    const b1 = this.screenEl.querySelector('#map-beacon-m1') || this.screenEl.querySelector('#gir-launch-m1');
+    if (b1) b1.addEventListener('click', () => {
+      soundFx.playChime();
+      girGuardianState.startMission('mission-1');
+    });
+
+    const b2 = this.screenEl.querySelector('#map-beacon-m2') || this.screenEl.querySelector('#gir-launch-m2');
+    if (b2) b2.addEventListener('click', () => {
+      soundFx.playChime();
+      girGuardianState.startMission('mission-2');
+    });
+
+    const b3 = this.screenEl.querySelector('#map-beacon-m3') || this.screenEl.querySelector('#gir-launch-m3');
+    if (b3) b3.addEventListener('click', () => {
+      soundFx.playChime();
+      girGuardianState.startMission('mission-3');
+    });
+
+    const completionBtn = this.screenEl.querySelector('#gir-view-completion-btn');
+    if (completionBtn) completionBtn.addEventListener('click', () => {
+      soundFx.playLevelUpFanfare();
+      girGuardianState.setScreen('completion');
+    });
+
+    // Mission 1 Events
+    const m1InspectBtn = this.screenEl.querySelector('#gir-m1-inspect-trail-btn');
+    if (m1InspectBtn) m1InspectBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.advanceM1Step();
+    });
+
+    const clueCards = this.screenEl.querySelectorAll('.gir-clue-card[data-clue-id]');
+    clueCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        const clueId = e.currentTarget.getAttribute('data-clue-id');
+        soundFx.playClick();
+        girGuardianState.inspectM1Clue(clueId);
       });
-    }
+    });
+
+    const m1DeductionBtn = this.screenEl.querySelector('#gir-m1-to-deduction-btn');
+    if (m1DeductionBtn) m1DeductionBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.advanceM1Step();
+    });
+
+    const m1OptBtns = this.screenEl.querySelectorAll('.gir-m1-opt-btn');
+    m1OptBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const optId = e.currentTarget.getAttribute('data-opt-id');
+        if (optId === 'opt-lion') {
+          soundFx.playCorrect();
+          girGuardianState.completeMission1();
+        } else {
+          soundFx.playWrong();
+          alert('❌ The clues point elsewhere! Remember: the pugmark has retracted claws and a short mane.');
+        }
+      });
+    });
+
+    // Mission 2 Events
+    const m2DecisionBtn = this.screenEl.querySelector('#gir-m2-to-decision-btn');
+    if (m2DecisionBtn) m2DecisionBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.advanceM2Step();
+    });
+
+    const m2DecisionCards = this.screenEl.querySelectorAll('.gir-decision-card[data-dec-id]');
+    m2DecisionCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        const decId = e.currentTarget.getAttribute('data-dec-id');
+        soundFx.playChime();
+        girGuardianState.submitM2Decision(decId);
+      });
+    });
+
+    const m2CompleteBtn = this.screenEl.querySelector('#gir-m2-complete-btn');
+    if (m2CompleteBtn) m2CompleteBtn.addEventListener('click', () => {
+      soundFx.playChime();
+      girGuardianState.setScreen('environment');
+    });
+
+    // Mission 3 Events
+    const m3AssessBtn = this.screenEl.querySelector('#gir-m3-to-assess-btn');
+    if (m3AssessBtn) m3AssessBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.advanceM3Step();
+    });
+
+    const m3ProtocolBtn = this.screenEl.querySelector('#gir-m3-to-protocol-btn');
+    if (m3ProtocolBtn) m3ProtocolBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.advanceM3Step();
+    });
+
+    const m3ActionCards = this.screenEl.querySelectorAll('.gir-decision-card[data-act-id]');
+    m3ActionCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        const actId = e.currentTarget.getAttribute('data-act-id');
+        soundFx.playChime();
+        girGuardianState.submitM3Action(actId);
+      });
+    });
+
+    const m3CompleteBtn = this.screenEl.querySelector('#gir-m3-complete-btn');
+    if (m3CompleteBtn) m3CompleteBtn.addEventListener('click', () => {
+      soundFx.playLevelUpFanfare();
+      girGuardianState.setScreen('completion');
+    });
+
+    // Discovery Claim
+    const claimDiscBtn = this.screenEl.querySelector('#gir-claim-disc-btn');
+    if (claimDiscBtn) claimDiscBtn.addEventListener('click', () => {
+      soundFx.playChime();
+      girGuardianState.dismissDiscovery();
+    });
+
+    // Completion Screen Actions
+    const exploreAgainBtn = this.screenEl.querySelector('#gir-explore-again-btn');
+    if (exploreAgainBtn) exploreAgainBtn.addEventListener('click', () => {
+      soundFx.playClick();
+      girGuardianState.reset();
+      girGuardianState.setScreen('environment');
+    });
 
     const returnHubBtn = this.screenEl.querySelector('#gir-return-hub-btn');
-    if (returnHubBtn) {
-      returnHubBtn.addEventListener('click', () => {
-        soundFx.playChime();
-        router.navigateTo('gujarat-map');
-      });
-    }
+    if (returnHubBtn) returnHubBtn.addEventListener('click', () => {
+      soundFx.playChime();
+      router.navigateTo('gujarat-map');
+    });
   }
 }
 

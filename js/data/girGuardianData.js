@@ -1,425 +1,340 @@
-// js/data/girGuardianData.js - Complete data model for "The Gir Guardian" location mission module
+// js/data/girGuardianData.js - Game data for "GIR GUARDIAN" adventure module
 
 export const GIR_GUARDIAN_DATA = {
   metadata: {
     id: 'gir-guardian',
     locationId: 'gir-saurashtra',
-    locationName: 'Gir National Park & Wildlife Sanctuary',
+    locationName: 'Gir National Park & Sanctuary',
     stateName: 'Gujarat',
-    region: 'Saurashtra Peninsula, Western India',
-    title: 'THE GIR GUARDIAN',
+    title: 'GIR GUARDIAN',
     subtitle: 'Protect the ecosystem. Understand the wild. Become a Guardian.',
-    coverTheme: 'deep-forest',
-    coordinates: '21.1241° N, 70.7944° E',
     habitat: 'Dry Deciduous Teak Forest & Savanna Scrublands',
-    keySpecies: 'Asiatic Lion (Panthera leo persica)',
-    totalMissions: 4,
-    maxXP: 1000
+    totalMissions: 3,
+    totalDiscoveries: 6,
+    maxXP: 250
   },
 
   intro: {
-    badge: '🦁 BHARATVERSE LOCATION EXPEDITION',
-    heading: 'The Gir Guardian',
-    subheading: 'Sanctuary of the Last Wild Asiatic Lions',
-    description: 'Welcome to Gir Forest—a 1,412 km² living sanctuary where dry deciduous teak forests, rocky ravines, and perennial river valleys harbor the world\'s only remaining wild population of Asiatic lions.',
-    miraGreeting: 'Welcome to Gir! Today, you are not just a visitor. You are going to become a Guardian of the forest. The wild is counting on our decisions!',
+    heading: 'GIR GUARDIAN',
+    tagline: 'Sanctuary of the Last Wild Asiatic Lions',
+    description: 'Enter the heart of Gir Forest—1,412 km² of rugged teak canopy, rocky ravines, and perennial streams. Step into the boots of a Guardian trainee to track wildlife, resolve environmental crises, and safeguard the king of Asia.',
+    miraDialogue: 'Welcome to Gir! Today you are not just a visitor—you are becoming a Guardian of the forest. Stay alert, observe the clues, and remember: every decision shapes the ecosystem.',
     stats: [
-      { value: '674+', label: 'Wild Asiatic Lions' },
-      { value: '1,412 km²', label: 'Protected Area' },
-      { value: '300+', label: 'Avian Species' },
-      { value: 'Centuries', label: 'Maldhari Coexistence' }
-    ],
-    cta: 'BEGIN GUARDIAN EXPEDITION'
+      { label: 'Wild Lions', value: '674+' },
+      { label: 'Protected Area', value: '1,412 km²' },
+      { label: 'Avian Species', value: '300+' },
+      { label: 'Coexistence', value: 'Centuries' }
+    ]
   },
 
+  // 6 UNLOCKABLE FIELD DISCOVERIES
+  discoveries: {
+    'disc-lion': {
+      id: 'disc-lion',
+      title: 'ASIATIC LION',
+      scientific: 'Panthera leo persica',
+      category: 'WILDLIFE OF GIR',
+      icon: '🦁',
+      rarity: 'Legendary Apex',
+      insight: 'The Asiatic lion has a distinctive longitudinal belly skin fold and a shorter mane than African lions. Gir is the only natural wild habitat for this subspecies in the world.',
+      xp: 50
+    },
+    'disc-chital': {
+      id: 'disc-chital',
+      title: 'CHITAL (SPOTTED DEER)',
+      scientific: 'Axis axis',
+      category: 'KEYSTONE HERBIVORE',
+      icon: '🦌',
+      rarity: 'Essential Prey',
+      insight: 'Chital deer retain permanent white spots throughout adulthood and form the primary natural prey (over 70%) sustaining Gir\'s predator populations.',
+      xp: 40
+    },
+    'disc-teak': {
+      id: 'disc-teak',
+      title: 'DRY DECIDUOUS TEAK FOREST',
+      scientific: 'Tectona grandis',
+      category: 'HABITAT & FLORA',
+      icon: '🌿',
+      rarity: 'Canopy Foundation',
+      insight: 'Teak trees shed their broad leaves in winter to conserve water, creating open sightlines and rich nutrient mulch on the rocky forest floor.',
+      xp: 30
+    },
+    'disc-waterhole': {
+      id: 'disc-waterhole',
+      title: 'KAMLESHWAR WATER BASIN',
+      scientific: 'Hiran River Drainage',
+      category: 'HYDROLOGY & SANCTUARY',
+      icon: '💧',
+      rarity: 'Life Support Nexus',
+      insight: 'Kamleshwar Dam is celebrated as the water lifeline of Gir, hosting one of India\'s largest wild populations of marsh Mugger crocodiles.',
+      xp: 50
+    },
+    'disc-maldhari': {
+      id: 'disc-maldhari',
+      title: 'MALDHARI COEXISTENCE TRADITION',
+      scientific: 'Pastoral Stewardship',
+      category: 'COMMUNITY CONSERVATION',
+      icon: '🤝',
+      rarity: 'Living Heritage',
+      insight: 'The indigenous Maldhari pastoralists have lived inside Gir\'s forest settlements (nesses) for centuries, sharing watering paths and territory with lions without conflict.',
+      xp: 40
+    },
+    'disc-pride': {
+      id: 'disc-pride',
+      title: 'MATERNAL PRIDE TERRITORY',
+      scientific: 'Social Carnivore Ecology',
+      category: 'BEHAVIORAL ECOLOGY',
+      icon: '👑',
+      rarity: 'Sanctuary Core',
+      insight: 'Asiatic lionesses form close-knit sisterhoods that cooperatively nurse cubs and hunt, maintaining home ranges near shaded ravines with reliable water.',
+      xp: 50
+    }
+  },
+
+  // MISSION 1: “THE SILENT TRAIL”
   mission1: {
     id: 'mission-1',
     number: 1,
-    title: 'Wildlife Detective',
-    subtitle: 'Identify Keystone Fauna Through Progressive Forensic Clues',
-    miraIntro: 'The forest leaves subtle clues everywhere. Let\'s test your wildlife tracking skills! The fewer clues you reveal before answering, the higher your detective XP.',
-    xpPerClue: [100, 80, 60, 40],
-    cases: [
+    title: 'The Silent Trail',
+    theme: 'Wildlife Tracking & Environmental Observation',
+    xpReward: 50,
+    miraBrief: 'Something moved through this sector just before dawn. Let\'s inspect the environmental clues left on the trail before drawing a conclusion.',
+    steps: [
       {
-        id: 'case-lion',
-        title: 'Mystery Specimen Alpha',
-        clues: [
-          'I am an apex carnivore that hunts during cool twilight and nocturnal hours.',
-          'I possess a distinct longitudinal skin fold running along the center of my belly.',
-          'My adult males have a shorter, darker mane compared to African relatives, leaving my ears clearly visible.',
-          'Gir National Park in Gujarat is the ONLY place on planet Earth where my wild population roams free.'
-        ],
-        options: [
-          { id: 'lion', name: 'Asiatic Lion', scientific: 'Panthera leo persica', icon: '🦁', isCorrect: true },
-          { id: 'leopard', name: 'Indian Leopard', scientific: 'Panthera pardus fusca', icon: '🐆', isCorrect: false },
-          { id: 'hyena', name: 'Striped Hyena', scientific: 'Hyaena hyaena', icon: '🐺', isCorrect: false },
-          { id: 'jungle-cat', name: 'Jungle Cat', scientific: 'Felis chaus', icon: '🐱', isCorrect: false }
-        ],
-        miraFact: 'That\'s the majestic Asiatic Lion! Gir is globally celebrated for bringing this subspecies back from fewer than 20 individuals in 1900 to over 674 today through strict protection and local community support.'
+        stepNum: 1,
+        title: 'Approach the Trail',
+        narration: 'You arrive at a shaded bend in the Hiran dry riverbed. Fresh indentations and disturbed dust lead toward a rocky teak outcrop.',
+        miraDialogue: 'Look closely at the substrate. The forest floor always tells a story if you know how to read it.',
+        prompt: 'Examine the ground for primary tracking signs.'
       },
       {
-        id: 'case-chital',
-        title: 'Mystery Specimen Beta',
+        stepNum: 2,
+        title: 'Investigate Environmental Clues',
+        narration: 'Multiple subtle clues are visible across the clearing:',
         clues: [
-          'I am a social herbivore feeding on tender forest grasses, herbs, and fallen acacia flowers.',
-          'My golden-rufous coat is covered in permanent white spots that remain throughout my entire life.',
-          'I share a mutualistic alarm-call partnership with Gray Langurs—they drop fruit from treetops and screech when predators approach.',
-          'I am the most abundant ungulate in Gir and form over 70% of the natural prey diet for lions and leopards.'
-        ],
-        options: [
-          { id: 'chital', name: 'Chital (Spotted Deer)', scientific: 'Axis axis', icon: '🦌', isCorrect: true },
-          { id: 'sambar', name: 'Sambar Deer', scientific: 'Rusa unicolor', icon: '🦌', isCorrect: false },
-          { id: 'blackbuck', name: 'Blackbuck', scientific: 'Antilope cervicapra', icon: '🦌', isCorrect: false },
-          { id: 'nilgai', name: 'Nilgai (Blue Bull)', scientific: 'Boselaphus tragocamelus', icon: '🐂', isCorrect: false }
-        ],
-        miraFact: 'Spot on! The Chital deer is Gir\'s keystone herbivore. A thriving deer population is the biological foundation that prevents predators from wandering into farming villages.'
+          {
+            id: 'clue-paw',
+            icon: '🐾',
+            label: 'Fresh Pugmark in Silt',
+            detail: 'Large, rounded four-toed footprint measuring 14 cm across with NO visible claw marks (claws are fully retracted during walking).'
+          },
+          {
+            id: 'clue-bark',
+            icon: '🌲',
+            label: 'Teak Bark Scratchings',
+            detail: 'Deep vertical territorial claw grooves etched 1.8 meters high on the trunk of a mature teak tree, mixed with stray golden-tawny hair follicles.'
+          },
+          {
+            id: 'clue-audio',
+            icon: '🔊',
+            label: 'Low-Frequency Resonance',
+            detail: 'A deep, guttural territorial grumble echoing across the ravine at 18 Hz, audible up to 5 kilometers away.'
+          },
+          {
+            id: 'clue-prey',
+            icon: '🦌',
+            label: 'Chital Alarm Call (Bark)',
+            detail: 'Northern Plains Gray Langurs in the canopy give repetitive high-pitched staccato alarms looking downward toward the rocky ledge.'
+          }
+        ]
       },
       {
-        id: 'case-crocodile',
-        title: 'Mystery Specimen Gamma',
-        clues: [
-          'I am a cold-blooded aquatic apex reptile basking on rocky riverbanks during morning sun.',
-          'I have a broad, tough snout and powerful scutes built for freshwater riverine habitats.',
-          'I thrive in large numbers at Kamleshwar Reservoir right in the heart of Gir Forest.',
-          'I clean aquatic ecosystems by scavenging fallen carcasses and regulating river fish populations.'
-        ],
+        stepNum: 3,
+        title: 'Identify the Wildlife Specimen',
+        question: 'Based on the retracted claw pugmarks, tree scent-marking height, and langur alarm calls, which keystone species passed here?',
         options: [
-          { id: 'croc', name: 'Mugger Crocodile', scientific: 'Crocodylus palustris', icon: '🐊', isCorrect: true },
-          { id: 'gharial', name: 'Gharial', scientific: 'Gavialis gangeticus', icon: '🦎', isCorrect: false },
-          { id: 'monitor', name: 'Bengal Monitor Lizard', scientific: 'Varanus bengalensis', icon: '🦎', isCorrect: false },
-          { id: 'python', name: 'Indian Rock Python', scientific: 'Python molurus', icon: '🐍', isCorrect: false }
-        ],
-        miraFact: 'Terrific deduction! Kamleshwar Dam is celebrated as the "Crocodile Nursery of Gir", sustaining one of the densest populations of marsh muggers in western India.'
+          {
+            id: 'opt-lion',
+            name: 'Asiatic Lion (Panthera leo persica)',
+            icon: '🦁',
+            isCorrect: true,
+            feedback: 'Spot on! The rounded retracted-claw pugmark, 1.8m scratch height, and guttural territorial roar definitively identify the Asiatic Lion.'
+          },
+          {
+            id: 'opt-hyena',
+            name: 'Striped Hyena (Hyaena hyaena)',
+            icon: '🐺',
+            isCorrect: false,
+            feedback: 'Hyena pugmarks always show prominent non-retractile blunt claws and sloping rear paws, unlike big cats.'
+          },
+          {
+            id: 'opt-boar',
+            name: 'Indian Wild Boar (Sus scrofa)',
+            icon: '🐗',
+            isCorrect: false,
+            feedback: 'Wild boars leave distinct two-toed cloven hoof prints with small dewclaws behind.'
+          }
+        ]
       }
-    ]
+    ],
+    discoveryId: 'disc-lion'
   },
 
+  // MISSION 2: “WATER OF LIFE”
   mission2: {
     id: 'mission-2',
     number: 2,
-    title: 'Become a Gir Ranger',
-    subtitle: 'Strategic Forest Patrol & Low-Disturbance Navigation',
-    miraIntro: 'A lioness with two 3-month-old cubs has been spotted moving toward the central drainage basin as dusk sets in. As duty ranger, choose the safest surveillance patrol route that minimizes wildlife disturbance while securing the territory.',
-    scenario: {
-      location: 'Kamleshwar Core Buffer Nexus',
-      time: '17:45 HRS • Pre-Dusk Shift',
-      temperature: '34°C • Dry Season'
-    },
-    routes: [
+    title: 'Water of Life',
+    theme: 'Conservation Decision & Hydrological Balance',
+    xpReward: 60,
+    miraBrief: 'A severe pre-monsoon heatwave has depleted the Kamleshwar feeder waterholes. Herbivores and predators are crowding into shrinking muddy pools. You are the Guardian—how will we resolve this?',
+    steps: [
       {
-        id: 'route-ridge',
-        name: 'The Teak Ridge Overlook (High Ground)',
-        distance: '4.2 km',
-        terrain: 'Rocky ridge line with elevated sightlines',
-        disturbanceLevel: 'Minimal (5%)',
-        riskLevel: 'Low',
-        xp: 100,
-        scorePoints: 100,
-        recommended: true,
-        consequence: {
-          status: 'Optimal Ranger Strategy ⭐',
-          type: 'success',
-          text: 'Masterful choice! By taking the elevated rocky ridge, your patrol observed the lioness and cubs through long-range optics without creating engine noise or disturbing prey herds at the watering hole.',
-          ecologicalTakeaway: 'High-ground observation gives rangers complete visibility across multiple canopy layers without intruding into sensitive maternal cub-rearing zones.'
-        }
+        stepNum: 1,
+        title: 'Inspect the Water Crisis',
+        narration: 'At the southern sector waterhole, water levels have dropped below 15%. Over 40 deer, two leopards, and a lion coalition rely on this single source.',
+        clues: [
+          {
+            icon: '📉',
+            label: 'Water Gauge: 12% Capacity',
+            detail: 'Waterhole is drying fast under 42°C May sun, creating stagnation and high bacteria risk.'
+          },
+          {
+            icon: '🐾',
+            label: 'Crowded Predator-Prey Convergence',
+            detail: 'Prey animals are hesitant to drink due to zero vegetative cover around the receding waterline.'
+          },
+          {
+            icon: '☀️',
+            label: 'Weather Station: 6 Weeks to Monsoon',
+            detail: 'No rainfall forecast for at least 45 days. Immediate hydrological stabilization required.'
+          }
+        ]
       },
       {
-        id: 'route-water',
-        name: 'The Hiran Riverbank Trail (Direct Water Route)',
-        distance: '2.1 km',
-        terrain: 'Moist riverine silt along active watering holes',
-        disturbanceLevel: 'Moderate-High (55%)',
-        riskLevel: 'Medium',
-        xp: 75,
-        scorePoints: 75,
-        recommended: false,
-        consequence: {
-          status: 'Moderate Disruption ⚠️',
-          type: 'warning',
-          text: 'You reached the water quickly, but your vehicle sound startled a herd of drinking Sambar deer. The alarm bark alerted the lioness, who retreated into dense thorn scrub with her cubs.',
-          ecologicalTakeaway: 'Water holes are critical life-support zones during dry seasons. Direct motorized access creates severe stress for animals gathering at dusk.'
-        }
-      },
-      {
-        id: 'route-grassland',
-        name: 'The Central Savanna Track (Open Plains)',
-        distance: '3.6 km',
-        terrain: 'Open grassland & scrub savanna',
-        disturbanceLevel: 'Moderate (40%)',
-        riskLevel: 'Low-Medium',
-        xp: 80,
-        scorePoints: 80,
-        recommended: false,
-        consequence: {
-          status: 'Fair Navigation 🧭',
-          type: 'neutral',
-          text: 'You traversed the open scrub swiftly and logged valuable Nilgai herd census data, but the vast open plains offered zero cover, preventing close verification of the cubs\' health.',
-          ecologicalTakeaway: 'Savanna tracks are excellent for broad ungulate surveys, but ineffective for monitoring carnivore mothers who seek dense ravines.'
-        }
-      },
-      {
-        id: 'route-boundary',
-        name: 'The Village Forest-Fringe Boundary (Buffer Patrol)',
-        distance: '5.8 km',
-        terrain: 'Perimeter fence line bordering farmland & nesses',
-        disturbanceLevel: 'Low in Core (10%)',
-        riskLevel: 'High Edge Priority',
-        xp: 90,
-        scorePoints: 90,
-        recommended: false,
-        consequence: {
-          status: 'Vital Buffer Defense 🛡️',
-          type: 'good',
-          text: 'While you missed the core cubs sighting, your patrol discovered an unfastened solar fence gate near an agricultural field and alerted the local Maldhari cattle herders before dusk.',
-          ecologicalTakeaway: 'Boundary patrols are equally vital in Gir to prevent nighttime livestock predation and maintain peaceful community-wildlife coexistence.'
-        }
+        stepNum: 2,
+        title: 'Guardian Conservation Decision',
+        prompt: 'You are the Guardian. What strategic intervention will you implement to secure wildlife water without disrupting natural behavior?',
+        decisions: [
+          {
+            id: 'dec-solar-cistern',
+            title: 'Deploy Solar-Powered Deep Borewell Pumps into Natural Stone Cisterns (Recommended)',
+            icon: '☀️',
+            score: 100,
+            xp: 60,
+            consequence: {
+              title: 'Ecosystem Stabilized & Zero Disturbance ⭐',
+              text: 'Brilliant Guardian strategy! Solar pumps quietly replenish shaded stone cisterns during dawn hours without engine noise. Deer and lions drink at safe staggered intervals, preventing disease and heatstroke.',
+              ecologicalLesson: 'Quiet, automated water replenishment preserves natural territorial spacing and avoids diesel tanker noise pollution in core wildlife zones.'
+            },
+            isBest: true
+          },
+          {
+            id: 'dec-diesel-tanker',
+            title: 'Drive Heavy Diesel Water Tankers Daily into the Core Riverbed',
+            icon: '🚛',
+            score: 50,
+            xp: 30,
+            consequence: {
+              title: 'Temporary Water but High Disturbance ⚠️',
+              text: 'Water is delivered, but loud diesel engine vibrations and exhaust fumes scare away sensitive breeding herds, forcing them toward unprotected farm boundaries.',
+              ecologicalLesson: 'Heavy vehicular traffic inside core wildlife reserves disrupts nocturnal hunting and maternal cub care.'
+            },
+            isBest: false
+          },
+          {
+            id: 'dec-do-nothing',
+            title: 'Take No Action (Let Extreme Drought Take Its Natural Course)',
+            icon: '⏳',
+            score: 20,
+            xp: 10,
+            consequence: {
+              title: 'Severe Dehydration & Corridor Migration ❌',
+              text: 'The waterhole dries completely within a week. Desperate deer and lions abandon the sanctuary and enter nearby farming villages in search of irrigation canals.',
+              ecologicalLesson: 'In fragmented modern landscapes, active water management within protected areas is critical to prevent human-wildlife conflict outside boundaries.'
+            },
+            isBest: false
+          }
+        ]
       }
-    ]
+    ],
+    discoveryId: 'disc-waterhole'
   },
 
+  // MISSION 3: “GUARDIAN OF THE PRIDE”
   mission3: {
     id: 'mission-3',
     number: 3,
-    title: 'Build the Gir Ecosystem',
-    subtitle: 'Construct the Trophic Food Web & Analyze Trophic Cascades',
-    miraIntro: 'A forest isn\'t just animals—it\'s a living, interconnected web of energy. Drag or place each organism into its correct trophic tier to activate the food web simulation!',
-    tiers: [
+    title: 'Guardian of the Pride',
+    theme: 'Apex Predator Stewardship & Human-Wildlife Boundary Coexistence',
+    xpReward: 80,
+    miraBrief: 'A lioness with two 4-month-old cubs is moving toward the southern boundary corridor near an active rail line and a Maldhari village. We must guide and safeguard the pride!',
+    steps: [
       {
-        level: 1,
-        title: 'Tier 1 • Primary Energy Source',
-        category: 'Solar Energy',
-        targetId: 'solar',
-        correctItem: 'sun',
-        hint: 'Radiates energy driving photosynthesis across all green flora.'
+        stepNum: 1,
+        title: 'Distant Roar & Trail Tracking',
+        narration: 'A maternal contact call resonates from the southern ridge. Footprints show the lioness and two cubs navigating along an old cattle path heading south.',
+        miraDialogue: 'The cubs are curious and playful, but the southern perimeter has major human infrastructure. Let\'s follow their path on the sector map.'
       },
       {
-        level: 2,
-        title: 'Tier 2 • Primary Producers',
-        category: 'Flora & Plants',
-        targetId: 'producers',
-        correctItem: 'teak-grass',
-        hint: 'Teak (Tectona grandis), Acacia thorn, and perennial savanna grasses.'
+        stepNum: 2,
+        title: 'Assess the Perimeter Hazard',
+        narration: 'You locate the pride resting under an acacia thicket 300 meters from the Pipavav railway corridor and an open village boundary.',
+        hazards: [
+          {
+            icon: '🚂',
+            title: 'Goods Train Rail Corridor (250m Ahead)',
+            desc: 'Night freight trains travel at high speeds across the coastal shipping corridor.'
+          },
+          {
+            icon: '🏡',
+            title: 'Maldhari Pastoral Cattle Sheds (400m South)',
+            desc: 'Pastoral cows are penned in open-top thorn enclosures (jhomplas).'
+          },
+          {
+            icon: '🌉',
+            title: 'Engineered Green Wildlife Underpass (150m West)',
+            desc: 'A vegetated eco-bridge under the railway tracks designed for safe lion crossings.'
+          }
+        ]
       },
       {
-        level: 3,
-        title: 'Tier 3 • Primary Herbivores (Ungulates)',
-        category: 'Herbivores',
-        targetId: 'herbivores',
-        correctItem: 'chital-sambar',
-        hint: 'Spotted Chital, heavy Sambar deer, and Nilgai antelope.'
-      },
-      {
-        level: 4,
-        title: 'Tier 4 • Apex Carnivores',
-        category: 'Top Predators',
-        targetId: 'carnivores',
-        correctItem: 'lion-leopard',
-        hint: 'Asiatic Lion and Indian Leopard regulating prey density.'
-      },
-      {
-        level: 5,
-        title: 'Tier 5 • Decomposers & Scavengers',
-        category: 'Recyclers',
-        targetId: 'decomposers',
-        correctItem: 'vultures-fungi',
-        hint: 'White-backed Vultures, dung beetles, and soil mycorrhizal fungi.'
+        stepNum: 3,
+        title: 'Coordinate the Guardian Protection Protocol',
+        prompt: 'How will you protect the pride and maintain peaceful village coexistence tonight?',
+        actions: [
+          {
+            id: 'act-smart-corridor',
+            title: 'Trigger Railway Optical/Thermal AI Speed Limits, Activate Blue LED Shed Repellers, & Guide Pride via Underpass',
+            icon: '🛡️',
+            score: 100,
+            xp: 80,
+            consequence: {
+              title: 'Master Guardian Coordination! 🏆',
+              text: 'Flawless execution! Automated thermal alerts reduced train speeds to 20 km/h. Flashing blue LED deterrents kept the lioness away from village sheds, and your team safely guided the pride through the vegetated underpass back into the sanctuary core.',
+              ecologicalLesson: 'Modern coexistence combines AI early-warning systems, non-lethal predator deterrents, and community trust to protect both farmers and endangered apex predators.'
+            },
+            isBest: true
+          },
+          {
+            id: 'act-tranquilize',
+            title: 'Immediately Dart & Tranquilize the Entire Pride for Captive Transport',
+            icon: '💉',
+            score: 40,
+            xp: 25,
+            consequence: {
+              title: 'High Stress & Unnecessary Removal ⚠️',
+              text: 'Darting a mother with young cubs poses high anesthetic risk. Relocating them removes an apex territory holder, allowing unhabituated wandering lions to move in.',
+              ecologicalLesson: 'Chemical immobilization is a measure of last resort; non-intrusive corridor guidance is far safer for wild carnivore families.'
+            },
+            isBest: false
+          },
+          {
+            id: 'act-firecrackers',
+            title: 'Light Loud Firecrackers & Flashlights to Scatter the Pride',
+            icon: '🎆',
+            score: 30,
+            xp: 15,
+            consequence: {
+              title: 'Panic & Cub Separation Risk ❌',
+              text: 'The explosions panic the lioness. The two cubs bolt in separate directions toward the train tracks in terror before rangers can intervene.',
+              ecologicalLesson: 'Explosives cause unpredictable panic in big cats and frequently cause mother-cub separations.'
+            },
+            isBest: false
+          }
+        ]
       }
     ],
-    items: [
-      { id: 'sun', name: '☀️ Solar Radiation', type: 'solar', icon: '☀️', desc: 'Photosynthetic energy' },
-      { id: 'teak-grass', name: '🌿 Teak & Savanna Grass', type: 'producers', icon: '🌿', desc: 'Primary vegetative biomass' },
-      { id: 'chital-sambar', name: '🦌 Chital & Sambar Herds', type: 'herbivores', icon: '🦌', desc: 'Primary grazers & browsers' },
-      { id: 'lion-leopard', name: '🦁 Asiatic Lion Pride', type: 'carnivores', icon: '🦁', desc: 'Keystone apex predators' },
-      { id: 'vultures-fungi', name: '🪲 Vultures & Soil Decomposers', type: 'decomposers', icon: '🪲', desc: 'Nutrient recyclers & scavengers' }
-    ],
-    dilemma: {
-      question: 'What happens if invasive weeds (such as Lantana camara) choke 40% of the native savanna grasses?',
-      options: [
-        {
-          id: 'opt-a',
-          text: 'Herbivore numbers decline $\\to$ Lions face prey shortage $\\to$ Increased livestock predation near villages.',
-          isCorrect: true,
-          feedback: 'Precisely! This is a classic "Trophic Cascade". When plant biomass drops, ungulate populations crash, forcing apex predators to venture outside the sanctuary to hunt livestock.'
-        },
-        {
-          id: 'opt-b',
-          text: 'Lions easily adapt by switching to eating weeds and dry teak bark.',
-          isCorrect: false,
-          feedback: 'Lions are obligate carnivores with digestive tracts specialized strictly for meat. They cannot digest cellulose or plant matter.'
-        },
-        {
-          id: 'opt-c',
-          text: 'Decomposers multiply exponentially and permanently replace the lost deer.',
-          isCorrect: false,
-          feedback: 'Decomposers require organic waste and carcasses; if herbivores vanish, decomposers also suffer severe population contractions.'
-        }
-      ]
-    }
-  },
-
-  mission4: {
-    id: 'mission-4',
-    number: 4,
-    title: 'The Conservation Crisis',
-    subtitle: 'Human-Wildlife Coexistence & Community Stewardship Policy',
-    miraIntro: 'This is the most critical test for any Guardian. Conservation isn\'t just about wildlife inside fences—it\'s about balancing human lives, pastoral traditions, and predator safety.',
-    scenario: {
-      title: 'CRISIS AT THE BUFFER ZONE: RAJULA PERIMETER',
-      context: 'A prolonged dry summer has caused wild boars and nilgai to raid groundnut and cotton fields in fringe villages. Two nights ago, an elderly lion killed a village cow in an open shed. Tension is running high among local farmers, who demand immediate intervention.'
-    },
-    choices: [
-      {
-        id: 'policy-c',
-        title: 'Community Coexistence Package (Recommended)',
-        icon: '🤝',
-        description: 'Deploy fast-track Direct Benefit Transfer (DBT) for livestock loss, install predator-proof chain-link cattle sheds, distribute solar crop-repellent lights, and employ youth as "Vanya Saathi" village trackers.',
-        consequences: {
-          ecologicalHealth: 95,
-          communityTrust: 98,
-          financialSustainability: 90,
-          outcomeBadge: 'Exemplary Coexistence Model ⭐',
-          verdict: 'Master Guardian Decision! Rapid compensation removes retaliatory anger. Predator-proof sheds protect cattle, and local youth gain pride as paid protectors. This mirrors Gir\'s real-world success with the Maldhari community!'
-        },
-        score: 100,
-        isBest: true
-      },
-      {
-        id: 'policy-a',
-        title: 'Complete Relocation & Heavy Perimeter Fencing',
-        icon: '🚧',
-        description: 'Enforce mandatory relocation of 12 fringe villages and erect a 10-foot electrified razor-wire perimeter around the entire national park boundary.',
-        consequences: {
-          ecologicalHealth: 60,
-          communityTrust: 25,
-          financialSustainability: 35,
-          outcomeBadge: 'Severe Social & Ecological Harm ❌',
-          verdict: 'Disastrous approach. Forced relocation shatters centuries of indigenous pastoral culture. Hard fencing prevents natural genetic dispersal of lions into Greater Gir corridors, leading to severe inbreeding.'
-        },
-        score: 45,
-        isBest: false
-      },
-      {
-        id: 'policy-b',
-        title: 'Total Capture & Caging of Dispersing Predators',
-        icon: '⛓️',
-        description: 'Capture and permanently zoo-house any lion or leopard that crosses outside the core sanctuary boundary.',
-        consequences: {
-          ecologicalHealth: 35,
-          communityTrust: 65,
-          financialSustainability: 40,
-          outcomeBadge: 'Ecological Imbalance ⚠️',
-          verdict: 'Flawed policy. More than 45% of Gir\'s lions naturally live in multi-use agro-pastoral landscapes outside the core. Caging them overcrowds zoos, while wild boar populations explode without predators, ruining crops even faster.'
-        },
-        score: 40,
-        isBest: false
-      },
-      {
-        id: 'policy-d',
-        title: 'Laissez-Faire (Do Nothing & Let Nature Decide)',
-        icon: '🤷',
-        description: 'Refuse state intervention, claiming wild animals have natural rights to roam anywhere without government mediation.',
-        consequences: {
-          ecologicalHealth: 20,
-          communityTrust: 10,
-          financialSustainability: 80,
-          outcomeBadge: 'Catastrophic Conflict Escalation ☠️',
-          verdict: 'Dangerous neglect. Without support, desperate farmers resort to illegal live electric wire traps and poisoned carcasses, causing catastrophic losses to both lions and humans.'
-        },
-        score: 20,
-        isBest: false
-      }
-    ]
-  },
-
-  finalChallenge: {
-    id: 'final-challenge',
-    title: 'THE FINAL GUARDIAN TEST',
-    subtitle: 'High-Stakes Emergency Crisis Simulation',
-    miraIntro: 'EMERGENCY ALERT: Multiple crises have erupted simultaneously across Gir during a scorching heatwave! Put everything you\'ve learned into action to save the sanctuary!',
-    stages: [
-      {
-        id: 'stage-1',
-        alert: '🚨 ALERT 1: Illegal Snare Detected in Eastern Buffer',
-        prompt: 'Rangers discover a metallic wire snare hidden near a water pipeline. What is your immediate protocol?',
-        options: [
-          { text: 'Deactivate snare, deploy sniffer dog squads, sweep 5 km radius, and notify village surveillance teams.', isCorrect: true, xp: 50 },
-          { text: 'Leave the trap in place to see if a poacher comes back next week.', isCorrect: false, xp: 0 },
-          { text: 'Burn down the surrounding scrubland to destroy other traps.', isCorrect: false, xp: 0 }
-        ]
-      },
-      {
-        id: 'stage-2',
-        alert: '💧 ALERT 2: Severe Drought at Kamleshwar Feeder Ponds',
-        prompt: 'Three critical waterholes have dried up completely. How do you replenish them with minimal habitat disturbance?',
-        options: [
-          { text: 'Operate solar-powered deep borewell pumps feeding natural stone cisterns during pre-dawn hours.', isCorrect: true, xp: 50 },
-          { text: 'Drive noisy diesel fuel tankers into the ponds every 2 hours during peak afternoon heat.', isCorrect: false, xp: 0 },
-          { text: 'Divert sewage water from nearby highways into the forest.', isCorrect: false, xp: 0 }
-        ]
-      },
-      {
-        id: 'stage-3',
-        alert: '🚂 ALERT 3: Lion Pride Dispersing Across Rail Track Corridor',
-        prompt: 'A young bachelor coalition of 3 lions is approaching the Pipavav railway goods corridor at night. What is your intervention?',
-        options: [
-          { text: 'Trigger the automated Optical/Thermal AI camera alerts, enforce 20 km/h train speed limit, and guide lions via underpass.', isCorrect: true, xp: 50 },
-          { text: 'Fire loud firecrackers directly at the lions to panic them.', isCorrect: false, xp: 0 },
-          { text: 'Speed up trains so they pass before the lions cross.', isCorrect: false, xp: 0 }
-        ]
-      },
-      {
-        id: 'stage-4',
-        alert: '🌾 ALERT 4: Village Cattle Shed Coexistence Check',
-        prompt: 'A Maldhari herder alerts you via the mobile wildlife app that lion pawprints (pugmarks) were seen 200m from his livestock enclosure.',
-        options: [
-          { text: 'Verify chain-link gate lock, activate flashing blue LED predator repellers, and deploy night patrol.', isCorrect: true, xp: 50 },
-          { text: 'Tell the farmer to abandon his cows and run away immediately.', isCorrect: false, xp: 0 },
-          { text: 'Trap the lion and deport it to another state without health checks.', isCorrect: false, xp: 0 }
-        ]
-      }
-    ]
-  },
-
-  badges: [
-    {
-      id: 'badge-guardian-gir',
-      name: 'GUARDIAN OF GIR',
-      tier: 'Legendary',
-      icon: '🦁',
-      description: 'Mastered biodiversity, forest navigation, food web balance, and community coexistence in Gir National Park.',
-      requirement: 'Complete all 4 missions and the Final Guardian Test.'
-    },
-    {
-      id: 'badge-wildlife-detective',
-      name: 'WILDLIFE DETECTIVE',
-      tier: 'Gold',
-      icon: '🔍',
-      description: 'Identified Gir\'s keystone species with maximum clue efficiency.',
-      requirement: 'Score 80%+ in Mission 1'
-    },
-    {
-      id: 'badge-master-ranger',
-      name: 'MASTER RANGER',
-      tier: 'Gold',
-      icon: '🧭',
-      description: 'Executed low-disturbance navigation across core sanctuary zones.',
-      requirement: 'Score 90%+ in Mission 2'
-    },
-    {
-      id: 'badge-ecosystem-builder',
-      name: 'ECOSYSTEM ARCHITECT',
-      tier: 'Gold',
-      icon: '🌿',
-      description: 'Perfectly assembled the trophic food web and solved the cascade dilemma.',
-      requirement: 'Score 100% in Mission 3'
-    },
-    {
-      id: 'badge-coexistence-leader',
-      name: 'COEXISTENCE LEADER',
-      tier: 'Gold',
-      icon: '🤝',
-      description: 'Championed community-based sustainable wildlife coexistence.',
-      requirement: 'Select the optimal policy in Mission 4'
-    }
-  ]
+    discoveryId: 'disc-pride'
+  }
 };
