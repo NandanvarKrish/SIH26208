@@ -1,4 +1,4 @@
-// js/components/QuizEngine.js - Reusable, decoupled quiz engine for BharatVerse
+import { getArtifactById } from '../data/museumData.js';
 
 export class QuizEngine {
   constructor() {
@@ -181,6 +181,20 @@ export class QuizEngine {
       performanceMessage = 'Good job! Review the story slides to master the subtle details.';
     }
 
+    let unlockedArtifact = this.quizData.unlocksArtifact || null;
+    if (!unlockedArtifact && this.quizData.unlocksArtifactId) {
+      const art = getArtifactById(this.quizData.unlocksArtifactId);
+      if (art) {
+        unlockedArtifact = {
+          id: art.id,
+          name: art.name,
+          rarity: art.rarity,
+          icon: art.icon,
+          desc: art.shortDesc || art.description
+        };
+      }
+    }
+
     return {
       quizId: this.quizData.id,
       title: this.quizData.title,
@@ -191,7 +205,7 @@ export class QuizEngine {
       maxStreak: this.maxStreak,
       xpEarned: isPassed ? baseXP : earnedXP,
       isPassed,
-      unlocksArtifact: this.quizData.unlocksArtifact || null,
+      unlocksArtifact: unlockedArtifact,
       performanceGrade,
       performanceMessage
     };

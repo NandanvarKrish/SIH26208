@@ -99,8 +99,9 @@ export const GUJARAT_QUIZZES = {
     locationId: 'kutch',
     title: 'Master of the White Desert Quiz',
     subtitle: 'Kutch Geography & Rogan Craft Assessment',
-    passingScore: 3,
-    xpReward: 100,
+    passingScore: 2,
+    xpReward: 150,
+    unlocksArtifactId: 'rogan-tree-of-life',
     questions: [
       {
         id: 'kq-1',
@@ -128,6 +129,123 @@ export const GUJARAT_QUIZZES = {
         explanation: 'Kutch is known as Flamingo City, the largest breeding colony in Asia.',
         culturalFact: 'Algae in the salt brine gives flamingos their pink color.',
         aiHint: 'Tall pink bird with long legs.'
+      }
+    ]
+  },
+
+  'gir-saurashtra': {
+    id: 'gir-quiz',
+    locationId: 'gir-saurashtra',
+    title: 'Guardian of Saurashtra Quiz',
+    subtitle: 'Gir Wildlife Sanctuary & Ecological Coexistence',
+    passingScore: 2,
+    xpReward: 150,
+    unlocksArtifactId: 'bronze-gir-lion',
+    questions: [
+      {
+        id: 'gq-1',
+        question: 'What makes the Asiatic Lion of Gir distinct from its African counterpart?',
+        options: ['Spot patterns on body', 'Longitudinal belly skin fold', 'Larger mane in males', 'Webbed paws'],
+        correctIndex: 1,
+        explanation: 'Asiatic lions possess a unique skin fold along their belly and shorter manes allowing their ears to remain visible.',
+        culturalFact: 'The Nawab of Junagadh first enacted strict protection for the remaining 20 lions in the early 1900s.',
+        aiHint: 'Look at the distinctive anatomical fold running across the lower abdomen.'
+      },
+      {
+        id: 'gq-2',
+        question: 'What indigenous pastoral tribe lives in circular settlements (Nesses) inside Gir core forest in harmony with lions?',
+        options: ['Maldhari pastoralists', 'Himalayan Sherpas', 'Bhil hunters', 'Gaddi shepherds'],
+        correctIndex: 0,
+        explanation: 'Maldharis have shared the Gir forest with lions for centuries, reading forest sounds to protect their herds peacefully.',
+        culturalFact: 'Maldhari literally means "keepers of cattle wealth".',
+        aiHint: 'The local Gujarati pastoralist community revered for lion coexistence.'
+      },
+      {
+        id: 'gq-3',
+        question: 'What ancient sea marker pillar at Somnath Temple marks an unobstructed direct ocean meridian to Antarctica?',
+        options: ['Ashoka Rock Pillar', 'Baan Stambh (Arrow Pillar)', 'Iron Pillar', 'Heliodorus Pillar'],
+        correctIndex: 1,
+        explanation: 'The Baan Stambh inscription indicates that no landmass exists in a direct line southward between Somnath and Antarctica.',
+        culturalFact: 'This ancient navigational inscription demonstrates the sophisticated maritime knowledge of early Indian astronomers.',
+        aiHint: 'Look for the Arrow Pillar pointing directly south to the pole.'
+      }
+    ]
+  },
+
+  'ahmedabad-central': {
+    id: 'ahm-quiz',
+    locationId: 'ahmedabad-central',
+    title: 'Scholar of the Heritage City Quiz',
+    subtitle: 'Sabarmati Freedom Legacy & UNESCO Pol Culture',
+    passingScore: 2,
+    xpReward: 150,
+    unlocksArtifactId: 'sabarmati-charkha',
+    questions: [
+      {
+        id: 'aq-1',
+        question: 'Which legendary 1930 peaceful march against British salt taxation began at Sabarmati Ashram?',
+        options: ['The 384 km Dandi Salt March', 'Bardoli Satyagraha', 'Kheda Movement', 'Quit India Movement'],
+        correctIndex: 0,
+        explanation: 'Mahatma Gandhi walked 384 km from Sabarmati Ashram with 78 satyagrahis to coastal Dandi to produce salt from seawater.',
+        culturalFact: '78 satyagrahis accompanied Gandhi on the 24-day journey.',
+        aiHint: 'Named after the coastal town in Navsari district where salt was gathered.'
+      },
+      {
+        id: 'aq-2',
+        question: 'In what year was Ahmedabad declared India\'s first UNESCO World Heritage City?',
+        options: ['2005', '2012', '2017', '2021'],
+        correctIndex: 2,
+        explanation: 'In July 2017, Ahmedabad was inscribed as India’s first UNESCO World Heritage City for its historic urban fabric.',
+        culturalFact: 'The city features over 600 historic pols with underground rainwater harvesting tankas.',
+        aiHint: 'Awarded in the late 2010s by UNESCO.'
+      },
+      {
+        id: 'aq-3',
+        question: 'What traditional community bird feeder towers are erected in the central square of every historic Ahmedabad Pol?',
+        options: ['Chabutra', 'Otla', 'Jharokha', 'Tanka'],
+        correctIndex: 0,
+        explanation: 'Chabutras are elevated wooden bird feeding towers reflecting the philosophy of Jiva-Daya (compassion for all living beings).',
+        culturalFact: 'Over 120 historic carved Chabutras still stand inside the walled city.',
+        aiHint: 'An elevated wooden tower built safely above street predators.'
+      }
+    ]
+  },
+
+  'patan-north': {
+    id: 'pat-quiz',
+    locationId: 'patan-north',
+    title: 'Master of Solanki Architecture Quiz',
+    subtitle: 'Rani ki Vav Stepwells & Double-Ikkat Patola Silk',
+    passingScore: 2,
+    xpReward: 150,
+    unlocksArtifactId: 'patola-silk-heirloom',
+    questions: [
+      {
+        id: 'pq-1',
+        question: 'On which denomination of the official Indian Rupee currency banknote is Rani ki Vav illustrated?',
+        options: ['₹50 Turquoise Note', '₹100 Lavender Note', '₹200 Bright Orange Note', '₹500 Stone Grey Note'],
+        correctIndex: 1,
+        explanation: 'The Reserve Bank of India features the UNESCO World Heritage stepwell Rani ki Vav on the reverse of the lavender ₹100 banknote.',
+        culturalFact: 'Built in 1063 CE by Queen Udayamati as an inverted temple, it features over 500 principal Vishnu sculptures.',
+        aiHint: 'Check the lavender banknote widely used in India.'
+      },
+      {
+        id: 'pq-2',
+        question: 'What makes Patan’s royal Double-Ikkat Patola silk unique and identical on both sides?',
+        options: ['Machine printing on polyester', 'Both warp and weft silk threads are mathematically tie-dyed before weaving', 'Dipped in gold paint after weaving', 'Embroidered with nylon patches'],
+        correctIndex: 1,
+        explanation: 'In double-ikkat, both warp (vertical) and weft (horizontal) silk yarns are tie-dyed before weaving, creating a 100% reversible design that never fades.',
+        culturalFact: 'A famous proverb says: "Padi Patole Bhaat, Faate Pan Fitey Nahi" (The fabric may tear with time, but the colors never fade).',
+        aiHint: 'Both vertical and horizontal threads are pre-dyed before handloom weaving.'
+      },
+      {
+        id: 'pq-3',
+        question: 'How many subterranean stepped terraced levels descend into the water table at Rani ki Vav?',
+        options: ['3 Levels', '5 Levels', '7 Levels', '12 Levels'],
+        correctIndex: 2,
+        explanation: 'Rani ki Vav descends seven majestic subterranean terraced levels with more than 500 principal sculptures.',
+        culturalFact: 'Designed as an inverted temple to sanctify the sacred life-giving groundwater.',
+        aiHint: 'Count the seven descending stepped pavilions.'
       }
     ]
   }

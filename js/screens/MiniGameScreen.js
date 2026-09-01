@@ -1,6 +1,7 @@
-// js/screens/MiniGameScreen.js - 'Gujarat Expedition: Race Across the Land of Legends' HTML5 2D Game Engine
+// js/screens/MiniGameScreen.js - Mini-Game Arena (Zone Heritage Challenges & 2D Canvas Expedition)
 
 import { EXPEDITION_REGIONS } from '../data/expeditionData.js';
+import { getMiniGameByLocationId, GUJARAT_MINIGAMES } from '../data/miniGamesData.js';
 import { playerState } from '../state/playerState.js';
 import { soundFx } from '../utils/audio.js';
 import { router } from '../utils/router.js';
@@ -12,7 +13,18 @@ export class MiniGameScreen {
     this.ctx = null;
     this.animFrameId = null;
 
-    // Game Progression State
+    // Active Mode: 'zone-challenge' | '2d-expedition'
+    this.mode = 'zone-challenge';
+    this.locationId = 'kutch';
+
+    // Zone Challenge State
+    this.zoneGame = null;
+    this.currentRoundIndex = 0;
+    this.selectedOption = null;
+    this.isRoundAnswered = false;
+    this.zoneChallengeScore = 0;
+
+    // 2D Expedition Game Progression State
     this.currentRegionIndex = 0;
     this.collectedTokens = []; // ['token-ahmedabad', 'token-kutch', 'token-gir', 'token-dwarka']
     this.pickedCollectibleIds = new Set();
@@ -53,17 +65,54 @@ export class MiniGameScreen {
     this.screenEl = document.getElementById('screen-game');
   }
 
-  onEnter() {
+  onEnter(params = {}) {
+    const locId = params.locationId || playerState.getState().selectedGujaratLocationId || 'kutch';
+    this.locationId = locId;
+    this.zoneGame = getMiniGameByLocationId(locId);
+
+    // If specific mode requested in params
+    if (params.mode) {
+      this.mode = params.mode;
+    } else {
+      this.mode = 'zone-challenge';
+    }
+
+    this.currentRoundIndex = 0;
+    this.selectedOption = null;
+    this.isRoundAnswered = false;
+    this.zoneChallengeScore = 0;
+
     this.resetExpedition();
     this.render();
-    this.initCanvas();
-    this.bindInputs();
-    this.startGameLoop();
+
+    if (this.mode === '2d-expedition') {
+      this.initCanvas();
+      this.bindInputs();
+      this.startGameLoop();
+    }
   }
 
   onLeave() {
     this.stopGameLoop();
     this.unbindInputs();
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  setMode(newMode) {
+    if (this.mode === newMode) return;
+    this.mode = newMode;
+    if (newMode === '2d-expedition') {
+      this.render();
+      this.initCanvas();
+      this.bindInputs();
+      this.startGameLoop();
+    } else {
+      this.stopGameLoop();
+      this.unbindInputs();
+      this.render();
+    }
   }
 
   resetExpedition() {
@@ -94,6 +143,305 @@ export class MiniGameScreen {
   render() {
     if (!this.screenEl) return;
 
+    if (this.mode === 'zone-challenge') {
+      this.renderZoneChallenge();
+    } else {
+      this.render2DExpedition();
+    }
+  }
+
+  // =========================================================================
+  // ZONE HERITAGE DISCOVERY CHALLENGE RENDERER
+  // =========================================================================
+  renderZoneChallenge() {
+    if (!this.zoneGame) {
+      this.zoneGame = getMiniGameByLocationId(this.locationId);
+    }
+    const game = this.zoneGame;
+    const isFinished = this.currentRoundIndex >= game.rounds.length;
+
+    if (isFinished) {
+      this.renderZoneChallengeVictory();
+      return;
+    }
+
+    const currentRound = game.rounds[this.currentRoundIndex];
+
+    this.screenEl.innerHTML = `
+      <div class="expedition-game-layout">
+        
+        <!-- Top HUD Bar -->
+        <div class="expedition-top-hud">
+          <div class="hud-left-group">
+            <button id="zone-challenge-exit-btn" class="breadcrumb-btn" aria-label="Exit Game">
+              <span>←</span> Exit
+            </button>
+            <div class="hud-region-badge">
+              <span>${game.icon}</span>
+              <span>${game.title}</span>
+            </div>
+          </div>
+
+          <!-- Round Progress Indicators -->
+          <div class="expedition-journey-tracker">
+            ${game.rounds.map((r, idx) => `
+              <div class="journey-node ${idx < this.currentRoundIndex ? 'completed' : (idx === this.currentRoundIndex ? 'active' : '')}">
+                <span>${idx < this.currentRoundIndex ? '✓' : `Round ${idx + 1}`}</span>
+              </div>
+              ${idx < game.rounds.length - 1 ? '<div class="journey-node-line ' + (idx < this.currentRoundIndex ? 'line-completed' : '') + '"></div>' : ''}
+            `).join('')}
+          </div>
+
+          <div class="hud-right-group">
+            <div class="hud-score-pill">
+              <span class="score-label">SCORE:</span>
+              <span class="score-val">${this.zoneChallengeScore} PTS</span>
+            </div>
+
+            <button id="switch-to-2d-btn" class="btn btn-outline btn-sm" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; border-color: var(--color-peacock-light); color: var(--color-peacock-light);" title="Switch to 2D Canvas Game">
+              🎮 2D Mode
+            </button>
+          </div>
+        </div>
+
+        <!-- Heritage Discovery Card Container -->
+        <div class="heritage-challenge-card anim-enter-slide">
+          
+          <!-- Slot Banner -->
+          <div class="heritage-slot-banner">
+            <div>
+              <span style="font-size: 0.72rem; color: #CBD5E1; font-family: var(--font-mono); text-transform: uppercase;">
+                ROUND ${currentRound.roundNumber} OF ${game.rounds.length}
+              </span>
+              <h2 class="heritage-slot-title">${currentRound.slotName}</h2>
+            </div>
+            <span class="heritage-slot-tag">🏛️ ${currentRound.structureTag}</span>
+          </div>
+
+          <!-- Mira's Cultural Clue Box -->
+          <div class="heritage-mira-hint">
+            <div class="mira-story-avatar anim-float" style="width: 48px; height: 48px; flex-shrink: 0;">
+              <img src="character/mira-avatar.png" alt="Mira" class="mira-story-avatar-img" />
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                <span style="font-family: var(--font-title); font-size: 0.8rem; font-weight: 700; color: var(--color-royal-gold);">MIRA'S ARCHITECTURAL CLUE</span>
+                <button id="challenge-tts-btn" class="btn-icon" style="width: 26px; height: 26px; font-size: 0.75rem;" title="Listen to Clue">🔊</button>
+              </div>
+              <p style="font-size: 0.88rem; color: #F8FAFC; line-height: 1.5;">${currentRound.miraClue}</p>
+            </div>
+          </div>
+
+          <!-- 3 Interactive Options Grid -->
+          <div class="heritage-options-grid">
+            ${currentRound.options.map((opt) => {
+              let stateClass = '';
+              if (this.selectedOption && this.selectedOption.id === opt.id) {
+                stateClass = opt.isCorrect ? 'correct' : 'incorrect';
+              }
+              return `
+                <button class="heritage-option-btn ${stateClass}" 
+                        data-option-id="${opt.id}"
+                        ${this.isRoundAnswered && opt.isCorrect ? 'disabled' : ''}>
+                  <span class="heritage-option-icon">${opt.icon}</span>
+                  <span class="heritage-option-name">${opt.name}</span>
+                  <span class="heritage-option-sub">${opt.subtitle}</span>
+                  <span style="font-size: 0.68rem; color: var(--color-peacock-light); font-family: var(--font-mono);">${opt.category}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Feedback Box after selection -->
+          ${this.selectedOption ? `
+            <div class="heritage-feedback-box ${this.selectedOption.isCorrect ? '' : 'error-box'} anim-enter-slide">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <strong style="color: ${this.selectedOption.isCorrect ? 'var(--color-success)' : 'var(--color-error)'}; font-size: 0.95rem;">
+                  ${this.selectedOption.isCorrect ? '✨ Brilliant Cultural Deduction!' : '⚠️ Not Quite the Right Element!'}
+                </strong>
+                ${this.selectedOption.isCorrect ? '<span style="color: var(--color-royal-gold); font-weight: 800; font-family: var(--font-mono);">+100 PTS</span>' : ''}
+              </div>
+              <p style="font-size: 0.85rem; color: #E2E8F0; line-height: 1.4;">
+                ${this.selectedOption.isCorrect ? this.selectedOption.feedback : this.selectedOption.hint}
+              </p>
+              ${this.selectedOption.isCorrect && this.selectedOption.culturalInsight ? `
+                <div style="font-size: 0.78rem; color: var(--color-peacock-light); border-top: 1px dashed rgba(255,255,255,0.15); padding-top: 0.4rem;">
+                  💡 <strong>Cultural Insight:</strong> ${this.selectedOption.culturalInsight}
+                </div>
+              ` : ''}
+              ${this.selectedOption.isCorrect ? `
+                <button id="challenge-next-round-btn" class="btn btn-primary btn-shimmer-effect" style="margin-top: 0.5rem; align-self: flex-end;">
+                  ${this.currentRoundIndex < game.rounds.length - 1 ? 'Next Component →' : 'Complete Challenge & Claim Artifact 🏆'}
+                </button>
+              ` : ''}
+            </div>
+          ` : ''}
+
+        </div>
+
+      </div>
+    `;
+
+    // Bind Zone Challenge Events
+    const exitBtn = this.screenEl.querySelector('#zone-challenge-exit-btn');
+    if (exitBtn) {
+      exitBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        router.navigateTo('gujarat-map');
+      });
+    }
+
+    const switchTo2dBtn = this.screenEl.querySelector('#switch-to-2d-btn');
+    if (switchTo2dBtn) {
+      switchTo2dBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        this.setMode('2d-expedition');
+      });
+    }
+
+    const ttsBtn = this.screenEl.querySelector('#challenge-tts-btn');
+    if (ttsBtn) {
+      ttsBtn.addEventListener('click', () => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(currentRound.miraClue);
+          utterance.rate = 1.0;
+          utterance.pitch = 1.1;
+          window.speechSynthesis.speak(utterance);
+        } else {
+          soundFx.playChime();
+        }
+      });
+    }
+
+    const optionBtns = this.screenEl.querySelectorAll('.heritage-option-btn:not([disabled])');
+    optionBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const optId = e.currentTarget.getAttribute('data-option-id');
+        this.handleZoneOptionSelect(optId);
+      });
+    });
+
+    const nextRoundBtn = this.screenEl.querySelector('#challenge-next-round-btn');
+    if (nextRoundBtn) {
+      nextRoundBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        this.currentRoundIndex += 1;
+        this.selectedOption = null;
+        this.isRoundAnswered = false;
+        this.render();
+      });
+    }
+  }
+
+  handleZoneOptionSelect(optionId) {
+    const currentRound = this.zoneGame.rounds[this.currentRoundIndex];
+    const option = currentRound.options.find(o => o.id === optionId);
+    if (!option) return;
+
+    this.selectedOption = option;
+
+    if (option.isCorrect) {
+      soundFx.playChime();
+      this.isRoundAnswered = true;
+      this.zoneChallengeScore += 100;
+    } else {
+      soundFx.playLockedBuzz();
+    }
+
+    this.render();
+  }
+
+  renderZoneChallengeVictory() {
+    const game = this.zoneGame;
+    playerState.recordGameCompleted(game.id, game.xpReward || 100, this.zoneChallengeScore);
+    if (game.artifactUnlock) {
+      playerState.unlockItem(game.artifactUnlock);
+    }
+
+    this.screenEl.innerHTML = `
+      <div class="expedition-game-layout">
+        
+        <div class="expedition-victory-card glass-panel anim-enter-slide">
+          
+          <div class="victory-emblem-wrap anim-float">
+            <div class="victory-sun-aura">${game.icon}</div>
+          </div>
+
+          <span class="badge-playable">CHALLENGE CONQUERED ⭐⭐⭐</span>
+          <h2 class="victory-main-title">${game.title} Mastered!</h2>
+          <p class="victory-subtitle">${game.subtitle}</p>
+
+          <!-- Reward Box -->
+          <div class="expedition-score-summary" style="width: 100%; max-width: 500px;">
+            <div class="points-badge-text">CHALLENGE DISCOVERY SCORE</div>
+            <div class="points-total-number">+${this.zoneChallengeScore} PTS</div>
+            <div class="points-xp-bonus">+${game.xpReward || 100} XP AWARDED ⚡</div>
+          </div>
+
+          ${game.artifactUnlock ? `
+            <div class="unlocked-artifact-banner" style="width: 100%; max-width: 500px; display: flex; align-items: center; gap: 1rem; background: rgba(255, 215, 0, 0.12); border: 1.5px solid var(--color-royal-gold); border-radius: var(--radius-md); padding: 0.85rem 1.25rem;">
+              <div style="font-size: 2.2rem;">${game.artifactUnlock.icon}</div>
+              <div style="text-align: left;">
+                <div style="font-size: 0.7rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-royal-gold);">
+                  ✨ UNLOCKED ${game.artifactUnlock.rarity.toUpperCase()} ARTIFACT
+                </div>
+                <h4 style="font-family: var(--font-title); font-weight: 700; color: #FFFFFF; font-size: 1rem;">
+                  ${game.artifactUnlock.name}
+                </h4>
+              </div>
+            </div>
+          ` : ''}
+
+          <!-- Action Buttons -->
+          <div class="victory-actions-row">
+            <button id="challenge-to-quiz-btn" class="btn btn-primary btn-shimmer-effect" style="padding: 0.9rem 2.2rem;">
+              🏆 Take Zone Quiz (+150 XP) →
+            </button>
+
+            <button id="challenge-to-2d-btn" class="btn btn-outline" style="padding: 0.9rem 1.6rem;">
+              🎮 Play 2D Canvas Expedition
+            </button>
+
+            <button id="challenge-to-map-btn" class="btn btn-secondary" style="padding: 0.9rem 1.6rem;">
+              🗺️ Return to Gujarat Map
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    const toQuizBtn = this.screenEl.querySelector('#challenge-to-quiz-btn');
+    if (toQuizBtn) {
+      toQuizBtn.addEventListener('click', () => {
+        soundFx.playChime();
+        router.navigateTo('quiz', { locationId: this.locationId });
+      });
+    }
+
+    const to2dBtn = this.screenEl.querySelector('#challenge-to-2d-btn');
+    if (to2dBtn) {
+      to2dBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        this.setMode('2d-expedition');
+      });
+    }
+
+    const toMapBtn = this.screenEl.querySelector('#challenge-to-map-btn');
+    if (toMapBtn) {
+      toMapBtn.addEventListener('click', () => {
+        soundFx.playClick();
+        router.navigateTo('gujarat-map');
+      });
+    }
+  }
+
+  // =========================================================================
+  // 2D CANVAS EXPEDITION RENDERER
+  // =========================================================================
+  render2DExpedition() {
     if (this.isCompleted) {
       this.renderVictory();
       return;

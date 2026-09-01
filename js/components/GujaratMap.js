@@ -460,7 +460,7 @@ export class GujaratMap {
     const deckQuizCard = this.deckPanel.querySelector('#deck-quiz-card');
     const handleLaunchQuiz = () => {
       soundFx.playChime();
-      router.navigateTo('quiz', { locationId: 'gujarat-master' });
+      router.navigateTo('quiz', { locationId: location.id });
     };
     if (playQuizBtn) playQuizBtn.addEventListener('click', handleLaunchQuiz);
     if (deckQuizCard) deckQuizCard.addEventListener('click', handleLaunchQuiz);
