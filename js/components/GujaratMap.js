@@ -400,9 +400,9 @@ export class GujaratMap {
             <span class="quest-item-sub">${location.questline.story.title} (+${location.questline.story.xp} XP)</span>
           </div>
 
-          <div class="quest-item-card" style="border-color: rgba(0, 210, 196, 0.4); cursor: pointer;" id="deck-game-card">
-            <span class="quest-item-title">🎮 Gujarat Expedition (Play)</span>
-            <span class="quest-item-sub">Land of Legends Adventure (+100 XP)</span>
+          <div class="quest-item-card" style="border-color: ${location.id === 'gir-saurashtra' ? 'var(--gir-warm-gold, #FBBF24)' : 'rgba(0, 210, 196, 0.4)'}; cursor: pointer;" id="deck-game-card">
+            <span class="quest-item-title">${location.id === 'gir-saurashtra' ? '🦁 The Gir Guardian (Play Mission)' : '🎮 Gujarat Expedition (Play)'}</span>
+            <span class="quest-item-sub">${location.id === 'gir-saurashtra' ? 'Forest Ecosystem & Lion Conservation (+1000 XP)' : 'Land of Legends Adventure (+100 XP)'}</span>
           </div>
 
           <div class="quest-item-card" style="border-color: rgba(255, 215, 0, 0.4); cursor: pointer;" id="deck-quiz-card">
@@ -424,8 +424,8 @@ export class GujaratMap {
         </button>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
-          <button id="loc-play-game-btn" class="btn btn-secondary" style="font-size: 0.82rem; padding: 0.6rem 0.5rem;">
-            🎮 Expedition Game
+          <button id="loc-play-game-btn" class="btn btn-secondary" style="font-size: 0.82rem; padding: 0.6rem 0.5rem; ${location.id === 'gir-saurashtra' ? 'background: linear-gradient(135deg, #10B981, #F59E0B); border-color: #FDE68A;' : ''}">
+            ${location.id === 'gir-saurashtra' ? '🦁 Gir Guardian' : '🎮 Expedition Game'}
           </button>
           <button id="loc-play-quiz-btn" class="btn btn-outline" style="font-size: 0.82rem; padding: 0.6rem 0.5rem; border-color: var(--gold-400); color: var(--gold-300);">
             🏆 Take Quiz
@@ -447,7 +447,11 @@ export class GujaratMap {
     const deckGameCard = this.deckPanel.querySelector('#deck-game-card');
     const handleLaunchGame = () => {
       soundFx.playChime();
-      router.navigateTo('game', { locationId: location.id });
+      if (location.id === 'gir-saurashtra') {
+        router.navigateTo('gir-guardian');
+      } else {
+        router.navigateTo('game', { locationId: location.id });
+      }
     };
     if (playGameBtn) playGameBtn.addEventListener('click', handleLaunchGame);
     if (deckGameCard) deckGameCard.addEventListener('click', handleLaunchGame);

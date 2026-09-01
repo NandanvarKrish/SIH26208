@@ -1,0 +1,750 @@
+/* css/gir-guardian.css - Visual Design & Animation System for "The Gir Guardian" Module */
+
+:root {
+  --gir-dark-forest: #07130B;
+  --gir-deep-green: #0F2A1A;
+  --gir-emerald: #10B981;
+  --gir-emerald-bright: #34D399;
+  --gir-moss: #22543D;
+  --gir-earth-brown: #382414;
+  --gir-teak-gold: #F59E0B;
+  --gir-warm-gold: #FBBF24;
+  --gir-sunset-orange: #EA580C;
+  --gir-sand-light: #F7FAFC;
+  --gir-panel-bg: rgba(11, 26, 17, 0.88);
+  --gir-glass-border: rgba(52, 211, 153, 0.25);
+  --gir-glow-gold: 0 0 25px rgba(251, 191, 36, 0.4);
+  --gir-glow-emerald: 0 0 25px rgba(16, 185, 129, 0.45);
+}
+
+/* ==========================================================================
+   GIR SCREEN CONTAINER & ENVIRONMENTAL ATMOSPHERE
+   ========================================================================== */
+
+.gir-screen-container {
+  width: 100%;
+  min-height: calc(100vh - var(--hud-height));
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: radial-gradient(circle at 50% 15%, #133924 0%, #091A10 60%, #040D07 100%);
+  color: #F8FAFC;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+/* Atmospheric Ambient Canvas Overlay */
+.gir-ambient-fog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gir-content-wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ==========================================================================
+   BREADCRUMB & TOP GUARDIAN HUD
+   ========================================================================== */
+
+.gir-breadcrumb-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(8, 20, 13, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--gir-glass-border);
+  border-radius: var(--radius-pill);
+  padding: 0.5rem 1rem;
+}
+
+.gir-breadcrumb-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94A3B8;
+}
+
+.gir-breadcrumb-links a,
+.gir-breadcrumb-links button {
+  color: var(--gir-emerald-bright);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: color var(--motion-fast) ease;
+}
+
+.gir-breadcrumb-links a:hover,
+.gir-breadcrumb-links button:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+.gir-hud-status-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.gir-hud-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--gir-warm-gold);
+}
+
+.gir-lives-pill {
+  color: #EF4444;
+  letter-spacing: 0.1em;
+}
+
+/* Mission Progression Bar */
+.gir-mission-tracker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(11, 26, 17, 0.7);
+  border: 1px solid var(--gir-glass-border);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+}
+
+.gir-tracker-steps {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.gir-tracker-step {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.gir-tracker-step.active-step {
+  background: var(--gir-warm-gold);
+  box-shadow: 0 0 10px var(--gir-warm-gold);
+}
+
+.gir-tracker-step.completed-step {
+  background: var(--gir-emerald-bright);
+  box-shadow: 0 0 8px var(--gir-emerald-bright);
+}
+
+/* ==========================================================================
+   MIRA ADVENTURE COMPANION CALLOUT
+   ========================================================================== */
+
+.gir-mira-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: rgba(12, 30, 20, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-left: 3.5px solid var(--gir-warm-gold);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.gir-mira-avatar-orb {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, rgba(234, 88, 12, 0.4) 100%), #0A0F1D;
+  border: 2px solid var(--gir-warm-gold);
+  box-shadow: var(--gir-glow-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.gir-mira-avatar-orb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.gir-mira-text-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.gir-mira-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gir-mira-name {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--gir-warm-gold);
+  letter-spacing: 0.06em;
+}
+
+.gir-mira-speech {
+  font-size: 0.88rem;
+  color: #E2E8F0;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   SCREEN 1: CINEMATIC GIR INTRO
+   ========================================================================== */
+
+.gir-intro-hero {
+  background: linear-gradient(135deg, rgba(16, 42, 26, 0.95) 0%, rgba(8, 20, 13, 0.98) 100%);
+  border: 1.5px solid var(--gir-glass-border);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.gir-intro-emblem {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F59E0B 0%, #B45309 60%, #451A03 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  border: 3px solid #FDE68A;
+  box-shadow: 0 0 45px rgba(245, 158, 11, 0.6);
+}
+
+.gir-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FBBF24 60%, #EA580C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.15;
+}
+
+.gir-hero-sub {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  color: var(--gir-emerald-bright);
+  max-width: 680px;
+}
+
+.gir-hero-desc {
+  font-size: 0.92rem;
+  color: #CBD5E1;
+  max-width: 720px;
+  line-height: 1.6;
+}
+
+.gir-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 850px;
+  margin-top: 0.5rem;
+}
+
+.gir-stat-box {
+  background: rgba(6, 17, 10, 0.75);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.gir-stat-val {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gir-warm-gold);
+}
+
+.gir-stat-lbl {
+  font-size: 0.72rem;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   MISSION 1: WILDLIFE DETECTIVE
+   ========================================================================== */
+
+.gir-detective-arena {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.gir-clue-board {
+  background: rgba(9, 23, 15, 0.9);
+  border: 1px solid var(--gir-glass-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.gir-clue-card {
+  background: rgba(17, 38, 26, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xs);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  transition: all var(--motion-fast) ease;
+}
+
+.gir-clue-card.revealed {
+  border-color: var(--gir-warm-gold);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.gir-clue-badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--gir-warm-gold);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+}
+
+.gir-clue-text {
+  font-size: 0.86rem;
+  color: #E2E8F0;
+  line-height: 1.45;
+}
+
+.gir-clue-locked-text {
+  font-size: 0.84rem;
+  color: #64748B;
+  font-style: italic;
+}
+
+.gir-options-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.gir-animal-card {
+  background: rgba(14, 34, 23, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all var(--motion-fast) ease;
+}
+
+.gir-animal-card:hover {
+  border-color: var(--gir-warm-gold);
+  background: rgba(26, 56, 39, 0.95);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.gir-animal-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.gir-animal-name {
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.gir-animal-sci {
+  font-size: 0.7rem;
+  color: #94A3B8;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   MISSION 2: BECOME A GIR RANGER (INTERACTIVE MAP)
+   ========================================================================== */
+
+.gir-ranger-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.gir-map-viewport {
+  background: rgba(5, 15, 9, 0.95);
+  border: 1.5px solid var(--gir-glass-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.gir-svg-map {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.map-zone-path {
+  fill-opacity: 0.7;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.5;
+  transition: all var(--motion-fast) ease;
+}
+
+.map-zone-path:hover {
+  fill-opacity: 0.95;
+  stroke: var(--gir-warm-gold);
+  stroke-width: 2.5;
+  cursor: pointer;
+}
+
+.map-waypoint-marker {
+  cursor: pointer;
+  transition: transform var(--motion-fast) ease;
+}
+
+.map-waypoint-marker:hover {
+  transform: scale(1.25);
+}
+
+.gir-routes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gir-route-card {
+  background: rgba(12, 30, 20, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all var(--motion-fast) ease;
+}
+
+.gir-route-card:hover {
+  border-color: var(--gir-emerald-bright);
+  background: rgba(18, 44, 30, 0.95);
+  transform: translateX(4px);
+}
+
+.gir-route-card.selected-route {
+  border-color: var(--gir-warm-gold);
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.gir-route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gir-route-name {
+  font-family: var(--font-title);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.gir-route-meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  color: #94A3B8;
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   MISSION 3: BUILD THE GIR ECOSYSTEM
+   ========================================================================== */
+
+.gir-ecosystem-arena {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.gir-trophic-slots-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+
+.gir-trophic-slot {
+  background: rgba(9, 23, 15, 0.85);
+  border: 2px dashed rgba(52, 211, 153, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 1rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 145px;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all var(--motion-fast) ease;
+}
+
+.gir-trophic-slot.slot-filled {
+  border-style: solid;
+  border-color: var(--gir-emerald-bright);
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.gir-slot-tier-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--gir-warm-gold);
+  text-transform: uppercase;
+}
+
+.gir-trophic-palette {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem;
+  background: rgba(6, 17, 10, 0.7);
+  border: 1px solid var(--gir-glass-border);
+  border-radius: var(--radius-sm);
+}
+
+.gir-palette-token {
+  background: rgba(17, 40, 28, 0.95);
+  border: 1.5px solid rgba(245, 158, 11, 0.4);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all var(--motion-fast) ease;
+}
+
+.gir-palette-token:hover {
+  background: var(--gir-warm-gold);
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: var(--gir-glow-gold);
+}
+
+.gir-palette-token.token-used {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   MISSION 4: THE CONSERVATION CRISIS
+   ========================================================================== */
+
+.gir-crisis-dossier {
+  background: rgba(14, 32, 22, 0.95);
+  border: 1.5px solid rgba(239, 68, 68, 0.4);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gir-policy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.gir-policy-card {
+  background: rgba(10, 24, 16, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all var(--motion-fast) ease;
+}
+
+.gir-policy-card:hover {
+  border-color: var(--gir-warm-gold);
+  background: rgba(18, 44, 30, 0.95);
+  transform: translateY(-2px);
+}
+
+.gir-policy-card.selected-policy {
+  border-color: var(--gir-emerald-bright);
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow: var(--gir-glow-emerald);
+}
+
+/* ==========================================================================
+   FINAL CHALLENGE / RESULTS SCREEN
+   ========================================================================== */
+
+.gir-emergency-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.25) 0%, rgba(185, 28, 28, 0.1) 100%);
+  border: 1.5px solid #EF4444;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1.1rem;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.gir-results-panel {
+  background: linear-gradient(135deg, rgba(14, 36, 24, 0.95) 0%, rgba(6, 18, 11, 0.98) 100%);
+  border: 2px solid var(--gir-warm-gold);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(245, 158, 11, 0.3);
+}
+
+.gir-score-bars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 800px;
+}
+
+.gir-score-card {
+  background: rgba(8, 20, 13, 0.85);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.gir-score-val {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--gir-emerald-bright);
+}
+
+.gir-badge-unlock-showcase {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, rgba(0, 0, 0, 0.6) 80%);
+  border: 1.5px solid var(--gir-warm-gold);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--gir-glow-gold);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (TABLET & MOBILE)
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .gir-detective-arena,
+  .gir-ranger-layout,
+  .gir-policy-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gir-stats-grid,
+  .gir-score-bars-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gir-trophic-slots-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .gir-screen-container {
+    padding: 0.75rem;
+  }
+
+  .gir-intro-hero,
+  .gir-results-panel {
+    padding: 1.25rem;
+  }
+
+  .gir-options-board {
+    grid-template-columns: 1fr;
+  }
+}
