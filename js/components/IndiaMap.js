@@ -74,7 +74,7 @@ export class IndiaMap {
           <g id="rajasthan-vector-group" class="rajasthan-node-group">
             <path id="rajasthan-svg-path" class="state-path ${isRajasthanUnlocked ? 'playable unlocked-rajasthan' : 'locked-state'}" data-state-id="rajasthan" 
               d="M 140,195 L 205,175 L 240,185 L 235,260 L 195,290 L 155,280 L 125,230 Z" 
-              title="${isRajasthanUnlocked ? 'Rajasthan (Unlocked!)' : 'Rajasthan (Locked - Complete Gujarat to Unlock)'}" />
+              title="${isRajasthanUnlocked ? 'Rajasthan (Unlocked! Click to explore)' : 'Rajasthan (Locked - Complete Gujarat to Unlock)'}" />
             
             <!-- Sparkle & Ripple Pulse Elements for Rajasthan-Only Animation -->
             <circle id="rajasthan-pulse-ring" cx="182" cy="232" r="10" fill="none" stroke="#FFD700" stroke-width="2.5" opacity="0" pointer-events="none" />
@@ -131,7 +131,7 @@ export class IndiaMap {
 
           <!-- Rajasthan Pin (Locked vs Unlocked State) -->
           ${isRajasthanUnlocked ? `
-            <div id="rajasthan-map-pin" class="map-pin pin-playable pin-unlocked-state" style="left: 31%; top: 35%;" data-state-id="rajasthan" role="button" aria-label="Rajasthan - Unlocked State">
+            <div id="rajasthan-map-pin" class="map-pin pin-playable pin-unlocked-state" style="left: 31%; top: 35%;" data-state-id="rajasthan" role="button" aria-label="Rajasthan - Unlocked State (Click to preview)">
               <div class="pin-icon-wrap anim-glow-aura" style="background: linear-gradient(135deg, #D96B27, #FFD700); border-color: #FFFFFF; box-shadow: 0 0 20px rgba(255, 122, 0, 0.7);">
                 <span class="text-xl">🏰</span>
                 <div class="pin-radar-ring anim-radar" style="border-color: #FFD700;"></div>
@@ -197,6 +197,9 @@ export class IndiaMap {
       this.showLockedStateModal(STATES_DATA[stateId]);
     } else {
       soundFx.playChime();
+      if (stateId === 'rajasthan') {
+        this.showRajasthanComingSoonModal(STATES_DATA[stateId]);
+      }
     }
   }
 
@@ -228,7 +231,7 @@ export class IndiaMap {
         </div>
         <div>
           ${isUnlocked 
-            ? '<span class="badge-playable" style="background: rgba(16, 185, 129, 0.2); border-color: #10B981; color: #34D399;">🟢 Unlocked State</span>' 
+            ? '<span class="badge-playable" style="background: rgba(255, 215, 0, 0.15); border-color: #FFD700; color: #FFD700;">✨ UNLOCKED STATE</span>' 
             : '<span class="badge-locked">🔒 Prototype Locked</span>'}
         </div>
       </div>
@@ -264,7 +267,7 @@ export class IndiaMap {
 
       <div class="mt-auto pt-2">
         <button id="state-cta-btn" class="btn ${isUnlocked ? 'btn-primary btn-shimmer-effect' : 'btn-outline'} w-full" style="width: 100%;">
-          ${isUnlocked ? (state.id === 'gujarat' ? 'Enter Gujarat Hub →' : '🏰 Enter Rajasthan Tour →') : '🔒 Complete Gujarat to Unlock'}
+          ${isUnlocked ? (state.id === 'gujarat' ? 'Enter Gujarat Hub →' : '🏜️ Preview Rajasthan Expedition →') : '🔒 Complete Gujarat to Unlock'}
         </button>
       </div>
     `;
@@ -277,7 +280,9 @@ export class IndiaMap {
           this.launchGujaratExpedition();
         } else if (isUnlocked) {
           soundFx.playChime();
-          this.showRajasthanTourModal(state);
+          if (state.id === 'rajasthan') {
+            this.showRajasthanComingSoonModal(state);
+          }
         } else {
           soundFx.playLockedBuzz();
           this.showLockedStateModal(state);
@@ -327,28 +332,76 @@ export class IndiaMap {
     });
   }
 
-  showRajasthanTourModal(state) {
+  // --- Beautiful Animated Rajasthan "Coming Soon / Next Adventure" Modal ---
+  showRajasthanComingSoonModal(state) {
     modal.show({
-      title: `🏰 Rajasthan Expedition Tour`,
-      subtitle: `${state.tagline}`,
-      badgeHtml: '<span class="badge-playable" style="background: #10B981; color: #000; font-weight: 800;">✨ UNLOCKED REWARD</span>',
+      title: 'Rajasthan',
+      subtitle: 'Land of Kings & Thar Desert Forts',
+      badgeHtml: '<span class="badge-rajasthan-coming-soon">✨ UNLOCKED • COMING SOON</span>',
       contentHtml: `
-        <div class="space-y-3 text-center">
-          <div class="text-4xl anim-float">🏰</div>
-          <h3 class="text-lg font-bold text-amber-300">Welcome to Rajasthan!</h3>
-          <p class="text-sm text-slate-200 leading-relaxed">
-            You have unlocked Rajasthan by mastering all 4 Gujarat locations. Prepare to travel through Thar Desert dunes, Mehrangarh fortresses, and royal puppet guilds in the upcoming National Tour expansion!
-          </p>
-          <div class="bg-slate-800/80 p-3 rounded-lg border border-amber-500/40 text-left text-xs space-y-1">
-            <div class="text-amber-300 font-bold mb-1">State Highlights Unlocked:</div>
-            ${state.pillars.map(p => `<div class="text-slate-300 flex items-center gap-2"><span>${p.icon}</span> <span>${p.label}</span></div>`).join('')}
+        <div class="rajasthan-cs-modal-content">
+          
+          <div class="rajasthan-cs-emblem-wrap anim-float">
+            <div class="rajasthan-cs-orb">🏜️</div>
           </div>
+
+          <div class="rajasthan-cs-headline-group">
+            <span class="rajasthan-cs-tag">✨ NEXT EXPEDITION CHAPTER</span>
+            <h3 class="rajasthan-cs-title">Your next adventure is being prepared…</h3>
+            <p class="rajasthan-cs-desc">
+              Splendid work, Yatri! You have successfully unlocked <strong>Rajasthan</strong> by completing your Gujarat journey. The grand desert dunes, mighty hill forts, and vibrant folk traditions are currently being crafted for your next epic expedition.
+            </p>
+          </div>
+
+          <div class="rajasthan-cs-grid">
+            <div class="rajasthan-cs-card">
+              <span class="cs-card-icon">🏰</span>
+              <div>
+                <h4 class="cs-card-title">Mehrangarh & Amber Forts</h4>
+                <p class="cs-card-desc">Towering hill fortresses, royal Rajput architecture & battle lore.</p>
+              </div>
+            </div>
+
+            <div class="rajasthan-cs-card">
+              <span class="cs-card-icon">🐪</span>
+              <div>
+                <h4 class="cs-card-title">Thar Desert Caravans</h4>
+                <p class="cs-card-desc">Golden sand dunes, camel safari routes & desert folk music.</p>
+              </div>
+            </div>
+
+            <div class="rajasthan-cs-card">
+              <span class="cs-card-icon">🎭</span>
+              <div>
+                <h4 class="cs-card-title">Kathputli Puppet Master</h4>
+                <p class="cs-card-desc">Traditional string puppet lore and vibrant folk art workshops.</p>
+              </div>
+            </div>
+
+            <div class="rajasthan-cs-card">
+              <span class="cs-card-icon">🍛</span>
+              <div>
+                <h4 class="cs-card-title">Dal Baati Churma Feast</h4>
+                <p class="cs-card-desc">Authentic royal Marwari flavors and culinary heritage quests.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rajasthan-cs-status-banner">
+            <span class="status-dot"></span>
+            <span>Status: <strong>Unlocked & Accessible Soon</strong> in the National Tour expansion</span>
+          </div>
+
         </div>
       `,
-      primaryBtnText: 'Return to Gujarat Hub 🗺️',
-      secondaryBtnText: 'Close',
+      primaryBtnText: '← Back to Map',
+      secondaryBtnText: '🗺️ Explore Gujarat',
       onPrimary: () => {
-        this.selectState('gujarat', true);
+        // Keeps user directly on India Map
+        soundFx.playClick();
+      },
+      onSecondary: () => {
+        soundFx.playChime();
         router.navigateTo('gujarat-map');
       }
     });
