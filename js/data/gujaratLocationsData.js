@@ -6,7 +6,7 @@ export const GUJARAT_LOCATIONS = [
     name: 'Great Rann of Kutch',
     region: 'North-West Gujarat',
     tagline: 'The Moonlit White Salt Desert & Artisan Guilds',
-    coordinates: { x: 28, y: 32 }, // Percentage position on the Gujarat regional map
+    coordinates: { x: 28.75, y: 29.3 }, // Percentage position on the Gujarat regional map
     icon: '🏜️',
     status: 'unlocked', // 'unlocked' | 'locked'
     unlockRequirement: 'Initial Starting Hub',
@@ -30,7 +30,7 @@ export const GUJARAT_LOCATIONS = [
     name: 'Gir National Park & Saurashtra',
     region: 'South-West Gujarat',
     tagline: 'The Last Sanctuary of the Asiatic Lion & Somnath Temple',
-    coordinates: { x: 38, y: 72 },
+    coordinates: { x: 36.85, y: 73.6 },
     icon: '🦁',
     status: 'unlocked',
     unlockRequirement: 'Accessible for Exploration',
@@ -54,7 +54,7 @@ export const GUJARAT_LOCATIONS = [
     name: 'Ahmedabad Heritage & Sabarmati',
     region: 'Central Gujarat',
     tagline: 'India\'s First UNESCO World Heritage City & Culinary Capital',
-    coordinates: { x: 62, y: 48 },
+    coordinates: { x: 64.35, y: 49.3 },
     icon: '🏛️',
     status: 'unlocked',
     unlockRequirement: 'Accessible for Exploration',
@@ -78,7 +78,7 @@ export const GUJARAT_LOCATIONS = [
     name: 'Patan & Rani ki Vav',
     region: 'North Gujarat',
     tagline: 'The Inverted Subterranean Temple & Royal Double-Ikkat Silk',
-    coordinates: { x: 55, y: 26 },
+    coordinates: { x: 61.25, y: 28.6 },
     icon: '🧵',
     status: 'unlocked',
     unlockRequirement: 'Accessible for Exploration',
