@@ -216,6 +216,9 @@ html, body {
   transition: opacity var(--motion-base) var(--ease-in-out-smooth), transform var(--motion-enter) var(--ease-out-expo);
   transform: scale(0.985) translateY(4px);
   will-change: transform, opacity;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .screen.active {

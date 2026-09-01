@@ -600,6 +600,7 @@ export class MiniGameScreen {
   }
 
   handleKeyDown = (e) => {
+    if (this.mode !== '2d-expedition') return;
     const key = e.key.toLowerCase();
     if (['arrowup', 'w'].includes(key)) { this.keys.up = true; e.preventDefault(); }
     if (['arrowdown', 's'].includes(key)) { this.keys.down = true; e.preventDefault(); }
@@ -608,6 +609,7 @@ export class MiniGameScreen {
   };
 
   handleKeyUp = (e) => {
+    if (this.mode !== '2d-expedition') return;
     const key = e.key.toLowerCase();
     if (['arrowup', 'w'].includes(key)) this.keys.up = false;
     if (['arrowdown', 's'].includes(key)) this.keys.down = false;
