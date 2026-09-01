@@ -98,6 +98,61 @@ class AudioManager {
       osc.stop(this.ctx.currentTime + 0.18);
     } catch (e) {}
   }
+  // Collectible Item Pickup Sound
+  playPickup() {
+    if (!this.isSoundActive()) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, now); // D5
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.1); // A5
+
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.1);
+    } catch (e) {}
+  }
+
+  // Triumphant Level Up / Fanfare Sound
+  playLevelUpFanfare() {
+    if (!this.isSoundActive()) return;
+    this.init();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+
+      notes.forEach((freq, index) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + index * 0.08);
+
+        gain.gain.setValueAtTime(0.15, now + index * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.45);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now + index * 0.08);
+        osc.stop(now + index * 0.08 + 0.45);
+      });
+    } catch (e) {}
+  }
 }
 
 export const soundFx = new AudioManager();
+

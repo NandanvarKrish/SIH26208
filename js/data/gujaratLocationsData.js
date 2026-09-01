@@ -68,7 +68,7 @@ export const GUJARAT_LOCATIONS = [
     ],
     questline: {
       story: { title: 'The Charkha & The Ancient Pols', duration: '2 min read', xp: 50 },
-      miniGame: { title: 'Gujarati Thali Master Chef', type: 'sorter', xp: 100 },
+      miniGame: { title: 'Restore the Heritage Challenge', type: 'discovery', xp: 100 },
       quiz: { title: 'Scholar of the Heritage City', questionCount: 3, xp: 150 },
       artifact: { name: 'Sabarmati Golden Charkha', rarity: 'Legendary', icon: '🪙' }
     }
