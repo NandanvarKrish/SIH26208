@@ -79,7 +79,7 @@ export class GujaratIntroScreen {
         <div class="mira-dialog-container glass-panel">
           <div class="mira-avatar-card">
             <div class="mira-avatar-orb anim-glow-aura">
-              <span>🪔</span>
+              <img src="character/mira-avatar.png" alt="Mira - Cultural AI Guide" class="mira-avatar-img" />
               <div class="mira-badge-online" title="Mira is Online & Ready"></div>
             </div>
             <div class="mira-name-tag">Mira</div>

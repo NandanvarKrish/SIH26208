@@ -116,7 +116,9 @@ export class StoryScreen {
 
         <!-- Mira Cultural Dialogue Companion Box -->
         <div class="mira-story-bubble">
-          <div class="mira-story-avatar anim-float">🪔</div>
+          <div class="mira-story-avatar anim-float">
+            <img src="character/mira-avatar.png" alt="Mira" class="mira-story-avatar-img" />
+          </div>
           <div class="mira-story-content">
             <div class="mira-story-name">
               <span>MIRA'S CULTURAL INSIGHT</span>
@@ -173,7 +175,9 @@ export class StoryScreen {
 
         <!-- Mira Prompt Bubble -->
         <div class="mira-story-bubble">
-          <div class="mira-story-avatar anim-float">🪔</div>
+          <div class="mira-story-avatar anim-float">
+            <img src="character/mira-avatar.png" alt="Mira" class="mira-story-avatar-img" />
+          </div>
           <div class="mira-story-content">
             <div class="mira-story-name">
               <span>MIRA'S QUESTION</span>

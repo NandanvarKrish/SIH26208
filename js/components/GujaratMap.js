@@ -358,7 +358,9 @@ export class GujaratMap {
 
       <!-- Mira Live Cultural Tip -->
       <div class="mira-live-tip-box">
-        <div class="mira-mini-avatar anim-float">🪔</div>
+        <div class="mira-mini-avatar anim-float">
+          <img src="character/mira-avatar.png" alt="Mira" class="mira-mini-avatar-img" />
+        </div>
         <div class="mira-speech-bubble" style="gap: 0.25rem;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-family: var(--font-title); font-size: 0.75rem; font-weight: 700; color: var(--gold-400);">MIRA'S GUIDE NOTE</span>

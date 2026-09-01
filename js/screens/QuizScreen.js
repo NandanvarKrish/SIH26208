@@ -137,7 +137,9 @@ export class QuizScreen {
           <!-- Mira AI Cultural Hint Box (if lifeline active) -->
           ${state.showAiHint ? `
             <div class="mira-ai-hint-box">
-              <div style="font-size: 1.5rem;" class="anim-float">🪔</div>
+              <div class="mira-hint-avatar anim-float">
+                <img src="character/mira-avatar.png" alt="Mira" class="mira-hint-avatar-img" />
+              </div>
               <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
                   <strong style="font-size: 0.78rem; color: var(--color-royal-gold); font-family: var(--font-title);">MIRA'S CULTURAL CLUE</strong>

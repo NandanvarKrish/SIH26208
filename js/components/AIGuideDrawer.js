@@ -36,8 +36,8 @@ class AIGuideDrawer {
       fab.className = 'ai-guide-fab hidden';
       fab.setAttribute('aria-label', 'Open Mira AI Cultural Guide');
       fab.innerHTML = `
-        <div class="fab-avatar-ring">
-          <span>🧕</span>
+        <div class="fab-avatar-ring anim-glow-aura">
+          <img src="character/mira-avatar.png" alt="Mira" class="fab-avatar-img" />
           <span class="fab-online-dot"></span>
         </div>
         <div class="fab-label-text">
@@ -62,7 +62,9 @@ class AIGuideDrawer {
         <!-- Drawer Header -->
         <div class="drawer-header">
           <div class="drawer-header-info">
-            <div class="drawer-mira-avatar">🧕</div>
+            <div class="drawer-mira-avatar anim-glow-aura">
+              <img src="character/mira-avatar.png" alt="Mira" class="drawer-mira-avatar-img" />
+            </div>
             <div>
               <div class="drawer-title">Mira • Cultural AI Guide</div>
               <div class="drawer-status-pill">
@@ -315,7 +317,9 @@ class AIGuideDrawer {
     const formattedText = this.formatMarkdown(text);
 
     row.innerHTML = `
-      <div class="chat-msg-avatar">🧕</div>
+      <div class="chat-msg-avatar">
+        <img src="character/mira-avatar.png" alt="Mira" class="chat-msg-avatar-img" />
+      </div>
       <div class="chat-bubble-mira">
         <div>${formattedText}</div>
         
@@ -359,7 +363,9 @@ class AIGuideDrawer {
       indicator.id = 'ai-typing-indicator';
       indicator.className = 'chat-msg-row mira-row';
       indicator.innerHTML = `
-        <div class="chat-msg-avatar">🧕</div>
+        <div class="chat-msg-avatar">
+          <img src="character/mira-avatar.png" alt="Mira" class="chat-msg-avatar-img" />
+        </div>
         <div class="typing-indicator-bubble">
           <div class="typing-dot"></div>
           <div class="typing-dot"></div>
