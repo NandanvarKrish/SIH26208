@@ -23,9 +23,8 @@ export class MapScreen {
 
   onEnter() {
     topHUD.show();
-    const state = playerState.getState();
     if (this.indiaMap) {
-      this.indiaMap.selectState(state.selectedStateId || 'gujarat', false);
+      this.indiaMap.onEnter();
     }
   }
 

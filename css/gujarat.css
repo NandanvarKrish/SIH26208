@@ -1,4 +1,4 @@
-/* css/gujarat.css - Gujarat Regional Hub, Interactive Vector Map, Waypoint Pins & Location Dossier */
+/* css/gujarat.css - Gujarat Regional Hub, Interactive Vector Map, Waypoint Pins, Exploration Tracker & Location Dossier */
 
 /* ==========================================================================
    1. GUJARAT INTRO HERO SCREEN
@@ -262,6 +262,67 @@
   border-radius: var(--radius-sm);
   padding: 0.4rem 0.85rem;
   flex-shrink: 0;
+  gap: 0.75rem;
+}
+
+/* Gujarat Exploration Progress Tracker Widget */
+.gujarat-exploration-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 220px;
+  background: rgba(11, 16, 28, 0.75);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-xs);
+  padding: 0.3rem 0.65rem;
+}
+
+.tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tracker-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--gold-400);
+  letter-spacing: 0.05em;
+}
+
+.tracker-count {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #34D399;
+}
+
+.tracker-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.tracker-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1B828F, #34D399, #FFD700);
+  border-radius: var(--radius-pill);
+  transition: width 0.5s var(--ease-out-expo);
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+
+.tracker-percent {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--gold-300);
 }
 
 /* Map Wrapper & Canvas */
@@ -316,12 +377,8 @@
 
 /* Quest Trail Flow Animation */
 @keyframes questTrailFlow {
-  0% {
-    stroke-dashoffset: 48;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
+  0% { stroke-dashoffset: 48; }
+  100% { stroke-dashoffset: 0; }
 }
 
 .quest-trail-line {
@@ -330,18 +387,8 @@
   pointer-events: none;
 }
 
-/* Water Ripple Animations */
-@keyframes waterWaveGlow {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 0.75; }
-}
-
-.water-waves {
-  animation: waterWaveGlow 5s ease-in-out infinite;
-}
-
 /* ==========================================================================
-   4. WAYPOINT PINS & INTERACTIVE OVERLAY
+   4. WAYPOINT PINS & EXPLORATION STATES
    ========================================================================== */
 
 .gujarat-pins-container {
@@ -391,6 +438,31 @@
   display: inline-block;
 }
 
+/* Explored State Checkmark Badge */
+.waypoint-pin.explored .waypoint-marker-shield {
+  border-color: #34D399;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.5), 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+.pin-check-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #10B981;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #070A11;
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+}
+
 /* Radar Beacon Ring */
 .waypoint-beacon-ring {
   position: absolute;
@@ -415,22 +487,6 @@
   background: linear-gradient(135deg, #D96B27 0%, #FFD700 100%);
   border-color: #FFFFFF;
   box-shadow: 0 0 28px rgba(255, 122, 0, 0.85), 0 4px 16px rgba(0, 0, 0, 0.8);
-}
-
-.waypoint-pin.active .waypoint-beacon-ring {
-  border-color: #FFD700;
-  animation-duration: 1.8s;
-}
-
-/* LOCKED WAYPOINT STATE */
-.waypoint-pin.locked .waypoint-marker-shield {
-  background: rgba(16, 23, 40, 0.85);
-  border-color: rgba(255, 255, 255, 0.25);
-  filter: grayscale(0.8);
-}
-
-.waypoint-pin.locked .waypoint-beacon-ring {
-  display: none;
 }
 
 /* ==========================================================================
@@ -460,7 +516,6 @@
   text-align: left;
 }
 
-/* Tooltip Downward Pointer Arrow */
 .waypoint-tooltip::after {
   content: '';
   position: absolute;
@@ -514,7 +569,100 @@
 }
 
 /* ==========================================================================
-   6. LOCATION DOSSIER DECK PANEL
+   6. RAJASTHAN UNLOCK CELEBRATION MODAL SYSTEM
+   ========================================================================== */
+
+.rajasthan-unlock-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.85rem;
+}
+
+.unlock-emblem-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFE259, #FF7A00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 35px rgba(255, 122, 0, 0.75);
+  border: 2px solid #FFFFFF;
+}
+
+.unlock-palace-orb {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.unlock-headline-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.unlock-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--gold-400);
+  letter-spacing: 0.08em;
+}
+
+.unlock-title {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.15;
+}
+
+.unlock-tagline {
+  font-size: 0.82rem;
+  color: var(--peacock-300);
+}
+
+.unlock-desc {
+  font-size: 0.85rem;
+  color: var(--sand-100);
+  line-height: 1.5;
+  max-width: 480px;
+}
+
+.unlock-features-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.unlock-feat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(229, 184, 105, 0.12);
+  border: 1px solid rgba(229, 184, 105, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  color: var(--sand-50);
+}
+
+.unlock-reward-note {
+  font-size: 0.78rem;
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-xs);
+}
+
+/* ==========================================================================
+   7. LOCATION DOSSIER DECK PANEL
    ========================================================================== */
 
 .location-deck-panel {
@@ -622,7 +770,7 @@
 }
 
 /* ==========================================================================
-   7. RESPONSIVE BREAKPOINTS
+   8. RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
 @media (max-width: 920px) {
@@ -643,6 +791,6 @@
   }
 
   .waypoint-tooltip {
-    display: none; /* Mobile touch uses deck panel directly */
+    display: none;
   }
 }

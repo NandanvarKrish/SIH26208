@@ -458,6 +458,7 @@ export class StoryScreen {
   handleCompleteStory() {
     soundFx.playChime();
     playerState.completeStory(this.locationId, this.story.xpReward || 100);
+    playerState.markLocationExplored(this.locationId, 50, 100);
     this.currentStep = this.story.slides.length + 1; // Advance to victory step
     this.render();
   }

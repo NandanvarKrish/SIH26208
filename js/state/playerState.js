@@ -31,6 +31,8 @@ const DEFAULT_STATE = {
   quizResults: {},
   unlockedItems: [],
   unlockedStates: ['gujarat'],
+  rajasthanUnlockShown: false,
+  rajasthanUnlockAnimationPlayed: false,
   selectedStateId: 'gujarat',
   selectedGujaratLocationId: 'kutch',
   soundEnabled: true
@@ -54,7 +56,10 @@ class PlayerStateManager {
           completedStories: Array.isArray(parsed.completedStories) ? parsed.completedStories : [],
           completedGames: Array.isArray(parsed.completedGames) ? parsed.completedGames : [],
           quizResults: parsed.quizResults || {},
-          unlockedItems: Array.isArray(parsed.unlockedItems) ? parsed.unlockedItems : []
+          unlockedItems: Array.isArray(parsed.unlockedItems) ? parsed.unlockedItems : [],
+          unlockedStates: Array.isArray(parsed.unlockedStates) ? parsed.unlockedStates : ['gujarat'],
+          rajasthanUnlockShown: Boolean(parsed.rajasthanUnlockShown),
+          rajasthanUnlockAnimationPlayed: Boolean(parsed.rajasthanUnlockAnimationPlayed)
         };
       }
     } catch (e) {
@@ -190,6 +195,59 @@ class PlayerStateManager {
     this.saveState();
   }
 
+  // --- Exploration Tracking & State Unlocks ---
+
+  getGujaratExplorationProgress() {
+    const GUJARAT_ALL_LOCATIONS = ['kutch', 'gir-saurashtra', 'ahmedabad-central', 'patan-north'];
+    const exploredList = GUJARAT_ALL_LOCATIONS.filter(id => this.state.completedLocations.includes(id));
+    const exploredCount = exploredList.length;
+    const totalLocations = GUJARAT_ALL_LOCATIONS.length;
+    const percentage = Math.min(100, Math.round((exploredCount / totalLocations) * 100));
+    const isCompleted = exploredCount === totalLocations;
+    const isRajasthanUnlocked = this.isStateUnlocked('rajasthan');
+
+    return {
+      totalLocations,
+      exploredCount,
+      percentage,
+      isCompleted,
+      exploredList,
+      isRajasthanUnlocked,
+      rajasthanUnlockShown: Boolean(this.state.rajasthanUnlockShown),
+      rajasthanUnlockAnimationPlayed: Boolean(this.state.rajasthanUnlockAnimationPlayed)
+    };
+  }
+
+  isLocationExplored(locationId) {
+    return Boolean(this.state.completedLocations && this.state.completedLocations.includes(locationId));
+  }
+
+  isStateUnlocked(stateId) {
+    if (stateId === 'gujarat') return true;
+    return Boolean(this.state.unlockedStates && this.state.unlockedStates.includes(stateId));
+  }
+
+  unlockState(stateId) {
+    if (!this.state.unlockedStates.includes(stateId)) {
+      this.state.unlockedStates.push(stateId);
+      this.saveState();
+    }
+  }
+
+  setRajasthanUnlockShown(shown = true) {
+    this.state.rajasthanUnlockShown = shown;
+    this.saveState();
+  }
+
+  isRajasthanUnlockAnimationPending() {
+    return this.isStateUnlocked('rajasthan') && !this.state.rajasthanUnlockAnimationPlayed;
+  }
+
+  setRajasthanUnlockAnimationPlayed(played = true) {
+    this.state.rajasthanUnlockAnimationPlayed = played;
+    this.saveState();
+  }
+
   // --- Progression Event Hooks ---
 
   // 1. Exploring Locations (+50 XP, +100 Score)
@@ -206,6 +264,15 @@ class PlayerStateManager {
     this.addScore(earnedScore);
     const xpResult = this.addXP(earnedXP);
 
+    // Check if Gujarat 4/4 locations completed and unlock Rajasthan
+    const progress = this.getGujaratExplorationProgress();
+    let newlyCompletedGujarat = false;
+
+    if (progress.isCompleted && !this.isStateUnlocked('rajasthan')) {
+      this.unlockState('rajasthan');
+      newlyCompletedGujarat = true;
+    }
+
     notification.showReward({
       title: `${isFirstTime ? 'New Location Discovered!' : 'Location Re-explored!'}`,
       subtitle: `${locationId.toUpperCase()} mapped in your heritage journal.`,
@@ -216,7 +283,16 @@ class PlayerStateManager {
     });
 
     this.saveState();
-    return xpResult;
+    return {
+      ...xpResult,
+      isFirstTime,
+      newlyCompletedGujarat,
+      progress
+    };
+  }
+
+  markLocationExplored(locationId, xp = 50, score = 100) {
+    return this.recordLocationExplored(locationId, xp, score);
   }
 
   visitGujaratLocation(locationId) {

@@ -1,4 +1,4 @@
-// js/screens/GujaratMapScreen.js - Screen controller for the Gujarat Regional Map & Location Hub
+// js/screens/GujaratMapScreen.js - Screen controller for the Gujarat Regional Map, Exploration Progress Hub & State Mastery
 
 import { GujaratMap } from '../components/GujaratMap.js';
 import { topHUD } from '../components/TopHUD.js';
@@ -20,14 +20,18 @@ export class GujaratMapScreen {
   render() {
     if (!this.screenEl) return;
 
+    const progress = playerState.getGujaratExplorationProgress();
+    const stats = playerState.getGujaratCompletionStats();
+
     this.screenEl.innerHTML = `
       <div class="gujarat-map-screen-layout">
         
         <!-- Interactive Map Container -->
         <div class="gujarat-map-canvas-container">
           
-          <!-- Header & Breadcrumb Bar -->
+          <!-- Header Bar with Integrated Exploration Progress Tracker -->
           <div class="gujarat-map-header-bar">
+            
             <nav class="breadcrumb-nav" aria-label="Breadcrumb">
               <button id="gujarat-map-back-btn" class="breadcrumb-btn" aria-label="Back to Gujarat Intro">
                 <span>←</span> Overview
@@ -40,12 +44,25 @@ export class GujaratMapScreen {
               <span style="color: #F8FAFC; font-weight: 700;">Gujarat Hub</span>
             </nav>
 
+            <!-- Gujarat Exploration Progress Tracker Widget -->
+            <div class="gujarat-exploration-tracker" id="gujarat-exploration-tracker">
+              <div class="tracker-header">
+                <span class="tracker-title">GUJARAT EXPLORATION</span>
+                <span class="tracker-count" id="exploration-count-label">${progress.exploredCount} / ${progress.totalLocations} Places Explored</span>
+              </div>
+              <div class="tracker-bar-wrap">
+                <div class="tracker-bar-fill" id="exploration-bar-fill" style="width: ${progress.percentage}%;"></div>
+                <span class="tracker-percent" id="exploration-percent-label">${progress.percentage}%</span>
+              </div>
+            </div>
+
             <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <span class="badge-playable" id="gujarat-header-mastery-badge">State Mastery: 0%</span>
-              <button id="gujarat-map-to-museum-btn" class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border-color: var(--color-royal-gold); color: var(--color-royal-gold);">
+              <span class="badge-playable" id="gujarat-header-mastery-badge">Mastery: ${stats.overallPercentage}%</span>
+              <button id="gujarat-map-to-museum-btn" class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; border-color: var(--gold-400); color: var(--gold-300);">
                 🏛️ Museum
               </button>
             </div>
+
           </div>
 
           <!-- SVG Regional Map Viewport -->
@@ -102,16 +119,28 @@ export class GujaratMapScreen {
 
   onEnter() {
     topHUD.show();
-    const state = playerState.getState();
+    const progress = playerState.getGujaratExplorationProgress();
     const stats = playerState.getGujaratCompletionStats();
+
+    // Update exploration progress tracker
+    const countEl = this.screenEl ? this.screenEl.querySelector('#exploration-count-label') : null;
+    const fillEl = this.screenEl ? this.screenEl.querySelector('#exploration-bar-fill') : null;
+    const percentEl = this.screenEl ? this.screenEl.querySelector('#exploration-percent-label') : null;
+
+    if (countEl) countEl.textContent = `${progress.exploredCount} / ${progress.totalLocations} Places Explored`;
+    if (fillEl) fillEl.style.width = `${progress.percentage}%`;
+    if (percentEl) percentEl.textContent = `${progress.percentage}%`;
 
     const badgeEl = this.screenEl ? this.screenEl.querySelector('#gujarat-header-mastery-badge') : null;
     if (badgeEl) {
-      badgeEl.textContent = `State Mastery: ${stats.overallPercentage}% (${stats.masteryRank})`;
+      badgeEl.textContent = `Mastery: ${stats.overallPercentage}% (${stats.masteryRank})`;
     }
 
     if (this.gujaratMap) {
-      this.gujaratMap.selectLocation(state.selectedGujaratLocationId || 'kutch', false);
+      this.gujaratMap.render();
+      this.gujaratMap.bindEvents();
+      this.gujaratMap.selectLocation(playerState.getState().selectedGujaratLocationId || 'kutch', false);
+      this.gujaratMap.checkAndTriggerRajasthanUnlock();
     }
   }
 
